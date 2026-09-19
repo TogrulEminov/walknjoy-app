@@ -1,0 +1,35 @@
+# macOS
+.DS_Store
+._*
+
+# Xcode user state and generated builds
+xcuserdata/
+*.xcuserstate
+DerivedData/
+build/
+*.xcarchive
+*.ipa
+*.dSYM/
+*.dSYM.zip
+*.xcresult/
+
+# Dependency build artifacts (keep Package.resolved in Git)
+.build/
+.swiftpm/
+Pods/
+Carthage/Build/
+
+# Local API configuration and credentials
+APIConfig.swift
+.env
+.env.*
+!.env.example
+*.p12
+*.p8
+*.mobileprovision
+
+# Tool output
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/
