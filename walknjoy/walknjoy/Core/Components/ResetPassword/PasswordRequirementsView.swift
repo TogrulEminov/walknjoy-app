@@ -25,7 +25,7 @@ struct PasswordRequirementsView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(String(localized: "password.requirements.title"))
                 .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(Color.primaryBlue.opacity(0.65)).padding(.bottom,12)
+                .foregroundStyle(Color.primary.opacity(0.65)).padding(.bottom,12)
 
             requirementRow(
                 "password.requirements.length",
@@ -44,14 +44,14 @@ struct PasswordRequirementsView: View {
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.primaryBlue.opacity(0.035))
+        .background(Color.primary.opacity(0.035))
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     private func requirementRow(_ key: String, isValid: Bool) -> some View {
         let isEmpty = password.isEmpty
         let color: Color =
-            isEmpty ? Color.primaryBlue.opacity(0.25) : isValid ? .green : .red
+            isEmpty ? Color.primary.opacity(0.25) : isValid ? .green : .red
 
         return HStack(spacing: 7) {
             Image(
@@ -66,7 +66,7 @@ struct PasswordRequirementsView: View {
                 .font(.system(size: 13))
                 .foregroundStyle(
                     isEmpty
-                        ? Color.primaryBlue.opacity(0.45)
+                        ? Color.primary.opacity(0.45)
                         : isValid ? .green : .red
                 )
         }

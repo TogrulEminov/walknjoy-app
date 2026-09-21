@@ -1,74 +1,63 @@
-import SnapKit
 import UIKit
 
 final class PasswordField: UIView {
 
     let textField: UITextField = {
         let textField = UITextField()
+
         textField.font = .systemFont(ofSize: 15)
         textField.textColor = .label
+        textField.tintColor = .label
+
         textField.isSecureTextEntry = true
-        textField.textContentType = nil
+        textField.textContentType = .password
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
-
-        textField.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        textField.setContentCompressionResistancePriority(
-            .defaultLow,
-            for: .horizontal
-        )
 
         return textField
     }()
 
     private lazy var visibilityButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setImage(UIImage(systemName: "eye"), for: .normal)
-        button.tintColor = .systemGray
-        button.imageView?.contentMode = .scaleAspectFit
 
-        button.setContentHuggingPriority(.required, for: .horizontal)
-        button.setContentCompressionResistancePriority(
-            .required,
-            for: .horizontal
+        button.setImage(
+            UIImage(systemName: "eye"),
+            for: .normal
         )
+
+        button.tintColor = .secondaryLabel
+        button.imageView?.contentMode = .scaleAspectFit
 
         button.addTarget(
             self,
             action: #selector(togglePasswordVisibility),
             for: .touchUpInside
         )
+
         return button
     }()
 
     private lazy var lockImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(systemName: "lock"))
-        imageView.tintColor = .systemGray
-        imageView.contentMode = .scaleAspectFit
-
-        imageView.setContentHuggingPriority(.required, for: .horizontal)
-        imageView.setContentCompressionResistancePriority(
-            .required,
-            for: .horizontal
+        let imageView = UIImageView(
+            image: UIImage(systemName: "lock")
         )
+
+        imageView.tintColor = .secondaryLabel
+        imageView.contentMode = .scaleAspectFit
 
         return imageView
     }()
 
-    private lazy var stackView: UIStackView = {
-        let stack = UIStackView()
-        stack.axis = .horizontal
-        stack.alignment = .center
-        stack.distribution = .fill
-        stack.spacing = 12
-        return stack
-    }()
+    private let horizontalInset: CGFloat = 16
+    private let iconSpacing: CGFloat = 12
+    private let lockSize: CGFloat = 20
+    private let buttonSize: CGFloat = 24
 
     init(placeholder: String) {
         super.init(frame: .zero)
+
         textField.placeholder = placeholder
         setupUI()
-        setupConstraints()
     }
 
     required init?(coder: NSCoder) {
@@ -76,52 +65,97 @@ final class PasswordField: UIView {
     }
 
     override var intrinsicContentSize: CGSize {
-        CGSize(width: UIView.noIntrinsicMetric, height: 56)
+        CGSize(
+            width: UIView.noIntrinsicMetric,
+            height: 56
+        )
     }
 
     private func setupUI() {
-        backgroundColor = .systemBackground
         layer.cornerRadius = 14
         layer.borderWidth = 1
-        layer.borderColor = UIColor.systemGray4.cgColor
         layer.masksToBounds = true
 
-        stackView.addArrangedSubview(lockImageView)
-        stackView.addArrangedSubview(textField)
-        stackView.addArrangedSubview(visibilityButton)
+        addSubview(lockImageView)
+        addSubview(textField)
+        addSubview(visibilityButton)
 
-        addSubview(stackView)
+        updateColors()
     }
 
-    private func setupConstraints() {
-        snp.makeConstraints {
-            $0.height.equalTo(56)
-        }
+    private func updateColors() {
+        backgroundColor = .secondarySystemBackground
 
-        stackView.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.leading.equalToSuperview().offset(16)
-            $0.trailing.equalToSuperview().offset(-16)
-        }
+        layer.borderColor =
+            UIColor.separator
+            .resolvedColor(with: traitCollection)
+            .cgColor
 
-        lockImageView.snp.makeConstraints {
-            $0.width.height.equalTo(20)
-        }
+        textField.textColor = .label
+        textField.tintColor = .label
 
-        visibilityButton.snp.makeConstraints {
-            $0.width.height.equalTo(24)
+        lockImageView.tintColor = .secondaryLabel
+        visibilityButton.tintColor = .secondaryLabel
+    }
+
+    private func registerTraitChanges() {
+        registerForTraitChanges(
+            [UITraitUserInterfaceStyle.self]
+        ) { (view: Self, _) in
+            view.updateColors()
         }
+    }
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        lockImageView.frame = CGRect(
+            x: horizontalInset,
+            y: (bounds.height - lockSize) / 2,
+            width: lockSize,
+            height: lockSize
+        )
+
+        visibilityButton.frame = CGRect(
+            x: bounds.width - horizontalInset - buttonSize,
+            y: (bounds.height - buttonSize) / 2,
+            width: buttonSize,
+            height: buttonSize
+        )
+
+        let textFieldX =
+            lockImageView.frame.maxX + iconSpacing
+
+        let textFieldWidth =
+            visibilityButton.frame.minX
+            - iconSpacing
+            - textFieldX
+
+        textField.frame = CGRect(
+            x: textFieldX,
+            y: 0,
+            width: max(0, textFieldWidth),
+            height: bounds.height
+        )
     }
 
     @objc
     private func togglePasswordVisibility() {
         let wasSecure = textField.isSecureTextEntry
+
         textField.isSecureTextEntry.toggle()
 
-        let icon = wasSecure ? "eye.slash" : "eye"
-        visibilityButton.setImage(UIImage(systemName: icon), for: .normal)
+        visibilityButton.setImage(
+            UIImage(
+                systemName: wasSecure
+                    ? "eye.slash"
+                    : "eye"
+            ),
+            for: .normal
+        )
 
-        if let text = textField.text, textField.isFirstResponder {
+        if let text = textField.text,
+            textField.isFirstResponder
+        {
             textField.text = nil
             textField.insertText(text)
         }

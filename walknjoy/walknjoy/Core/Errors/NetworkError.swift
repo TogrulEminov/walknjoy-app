@@ -1,8 +1,10 @@
 import Foundation
 
 enum NetworkError: LocalizedError {
+
     case invalidURL
     case invalidResponse
+
     case unauthorized
     case forbidden
     case tokenExpired
@@ -12,16 +14,28 @@ enum NetworkError: LocalizedError {
     case emailAlreadyExists
     case accountSuspended
     case providerNotApproved
+    case emailNotVerified
+
+    case apiError(
+        code: String,
+        message: String,
+        statusCode: Int
+    )
+
     case serverError(statusCode: Int)
     case decodingError
     case encodingError
     case noInternet
     case unknown(Error)
-
 }
 extension NetworkError {
+
     var errorDescription: String? {
         switch self {
+
+        case .emailNotVerified:
+            return "E-poçt ünvanınızı təsdiqləməlisiniz."
+
         case .invalidURL:
             return "URL düzgün deyil."
 
@@ -55,6 +69,9 @@ extension NetworkError {
         case .providerNotApproved:
             return "Xidmət təminatçısı hələ təsdiqlənməyib."
 
+        case .apiError(_, let message, _):
+            return message
+
         case .serverError(let statusCode):
             return "Server xətası baş verdi. Kod: \(statusCode)"
 
@@ -73,8 +90,15 @@ extension NetworkError {
     }
 }
 extension NetworkError {
-    static func from(code: String) -> NetworkError {
+
+    static func from(
+        code: String,
+        message: String,
+        statusCode: Int
+    ) -> NetworkError {
+
         switch code {
+
         case "UNAUTHORIZED":
             return .unauthorized
 
@@ -102,8 +126,15 @@ extension NetworkError {
         case "PROVIDER_NOT_APPROVED":
             return .providerNotApproved
 
+        case "EMAIL_NOT_VERIFIED":
+            return .emailNotVerified
+
         default:
-            return .serverError(statusCode: 0)
+            return .apiError(
+                code: code,
+                message: message,
+                statusCode: statusCode
+            )
         }
     }
 }

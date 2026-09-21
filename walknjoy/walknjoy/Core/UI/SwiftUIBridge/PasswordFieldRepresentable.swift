@@ -29,6 +29,15 @@ struct PasswordFieldRepresentable: UIViewRepresentable {
         }
     }
 
+    func sizeThatFits(
+        _ proposal: ProposedViewSize,
+        uiView: PasswordField,
+        context: Context
+    ) -> CGSize? {
+        guard let width = proposal.width, width.isFinite else { return nil }
+        return CGSize(width: width, height: uiView.intrinsicContentSize.height)
+    }
+
     final class Coordinator: NSObject {
         var parent: PasswordFieldRepresentable
 

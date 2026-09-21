@@ -15,7 +15,7 @@ struct AppView: View {
             switch appState.flow {
             case .splash: SplashView()
             case .onboarding: OnboardingView()
-            case .auth: LoginView()
+            case .auth: AuthView()
             case .main: Text("main")
             case .languageSelection:
                 LanguageSelectionView()

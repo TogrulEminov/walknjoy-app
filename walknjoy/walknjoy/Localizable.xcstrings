@@ -1,19 +1,19 @@
 {
   "sourceLanguage" : "az",
   "strings" : {
-    "forgot" : {
-      "extractionState" : "stale",
+    "common.ok" : {
+      "extractionState" : "manual",
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "unut"
+            "value" : "Oldu"
           }
         },
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "forgot"
+            "value" : "OK"
           }
         }
       }
@@ -70,7 +70,6 @@
       }
     },
     "forgot.title" : {
-      "extractionState" : "manual",
       "localizations" : {
         "az" : {
           "stringUnit" : {
@@ -81,7 +80,56 @@
         "en" : {
           "stringUnit" : {
             "state" : "translated",
+            "value" : "Forgot Your Password?"
+          }
+        }
+      }
+    },
+    "forgot.title\n" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrəni unutmusunuz?\n"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
             "value" : "Forgot your password?"
+          }
+        }
+      }
+    },
+    "forgot.validation.email" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzgün e-poçt ünvanı daxil edin."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a valid email address."
+          }
+        }
+      }
+    },
+    "forgot.validation.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məlumatları yoxlayın"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check Your Information"
           }
         }
       }
@@ -113,7 +161,7 @@
         },
         "en" : {
           "stringUnit" : {
-            "state" : "needs_review",
+            "state" : "translated",
             "value" : "Email address"
           }
         }
@@ -365,6 +413,54 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Welcome back!"
+          }
+        }
+      }
+    },
+    "login.validation.email" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzgün e-poçt ünvanı daxil edin."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a valid email address."
+          }
+        }
+      }
+    },
+    "login.validation.password" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrə ən azı 8 simvoldan ibarət olmalı, ən azı bir hərf və bir rəqəm ehtiva etməlidir."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The password must contain at least 8 characters, including at least one letter and one number."
+          }
+        }
+      }
+    },
+    "login.validation.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məlumatları yoxlayın"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check Your Information"
           }
         }
       }
@@ -623,6 +719,38 @@
         }
       }
     },
+    "otp.expired" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodun vaxtı bitib."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The code has expired."
+          }
+        }
+      }
+    },
+    "otp.expiresIn" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodun etibarlılıq müddəti:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Code expires in"
+          }
+        }
+      }
+    },
     "otp.resend" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -636,6 +764,22 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Resend"
+          }
+        }
+      }
+    },
+    "otp.resendAvailableIn" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodu yenidən göndərmək üçün:"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resend code in"
           }
         }
       }
@@ -810,6 +954,57 @@
         }
       }
     },
+    "register.success.button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Login səhifəsinə qayıt"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Return to the login page"
+          }
+        }
+      }
+    },
+    "register.success.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təsdiqləmə linkini email ünvanınıza göndərdik. Hesabınızı aktivləşdirmək üçün emailinizdəki linkə daxil olun."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We have sent a confirmation link to your email address. Click the link in your email to activate your account."
+          }
+        }
+      }
+    },
+    "register.success.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emailinizi yoxlayın"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check your email."
+          }
+        }
+      }
+    },
     "register.title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -823,6 +1018,91 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Register"
+          }
+        }
+      }
+    },
+    "register.validation.email" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzgün e-poçt ünvanı daxil edin.\n"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a valid email address.\n"
+          }
+        }
+      }
+    },
+    "register.validation.firstName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zəhmət olmasa, adınızı daxil edin."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter your first name."
+          }
+        }
+      }
+    },
+    "register.validation.lastName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zəhmət olmasa, soyadınızı daxil edin."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter your last name.\n"
+          }
+        }
+      }
+    },
+    "register.validation.password" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrə ən azı 8 simvoldan ibarət olmalı, ən azı bir hərf və bir rəqəm ehtiva etməlidir."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The password must contain at least 8 characters, including at least one letter and one number.\n"
+          }
+        }
+      }
+    },
+    "register.validation.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məlumatları yoxlayın"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check Your Information\n"
           }
         }
       }
@@ -878,8 +1158,53 @@
         }
       }
     },
-    "salam" : {
-
+    "reset.validation.passwordInvalid" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrə minimum 8 simvoldan ibarət olmalı, böyük və kiçik hərf, rəqəm və ya xüsusi simvol ehtiva etməlidir."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Password must contain at least 8 characters, uppercase and lowercase letters, and a number or special character."
+          }
+        }
+      }
+    },
+    "reset.validation.passwordRequired" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zəhmət olmasa, yeni şifrənizi daxil edin."
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter your new password."
+          }
+        }
+      }
+    },
+    "reset.validation.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xəta"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Error"
+          }
+        }
+      }
     }
   },
   "version" : "1.2"

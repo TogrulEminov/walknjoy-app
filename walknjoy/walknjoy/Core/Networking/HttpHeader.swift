@@ -9,10 +9,7 @@ import Foundation
 
 enum HttpHeader{
     static let authorization = "Authorization"
-    static let accept = "accept"
-    static let baerar = "Bearer"
-}
-enum ContentType {
-    static let applicationJson = "application/json"
-    static let multipartFormData = "multipart/formdata"
+    static let accept = "Accept"
+    static let bearar = "Bearer"
+    static let contentType = "Content-Type"
 }

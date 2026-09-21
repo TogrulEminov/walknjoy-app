@@ -7,9 +7,18 @@
 
 import Foundation
 
-enum AuthRoute {
+enum AuthRoute: Hashable {
     case login
-    case register 
+    case register
     case forgotPassword
-    case resetPassword
+    case otp(
+        email: String,
+        expireTime:Int,
+        resendAvailableInSeconds: Int
+    )
+
+
+    case resetPassword(
+        resetToken: String
+    )
 }
