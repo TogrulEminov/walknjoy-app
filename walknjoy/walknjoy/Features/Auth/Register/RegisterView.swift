@@ -7,64 +7,106 @@
 import SwiftUI
 
 struct RegisterView: View {
+    @Environment(\.dismiss) private var dismiss
+    @State private var registerVM = RegisterViewModel()
+
+
     @State private var email = ""
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var password = ""
 
+    private var form: FormState<AuthField> {
+        AuthForms.register(firstName: firstName, lastName: lastName, email: email, password: password, isSubmitting: isLoading)
+    }
+
+    private var isLoading: Bool {
+        if case .loading = registerVM.state {
+            return true
+        }
+
+        return false
+    }
+
+
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
-            LoginBackgroundDecoration().ignoresSafeArea()
+            Color.appBackground
+                .ignoresSafeArea()
+            BackgroundDecoration().ignoresSafeArea()
 
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-                    logoView
-                    Spacer().frame(height: 100)
-                    header
-                    Spacer().frame(height: 32)
-                    inputFields
-                    Spacer().frame(height: 38)
-                    registerButton
-                    Spacer()
-                        .frame(height: 36)
-                    loginSection
-                }.padding(.horizontal, 24).padding(.top, 20).padding(
-                    .bottom,
-                    30
-                )
+            switch registerVM.state {
+            case .success: successContent
+            default: registerContent
             }
-            .scrollIndicators(.hidden)
-            .scrollDismissesKeyboard(.interactively)
-            .simultaneousGesture(
-                TapGesture().onEnded {
-                    UIApplication.shared.sendAction(
-                        #selector(UIResponder.resignFirstResponder),
-                        to: nil,
-                        from: nil,
-                        for: nil
-                    )
-                }
-            )
         }
     }
 }
 extension RegisterView {
-    private var logoView: some View {
-        Image("logo-colorfull").resizable().scaledToFit().frame(width: 150)
+
+    private var successContent: some View {
+        SuccessStateView(
+            title: "register.success.title",
+            message: "register.success.message",
+            buttonTitle: "register.success.button"
+        ) {
+            dismiss()
+        }
+        .padding(.horizontal, 24)
+    }
+}
+extension RegisterView {
+
+    @ViewBuilder
+    private var errorContent: some View {
+        if case .error(let message) = registerVM.state {
+            Text(message)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundStyle(Color.errorColor)
+                .padding(.top, 12)
+        }
+    }
+}
+
+extension RegisterView {
+    private var registerContent: some View {
+        ScrollView(.vertical, showsIndicators: false) {
+            VStack(alignment: .leading, spacing: 0) {
+                LogoView()
+                Spacer().frame(height: 100)
+                header
+                Spacer().frame(height: 32)
+                inputFields
+                errorContent
+                Spacer().frame(height: 38)
+
+                registerButton
+                Spacer()
+                    .frame(height: 36)
+                loginSection
+            }.padding(.horizontal, 24).padding(.top, 20).padding(
+                .bottom,
+                30
+            )
+        }
+        .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.interactively)
+        .simultaneousGesture(
+            TapGesture().onEnded {
+                UIApplication.shared.sendAction(
+                    #selector(UIResponder.resignFirstResponder),
+                    to: nil,
+                    from: nil,
+                    for: nil
+                )
+            }
+        )
     }
 }
 
 extension RegisterView {
     private var header: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("register.title").font(.system(size: 34, weight: .bold))
-                .foregroundStyle(Color.primaryBlue)
-            Text("register.description").font(
-                .system(size: 16, weight: .medium)
-            )
-            .foregroundStyle(Color.primaryBlue.opacity(0.45)).lineSpacing(3)
-        }
+        AuthHeader(title: "register.title", description: "register.description")
     }
 }
 extension RegisterView {
@@ -79,6 +121,7 @@ extension RegisterView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.firstName])
             InputFieldRepresentable(
                 text: $lastName,
                 placeholder: String(
@@ -88,6 +131,7 @@ extension RegisterView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.lastName])
 
             InputFieldRepresentable(
                 text: $email,
@@ -101,6 +145,7 @@ extension RegisterView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.email])
 
             PasswordFieldRepresentable(
                 text: $password,
@@ -110,6 +155,7 @@ extension RegisterView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.password])
 
         }
     }
@@ -120,7 +166,7 @@ extension RegisterView {
             Text("register.loginText")
             NavigationLink(value: AuthRoute.login) {
                 Text("register.login").fontWeight(.semibold).foregroundStyle(
-                    Color.primaryBlue
+                    Color.titleText
                 )
             }
 
@@ -130,23 +176,36 @@ extension RegisterView {
 
 extension RegisterView {
     private var registerButton: some View {
-        Button {
-            print("hello")
-        } label: {
-            HStack {
-                Text("register.button")
-                Image(systemName: "arrow.right")
-            }.font(.system(size: 16, weight: .semibold)).foregroundStyle(
-                Color.primaryBlue
-            ).frame(maxWidth: .infinity).frame(height: 56).background(
-                Color.primaryYellow
-            ).clipShape(RoundedRectangle(cornerRadius: 16))
-        }.buttonStyle(.plain)
+        SubmitButton(
+            title: "register.button",
+            icon: "arrow.right",
+            form: form,
+        ) {
+            submit()
+        }
 
     }
 }
 struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
         RegisterView()
+    }
+}
+
+extension RegisterView {
+    private func submit() {
+        guard form.canSubmit else {
+            return
+        }
+
+        Task {
+            await registerVM.register(
+                lastName: lastName,
+                firstName: firstName,
+                email: email,
+                password: password
+            )
+
+        }
     }
 }

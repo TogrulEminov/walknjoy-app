@@ -4,125 +4,330 @@
 //
 //  Created by Eminov Togrul Punhan on 16.09.26.
 //
+
 import SwiftUI
 
 struct ForgotPasswordView: View {
-    @State private var password = ""
-    @State private var confirmPassword = ""
+
+    // MARK: - Environment
+
+    @Environment(\.dismiss) private var dismiss
+
+    // MARK: - ViewModel
+
+    @State private var forgotPasswordVM = ForgotPasswordViewModel()
+
+    // MARK: - Form State
+
+    @State private var email = ""
+
+    // MARK: - Validation State
+
+
+    // MARK: - Navigation State
+
+    @State private var navigateToOtp = false
+
+    @State private var expiresInSeconds = 0
+    @State private var resendAvailableInSeconds = 0
+
+    // MARK: - Computed Properties
+
+    private var form: FormState<AuthField> {
+        AuthForms.forgotPassword(email: email, isSubmitting: isLoading)
+    }
+
+    private var isLoading: Bool {
+        if case .loading = forgotPasswordVM.state {
+            return true
+        }
+
+        return false
+    }
+
+    // MARK: - Body
 
     var body: some View {
         ZStack {
-            Color.white.ignoresSafeArea()
-            LoginBackgroundDecoration().ignoresSafeArea()
+            Color.appBackground
+                .ignoresSafeArea()
+            BackgroundDecoration()
+                .ignoresSafeArea()
 
-            ScrollView(.vertical, showsIndicators: false) {
-                VStack(alignment: .leading, spacing: 0) {
-                    logoView
-                    Spacer().frame(height: 100)
-                    header
-                    Spacer().frame(height: 32)
-                    inputFields
-                    Spacer().frame(height: 38)
-                    PasswordRequirementsView(password: password)
-                    Spacer().frame(height: 38)
-                    customButton
-                    Spacer()
-                        .frame(height: 36)
-                    loginSection
-                }.padding(.horizontal, 24).padding(.top, 20).padding(
-                    .bottom,
-                    30
-                )
+            contentView
+        }
+        
+        .navigationDestination(
+            isPresented: $navigateToOtp
+        ) {
+            OtpView(
+                email: email,
+                expireTime: expiresInSeconds,
+                resendAvailableTime: resendAvailableInSeconds
+            )
+        }
+        .onChange(
+            of: forgotPasswordVM.state
+        ) { _, newState in
+            handleStateChange(newState)
+        }
+    }
+}
+
+// MARK: - Content
+
+extension ForgotPasswordView {
+
+    private var contentView: some View {
+        ScrollView(
+            .vertical,
+            showsIndicators: false
+        ) {
+            VStack(
+                alignment: .leading,
+                spacing: 0
+            ) {
+
+                LogoView()
+
+                Spacer()
+                    .frame(height: 100)
+
+                header
+
+                Spacer()
+                    .frame(height: 32)
+
+                inputFields
+
+                errorContent
+
+                Spacer()
+                    .frame(height: 38)
+
+                customButton
+
+                Spacer()
+                    .frame(height: 36)
+
+                loginSection
             }
-            .scrollIndicators(.hidden)
-            .scrollDismissesKeyboard(.interactively)
-            .simultaneousGesture(
-                TapGesture().onEnded {
-                    UIApplication.shared.sendAction(
-                        #selector(UIResponder.resignFirstResponder),
-                        to: nil,
-                        from: nil,
-                        for: nil
-                    )
-                }
-            )
+            .padding(.horizontal, 24)
+            .padding(.top, 20)
+            .padding(.bottom, 30)
         }
+        .scrollIndicators(.hidden)
+        .scrollDismissesKeyboard(.interactively)
+        .simultaneousGesture(
+            TapGesture().onEnded {
+                dismissKeyboard()
+            }
+        )
     }
 }
 
-extension ForgotPasswordView {
-    private var logoView: some View {
-        Image("logo-colorfull").resizable().scaledToFit().frame(width: 150)
-    }
-}
+// MARK: - Header
 
 extension ForgotPasswordView {
+
     private var header: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("reset.title").font(.system(size: 34, weight: .bold))
-                .foregroundStyle(Color.primaryBlue)
-            Text("reset.description").font(
-                .system(size: 16, weight: .medium)
-            )
-            .foregroundStyle(Color.primaryBlue.opacity(0.45)).lineSpacing(3)
+        VStack(
+            alignment: .leading,
+            spacing: 10
+        ) {
+
+            Text("forgot.title")
+                .font(
+                    .system(
+                        size: 34,
+                        weight: .bold
+                    )
+                )
+                .foregroundStyle(Color.titleText)
+
+            Text("forgot.description")
+                .font(
+                    .system(
+                        size: 16,
+                        weight: .medium
+                    )
+                )
+                .foregroundStyle(
+                    Color.titleText.opacity(0.45)
+                )
+                .lineSpacing(3)
         }
     }
 }
+
+// MARK: - Input Fields
+
 extension ForgotPasswordView {
+
     private var inputFields: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            PasswordFieldRepresentable(
-                text: $password,
-                placeHolder: String(
-                    localized: "input.password"
-                )
+        VStack(
+            alignment: .leading,
+            spacing: 10
+        ) {
+
+            InputFieldRepresentable(
+                text: $email,
+                placeholder: String(
+                    localized: "input.email"
+                ),
+                icon: "envelope",
+                keyboardType: .emailAddress,
+                textContentType: .emailAddress,
+                autocapitalizationType: .none
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
-            PasswordFieldRepresentable(
-                text: $confirmPassword,
-                placeHolder: String(
-                    localized: "input.confirmPassword"
-                )
-            )
-            .frame(maxWidth: .infinity)
-            .frame(height: 56)
+            .fieldValidation(form[.email])
         }
     }
 }
+
+// MARK: - Error
+
 extension ForgotPasswordView {
+
+    @ViewBuilder
+    private var errorContent: some View {
+
+        if case .error(let message) = forgotPasswordVM.state {
+
+            Text(message)
+                .font(
+                    .system(
+                        size: 13,
+                        weight: .medium
+                    )
+                )
+                .foregroundStyle(Color.errorColor)
+                .frame(
+                    maxWidth: .infinity,
+                    alignment: .leading
+                )
+                .padding(.top, 12)
+        }
+    }
+}
+
+// MARK: - Login Section
+
+extension ForgotPasswordView {
+
     private var loginSection: some View {
         HStack(spacing: 5) {
-            Text("login.back")
-            NavigationLink(value: AuthRoute.login) {
-                Text("login.button").fontWeight(.semibold).foregroundStyle(
-                    Color.primaryBlue
-                )
-            }
 
-        }.font(.system(size: 14)).frame(maxWidth: .infinity)
+            Text("forgot.remember")
+
+            Button {
+                dismiss()
+            } label: {
+
+                Text("login.button")
+                    .fontWeight(.semibold)
+                    .foregroundStyle(
+                        Color.titleText
+                    )
+            }
+            .buttonStyle(.plain)
+        }
+        .font(.system(size: 14))
+        .frame(maxWidth: .infinity)
     }
 }
+
+// MARK: - Button
 
 extension ForgotPasswordView {
-    private var customButton: some View {
-        Button {
-            print("hello")
-        } label: {
-            HStack {
-                Text("reset.button")
-                Image(systemName: "arrow.right")
-            }.font(.system(size: 16, weight: .semibold)).foregroundStyle(
-                Color.primaryBlue
-            ).frame(maxWidth: .infinity).frame(height: 56).background(
-                Color.primaryYellow
-            ).clipShape(RoundedRectangle(cornerRadius: 16))
-        }.buttonStyle(.plain)
 
+    private var customButton: some View {
+        SubmitButton(
+            title: "forgot.button",
+            icon: "arrow.right",
+            form: form
+        ) {
+            submit()
+        }
     }
 }
-struct ForgotPassword_Previews: PreviewProvider {
-    static var previews: some View {
+
+// MARK: - Actions
+
+extension ForgotPasswordView {
+
+    private func submit() {
+
+        guard form.canSubmit else {
+            return
+        }
+
+        dismissKeyboard()
+
+        Task {
+            await forgotPasswordVM.forgotPassowrd(
+                email: email
+            )
+        }
+    }
+
+
+}
+
+// MARK: - State Handler
+
+extension ForgotPasswordView {
+
+    private func handleStateChange(
+        _ state: ForgotPasswordState
+    ) {
+
+        switch state {
+
+        case .idle,
+            .loading,
+            .error:
+            break
+
+        case .success(
+            let expiresInSeconds,
+            let resendAvailableInSeconds
+        ):
+
+            self.expiresInSeconds =
+                expiresInSeconds
+
+            self.resendAvailableInSeconds =
+                resendAvailableInSeconds
+
+            navigateToOtp = true
+        }
+    }
+}
+
+// MARK: - Helpers
+
+extension ForgotPasswordView {
+
+    private func dismissKeyboard() {
+
+        UIApplication.shared.sendAction(
+            #selector(
+                UIResponder.resignFirstResponder
+            ),
+            to: nil,
+            from: nil,
+            for: nil
+        )
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    NavigationStack {
         ForgotPasswordView()
     }
 }

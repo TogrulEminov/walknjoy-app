@@ -7,8 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AC8FDC623066464100F8DF68 /* InputMask in Frameworks */ = {isa = PBXBuildFile; productRef = AC8FDC613066464100F8DF68 /* InputMask */; };
 		AC903DA4305B0C0500EDE816 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = AC903DA3305B0C0500EDE816 /* SDWebImageSwiftUI */; };
 		AC903DA7305B0C4600EDE816 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = AC903DA6305B0C4600EDE816 /* SnapKit */; };
+		ACA5FBA83063BBE7007E3433 /* InfomaniakRichHTMLEditor in Frameworks */ = {isa = PBXBuildFile; productRef = ACA5FBA73063BBE7007E3433 /* InfomaniakRichHTMLEditor */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +34,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				AC903DA4305B0C0500EDE816 /* SDWebImageSwiftUI in Frameworks */,
+				AC8FDC623066464100F8DF68 /* InputMask in Frameworks */,
+				ACA5FBA83063BBE7007E3433 /* InfomaniakRichHTMLEditor in Frameworks */,
 				AC903DA7305B0C4600EDE816 /* SnapKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -77,6 +81,8 @@
 			packageProductDependencies = (
 				AC903DA3305B0C0500EDE816 /* SDWebImageSwiftUI */,
 				AC903DA6305B0C4600EDE816 /* SnapKit */,
+				ACA5FBA73063BBE7007E3433 /* InfomaniakRichHTMLEditor */,
+				AC8FDC613066464100F8DF68 /* InputMask */,
 			);
 			productName = walknjoy;
 			productReference = AC903D7A305B017200EDE816 /* walknjoy.app */;
@@ -101,7 +107,6 @@
 			developmentRegion = az;
 			hasScannedForEncodings = 0;
 			knownRegions = (
-				en,
 				Base,
 				az,
 			);
@@ -110,6 +115,8 @@
 			packageReferences = (
 				AC903DA2305B0C0500EDE816 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				AC903DA5305B0C4600EDE816 /* XCRemoteSwiftPackageReference "snapkit" */,
+				ACA5FBA63063BBE7007E3433 /* XCRemoteSwiftPackageReference "swift-rich-html-editor" */,
+				AC8FDC603066464100F8DF68 /* XCRemoteSwiftPackageReference "input-mask-ios" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = AC903D7B305B017200EDE816 /* Products */;
@@ -146,7 +153,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -211,7 +218,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -269,7 +276,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = buttonBackground;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D9WYP3DGP5;
@@ -301,7 +308,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = buttonBackground;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = D9WYP3DGP5;
@@ -353,6 +360,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		AC8FDC603066464100F8DF68 /* XCRemoteSwiftPackageReference "input-mask-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RedMadRobot/input-mask-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.3.2;
+			};
+		};
 		AC903DA2305B0C0500EDE816 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
@@ -369,9 +384,22 @@
 				minimumVersion = 6.0.0;
 			};
 		};
+		ACA5FBA63063BBE7007E3433 /* XCRemoteSwiftPackageReference "swift-rich-html-editor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Infomaniak/swift-rich-html-editor.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.3.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		AC8FDC613066464100F8DF68 /* InputMask */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = AC8FDC603066464100F8DF68 /* XCRemoteSwiftPackageReference "input-mask-ios" */;
+			productName = InputMask;
+		};
 		AC903DA3305B0C0500EDE816 /* SDWebImageSwiftUI */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = AC903DA2305B0C0500EDE816 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
@@ -381,6 +409,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = AC903DA5305B0C4600EDE816 /* XCRemoteSwiftPackageReference "snapkit" */;
 			productName = SnapKit;
+		};
+		ACA5FBA73063BBE7007E3433 /* InfomaniakRichHTMLEditor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ACA5FBA63063BBE7007E3433 /* XCRemoteSwiftPackageReference "swift-rich-html-editor" */;
+			productName = InfomaniakRichHTMLEditor;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

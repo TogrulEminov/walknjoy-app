@@ -1,19 +1,195 @@
 {
   "sourceLanguage" : "az",
   "strings" : {
-    "forgot" : {
-      "extractionState" : "stale",
+    "" : {
+
+    },
+    "%lld" : {
+
+    },
+    "common.ok" : {
+      "extractionState" : "manual",
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "unut"
+            "value" : "Oldu"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "editor.action.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "forgot"
+            "value" : "Əlavə et"
+          }
+        }
+      }
+    },
+    "editor.action.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ləğv et"
+          }
+        }
+      }
+    },
+    "editor.action.redo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təkrar et"
+          }
+        }
+      }
+    },
+    "editor.action.undo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geri al"
+          }
+        }
+      }
+    },
+    "editor.content.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məzmun"
+          }
+        }
+      }
+    },
+    "editor.format.bold" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qalın"
+          }
+        }
+      }
+    },
+    "editor.format.bulletList" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Siyahı"
+          }
+        }
+      }
+    },
+    "editor.format.clear" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formatı sil"
+          }
+        }
+      }
+    },
+    "editor.format.italic" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İtalik"
+          }
+        }
+      }
+    },
+    "editor.format.link" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link"
+          }
+        }
+      }
+    },
+    "editor.format.numberedList" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nömrəli siyahı"
+          }
+        }
+      }
+    },
+    "editor.format.paragraph" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adi mətn"
+          }
+        }
+      }
+    },
+    "editor.format.underline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Altından xətt"
+          }
+        }
+      }
+    },
+    "editor.link.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilmiş mətnə əlavə ediləcək linki daxil et."
+          }
+        }
+      }
+    },
+    "editor.link.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://example.com"
+          }
+        }
+      }
+    },
+    "editor.link.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Link əlavə et"
           }
         }
       }
@@ -26,12 +202,6 @@
             "state" : "translated",
             "value" : "Linki göndər"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Send the link"
-          }
         }
       }
     },
@@ -42,12 +212,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "E-poçt ünvanınızı daxil edin, şifrə sıfılama linki sizə göndərilsin"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter your email address to receive a password reset link."
           }
         }
       }
@@ -60,28 +224,48 @@
             "state" : "translated",
             "value" : "Xatırladınız?"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Do you remember?"
-          }
         }
       }
     },
     "forgot.title" : {
-      "extractionState" : "manual",
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Şifrəni unutmusunuz?"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "forgot.title\n" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Forgot your password?"
+            "value" : "Şifrəni unutmusunuz?\n"
+          }
+        }
+      }
+    },
+    "forgot.validation.email" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzgün e-poçt ünvanı daxil edin."
+          }
+        }
+      }
+    },
+    "forgot.validation.title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məlumatları yoxlayın"
           }
         }
       }
@@ -94,12 +278,6 @@
             "state" : "translated",
             "value" : "Şifrəni təkrar daxil edin"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Re-enter the password"
-          }
         }
       }
     },
@@ -109,12 +287,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "E-poçt ünvanı"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "needs_review",
-            "value" : "Email address"
           }
         }
       }
@@ -127,12 +299,6 @@
             "state" : "translated",
             "value" : "Adınız"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Name"
-          }
         }
       }
     },
@@ -144,12 +310,6 @@
             "state" : "translated",
             "value" : "Soyadınız"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Surname"
-          }
         }
       }
     },
@@ -159,12 +319,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Şifrə"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Password"
           }
         }
       }
@@ -177,12 +331,6 @@
             "state" : "translated",
             "value" : "Azərbaycan dili"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Azerbaijani"
-          }
         }
       }
     },
@@ -193,12 +341,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Davam et"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continue"
           }
         }
       }
@@ -211,12 +353,6 @@
             "state" : "translated",
             "value" : "İngilis dili"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "English"
-          }
         }
       }
     },
@@ -227,12 +363,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tətbiqi istədiyiniz dildə istifadə edin."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Use the app in your preferred language."
           }
         }
       }
@@ -245,12 +375,6 @@
             "state" : "translated",
             "value" : "Dil seçin"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose a language"
-          }
         }
       }
     },
@@ -262,12 +386,6 @@
             "state" : "translated",
             "value" : "Geri qayıtmaq istəyirsiniz?"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Do you want to go back?"
-          }
         }
       }
     },
@@ -277,12 +395,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Daxil ol"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign In"
           }
         }
       }
@@ -295,12 +407,6 @@
             "state" : "translated",
             "value" : "Səyahətinə qaldıqım yerdən davam et"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continue the journey from where I left off."
-          }
         }
       }
     },
@@ -310,12 +416,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Şifrəni unutmusunuz?"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Forgot password?"
           }
         }
       }
@@ -327,12 +427,6 @@
             "state" : "translated",
             "value" : "Hesabınız yoxdur?"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Don’t have an account?"
-          }
         }
       }
     },
@@ -342,12 +436,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Qeydiyyatdan keç"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign Up"
           }
         }
       }
@@ -360,27 +448,181 @@
             "state" : "translated",
             "value" : "Yenidən xoş gəldiniz!"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Welcome back!"
-          }
         }
       }
     },
-    "main" : {
+    "login.validation.email" : {
+      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Əsas"
+            "value" : "Düzgün e-poçt ünvanı daxil edin."
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "login.validation.password" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Main"
+            "value" : "Şifrə ən azı 8 simvoldan ibarət olmalı, ən azı bir hərf və bir rəqəm ehtiva etməlidir."
+          }
+        }
+      }
+    },
+    "login.validation.title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məlumatları yoxlayın"
+          }
+        }
+      }
+    },
+    "notifications.activity" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesab və sifarişlər"
+          }
+        }
+      }
+    },
+    "notifications.ai" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI yenilikləri"
+          }
+        }
+      }
+    },
+    "notifications.ai.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Süni intellekt funksiyaları ilə bağlı yeniliklər."
+          }
+        }
+      }
+    },
+    "notifications.bookings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sifariş yenilikləri"
+          }
+        }
+      }
+    },
+    "notifications.bookings.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sifarişlərinizlə bağlı dəyişikliklər və yeniliklər."
+          }
+        }
+      }
+    },
+    "notifications.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hansı yeniliklər barədə bildiriş almaq istədiyinizi seçin."
+          }
+        }
+      }
+    },
+    "notifications.discover" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeniliklər və təkliflər"
+          }
+        }
+      }
+    },
+    "notifications.loadError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildiriş seçimləri yüklənmədi"
+          }
+        }
+      }
+    },
+    "notifications.marketing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təkliflər və kampaniyalar"
+          }
+        }
+      }
+    },
+    "notifications.marketing.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xüsusi təkliflər və tanıtım bildirişləri."
+          }
+        }
+      }
+    },
+    "notifications.messages" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mesajlar"
+          }
+        }
+      }
+    },
+    "notifications.messages.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni mesajlar barədə bildirişlər."
+          }
+        }
+      }
+    },
+    "notifications.saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildiriş seçimləri yadda saxlanıldı."
           }
         }
       }
@@ -393,12 +635,6 @@
             "state" : "translated",
             "value" : "Turlar, aktivitilər və yerli təcrübələrlə səyahətini rənglə."
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Make your journey memorable with tours, activities and local experiences."
-          }
         }
       }
     },
@@ -409,12 +645,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unikal təcrübələr"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unique experiences"
           }
         }
       }
@@ -427,12 +657,6 @@
             "state" : "translated",
             "value" : "Davam et"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continue"
-          }
         }
       }
     },
@@ -443,12 +667,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Sevimlilərini saxla, planla və hər yerdən asanlıqla idarə et."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Save your favorites, plan your journey and manage it with ease."
           }
         }
       }
@@ -461,12 +679,6 @@
             "state" : "translated",
             "value" : "Planla. Kəşf et. Yaşa."
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plan. Discover. Experience."
-          }
         }
       }
     },
@@ -477,12 +689,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Keç"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Skip"
           }
         }
       }
@@ -495,12 +701,6 @@
             "state" : "translated",
             "value" : "Başla"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Get started"
-          }
         }
       }
     },
@@ -511,12 +711,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minlərlə otel, villa və qonaq evi sənin üçün."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Thousands of hotels, villas and guest houses for your journey."
           }
         }
       }
@@ -529,12 +723,6 @@
             "state" : "translated",
             "value" : "Rahat qalma yerləri"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comfortable stays"
-          }
         }
       }
     },
@@ -545,12 +733,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Unudulmaz məkanlar, təcrübələr və macəralar səni gözləyir."
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Unforgettable places, experiences and adventures await you."
           }
         }
       }
@@ -563,12 +745,6 @@
             "state" : "translated",
             "value" : "Hər səyahət yeni bir hekayədir"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Every journey is a new story"
-          }
         }
       }
     },
@@ -579,12 +755,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Davam et"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Continue"
           }
         }
       }
@@ -597,12 +767,6 @@
             "state" : "translated",
             "value" : "E-poçt ünvanınıza göndərdiyimiz 6 rəqəmli kodu daxil edin."
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Enter the 6-digit code we sent to your email address."
-          }
         }
       }
     },
@@ -614,11 +778,25 @@
             "state" : "translated",
             "value" : "Kodu almadınız?"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "otp.expired" : {
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Didn't receive the code?\n"
+            "value" : "Kodun vaxtı bitib."
+          }
+        }
+      }
+    },
+    "otp.expiresIn" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodun etibarlılıq müddəti:"
           }
         }
       }
@@ -631,11 +809,15 @@
             "state" : "translated",
             "value" : "Yenidən göndər"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "otp.resendAvailableIn" : {
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Resend"
+            "value" : "Kodu yenidən göndərmək üçün:"
           }
         }
       }
@@ -648,12 +830,6 @@
             "state" : "translated",
             "value" : "Kod göndərildi:"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Code sent to:"
-          }
         }
       }
     },
@@ -665,11 +841,27 @@
             "state" : "translated",
             "value" : "Doğrulama kodunu daxil edin"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "otp.validation.code" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Enter verification code"
+            "value" : "6 rəqəmli təsdiq kodunu tam daxil edin."
+          }
+        }
+      }
+    },
+    "password.requirements.digit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ən azı bir rəqəm"
           }
         }
       }
@@ -682,11 +874,27 @@
             "state" : "translated",
             "value" : "8 simvoldan ibarət olsun"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "password.requirements.lengthRange" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Your password must contain:"
+            "value" : "8–128 simvol"
+          }
+        }
+      }
+    },
+    "password.requirements.letter" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ən azı bir latın hərfi"
           }
         }
       }
@@ -699,12 +907,6 @@
             "state" : "translated",
             "value" : "Rəqəm və ya xüsusi simvol ehtiva etsin"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A number or special character"
-          }
         }
       }
     },
@@ -715,12 +917,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Şifrəniz ən azı:"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Your password must be at least:"
           }
         }
       }
@@ -733,11 +929,353 @@
             "state" : "translated",
             "value" : "Böyük və kiçik hərf ehtiva etsin"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "profile.adminDashboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Uppercase and lowercase letters"
+            "value" : "İdarəetmə paneli"
+          }
+        }
+      }
+    },
+    "profile.administration" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İdarəetmə paneli"
+          }
+        }
+      }
+    },
+    "profile.appearance" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Görünüş"
+          }
+        }
+      }
+    },
+    "profile.avatar.delete" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil şəklini sil"
+          }
+        }
+      }
+    },
+    "profile.avatar.updating" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil şəkli yenilənir..."
+          }
+        }
+      }
+    },
+    "profile.bookings" : {
+      "comment" : "My Bookings",
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezervasiyalar"
+          }
+        }
+      }
+    },
+    "profile.business" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes"
+          }
+        }
+      }
+    },
+    "profile.businessDashboard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes paneli"
+          }
+        }
+      }
+    },
+    "profile.editProfile" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profili redaktə et"
+          }
+        }
+      }
+    },
+    "profile.error.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xəta baş verdi"
+          }
+        }
+      }
+    },
+    "profile.favorites" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilmişlər"
+          }
+        }
+      }
+    },
+    "profile.firstName" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ad"
+          }
+        }
+      }
+    },
+    "profile.firstName.placeholder" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adınızı daxil edin"
+          }
+        }
+      }
+    },
+    "profile.language" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dil"
+          }
+        }
+      }
+    },
+    "profile.lastName" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soyad"
+          }
+        }
+      }
+    },
+    "profile.lastName.placeholder" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Soyadınızı daxil edin"
+          }
+        }
+      }
+    },
+    "profile.logout" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesabdan çıx"
+          }
+        }
+      }
+    },
+    "profile.main" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesab"
+          }
+        }
+      }
+    },
+    "profile.myAccount" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesabım"
+          }
+        }
+      }
+    },
+    "profile.notifications" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistem bildirişləri"
+          }
+        }
+      }
+    },
+    "profile.personalInformation" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şəxsi məlumatlar"
+          }
+        }
+      }
+    },
+    "profile.personalInformation\n" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şəxsi məlumatlar"
+          }
+        }
+      }
+    },
+    "profile.personalInformation.description" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil məlumatlarınızı yeniləyin"
+          }
+        }
+      }
+    },
+    "profile.phone" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefon"
+          }
+        }
+      }
+    },
+    "profile.phone.invalid" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefon nömrəsini tam daxil edin"
+          }
+        }
+      }
+    },
+    "profile.reviews" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rəylər"
+          }
+        }
+      }
+    },
+    "profile.role.admin" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Administrator"
+          }
+        }
+      }
+    },
+    "profile.role.customer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səyahətçi"
+          }
+        }
+      }
+    },
+    "profile.role.provider" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xidmət təminatçısı"
+          }
+        }
+      }
+    },
+    "profile.saveChanges" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dəyişiklikləri yadda saxla"
+          }
+        }
+      }
+    },
+    "profile.security" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təhlükəsizlik"
+          }
+        }
+      }
+    },
+    "profile.settings" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tənzimləmələr"
+          }
+        }
+      }
+    },
+    "profile.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil"
           }
         }
       }
@@ -750,12 +1288,6 @@
             "state" : "translated",
             "value" : "Qeydiyyatdan keç"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign Up"
-          }
         }
       }
     },
@@ -766,12 +1298,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yeni üfüqlərə birlikdə addım ataq"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Let us step towards new horizons together."
           }
         }
       }
@@ -784,12 +1310,6 @@
             "state" : "translated",
             "value" : "Daxil ol"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sign in"
-          }
         }
       }
     },
@@ -801,11 +1321,38 @@
             "state" : "translated",
             "value" : "Artıq hesabınız var?"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "register.success.button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Do you already have an account?"
+            "value" : "Login səhifəsinə qayıt"
+          }
+        }
+      }
+    },
+    "register.success.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təsdiqləmə linkini email ünvanınıza göndərdik. Hesabınızı aktivləşdirmək üçün emailinizdəki linkə daxil olun."
+          }
+        }
+      }
+    },
+    "register.success.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Emailinizi yoxlayın"
           }
         }
       }
@@ -818,11 +1365,60 @@
             "state" : "translated",
             "value" : "Qeydiyyat"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "register.validation.email" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Register"
+            "value" : "Düzgün e-poçt ünvanı daxil edin.\n"
+          }
+        }
+      }
+    },
+    "register.validation.firstName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zəhmət olmasa, adınızı daxil edin."
+          }
+        }
+      }
+    },
+    "register.validation.lastName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zəhmət olmasa, soyadınızı daxil edin."
+          }
+        }
+      }
+    },
+    "register.validation.password" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrə ən azı 8 simvoldan ibarət olmalı, ən azı bir hərf və bir rəqəm ehtiva etməlidir."
+          }
+        }
+      }
+    },
+    "register.validation.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məlumatları yoxlayın"
           }
         }
       }
@@ -835,12 +1431,6 @@
             "state" : "translated",
             "value" : "Şifrəni yenilə"
           }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Reset password"
-          }
         }
       }
     },
@@ -851,12 +1441,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hesabınız üçün yeni şifrə müəyyən edin və davam edin"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Set a new password for your account and continue."
           }
         }
       }
@@ -869,17 +1453,424 @@
             "state" : "translated",
             "value" : "Yeni şifrə təyin edin"
           }
-        },
-        "en" : {
+        }
+      }
+    },
+    "reset.validation.passwordInvalid" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Set a new password"
+            "value" : "Şifrə minimum 8 simvoldan ibarət olmalı, böyük və kiçik hərf, rəqəm və ya xüsusi simvol ehtiva etməlidir."
           }
         }
       }
     },
-    "salam" : {
-
+    "reset.validation.passwordRequired" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zəhmət olmasa, yeni şifrənizi daxil edin."
+          }
+        }
+      }
+    },
+    "reset.validation.title" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xəta"
+          }
+        }
+      }
+    },
+    "retry" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yenidən cəhd et"
+          }
+        }
+      }
+    },
+    "save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yadda saxla"
+          }
+        }
+      }
+    },
+    "security.changePassword" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrəni dəyiş"
+          }
+        }
+      }
+    },
+    "security.code.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesabınızın e-poçt ünvanına göndərilən 6 rəqəmli kodu daxil edin."
+          }
+        }
+      }
+    },
+    "security.code.expired" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodun vaxtı bitib. Yeni kod istəyin."
+          }
+        }
+      }
+    },
+    "security.code.remaining %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodun bitməsinə %lld saniyə qalıb"
+          }
+        }
+      }
+    },
+    "security.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni şifrəni təkrarlayın"
+          }
+        }
+      }
+    },
+    "security.confirm.mismatch" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrələr eyni deyil."
+          }
+        }
+      }
+    },
+    "security.confirm.required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni şifrəni təkrar daxil edin."
+          }
+        }
+      }
+    },
+    "security.current" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mövcud şifrə"
+          }
+        }
+      }
+    },
+    "security.current.required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mövcud şifrənizi daxil edin."
+          }
+        }
+      }
+    },
+    "security.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hesabınızı qorumaq üçün əvvəl mövcud şifrənizi, sonra e-poçtunuza gələn kodu təsdiqləyin."
+          }
+        }
+      }
+    },
+    "security.new" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni şifrə"
+          }
+        }
+      }
+    },
+    "security.resend" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodu yenidən göndər"
+          }
+        }
+      }
+    },
+    "security.resend.remaining %lld" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yenidən göndərmək üçün %lld saniyə"
+          }
+        }
+      }
+    },
+    "security.restart" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yenidən başla"
+          }
+        }
+      }
+    },
+    "security.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrəni dəyiş"
+          }
+        }
+      }
+    },
+    "security.send" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodu göndər"
+          }
+        }
+      }
+    },
+    "security.sessions" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digər cihazlardakı sessiyalarınız bağlandı. Bu cihazdakı sessiyanız davam edir."
+          }
+        }
+      }
+    },
+    "security.step.code" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "2 / 3 · E-poçt təsdiqi"
+          }
+        }
+      }
+    },
+    "security.step.current" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 / 3 · Mövcud şifrə"
+          }
+        }
+      }
+    },
+    "security.step.new" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "3 / 3 · Yeni şifrə"
+          }
+        }
+      }
+    },
+    "security.success" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrəniz dəyişdirildi"
+          }
+        }
+      }
+    },
+    "security.token.expired" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təsdiqin vaxtı bitib. Yenidən başlayın."
+          }
+        }
+      }
+    },
+    "security.verify" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kodu təsdiqlə"
+          }
+        }
+      }
+    },
+    "settings.appearance.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Görünüş seçimi dərhal bütün tətbiqə tətbiq olunur."
+          }
+        }
+      }
+    },
+    "settings.language.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dil seçiminiz yadda saxlanılır."
+          }
+        }
+      }
+    },
+    "settings.mode.dark" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tünd"
+          }
+        }
+      }
+    },
+    "settings.mode.light" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Açıq"
+          }
+        }
+      }
+    },
+    "settings.mode.system" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sistemə uyğun"
+          }
+        }
+      }
+    },
+    "settings.preferences" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dil və görünüş"
+          }
+        }
+      }
+    },
+    "upload.image.add" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şəkillər əlavə et"
+          }
+        }
+      }
+    },
+    "upload.image.change" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dəyiş"
+          }
+        }
+      }
+    },
+    "upload.image.description" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şəkil seçmək üçün toxunun"
+          }
+        }
+      }
+    },
+    "upload.image.uploading" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yüklənir..."
+          }
+        }
+      }
     }
   },
   "version" : "1.2"

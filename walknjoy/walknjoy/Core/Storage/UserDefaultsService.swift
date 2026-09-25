@@ -10,17 +10,18 @@ import Foundation
 protocol UserDefaultsServiceProtocol {
     var hasSeenOnboarding: Bool { get set }
     var selectedLanguage: AppLanguage { get set }
+    var selectedMode: Mode { get set }
 }
 final class UserDefaultsService: UserDefaultsServiceProtocol {
     private enum Keys {
         static let hasSeenOnboarding = "hasSeenOnboarding"
         static let selectedLanguage = "selectedLanguage"
+        static let selectedMode = "selectedMode"
     }
 
     private let defaults: UserDefaults
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        UserDefaults.standard.set(false, forKey: "hasSeenOnboarding")
 
     }
 
@@ -32,7 +33,24 @@ final class UserDefaultsService: UserDefaultsServiceProtocol {
             defaults.set(newValue, forKey: Keys.hasSeenOnboarding)
         }
     }
+    var selectedMode: Mode {
+        get {
+            guard
+                let value = defaults.string(forKey: Keys.selectedMode),
+                let mode = Mode(rawValue: value)
+            else {
+                return .system
+            }
 
+            return mode
+        }
+        set {
+            defaults.set(
+                newValue.rawValue,
+                forKey: Keys.selectedMode
+            )
+        }
+    }
     var selectedLanguage: AppLanguage {
         get {
             guard

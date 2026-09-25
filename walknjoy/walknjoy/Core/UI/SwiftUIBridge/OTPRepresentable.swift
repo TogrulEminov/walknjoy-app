@@ -6,7 +6,24 @@
 //
 import SwiftUI
 
-struct OTPRepresentable: UIViewRepresentable {
+/// Measure the actual row width before crossing the SwiftUI/UIKit boundary.
+struct OTPRepresentable: View {
+    @Binding var code: String
+    let digitCount: Int
+
+    var body: some View {
+        GeometryReader { geometry in
+            OTPUIKitBridge(code: $code, digitCount: digitCount)
+                .frame(width: max(0, geometry.size.width), height: 56)
+        }
+        .frame(height: 56)
+        .frame(maxWidth: .infinity)
+    }
+}
+
+private struct OTPUIKitBridge: UIViewRepresentable {
+
+    @Environment(\.fieldHasValidationError) private var hasValidationError
 
     @Binding var code: String
     let digitCount: Int
@@ -22,6 +39,7 @@ struct OTPRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: OtpInput, context: Context) {
+        uiView.hasValidationError = hasValidationError
         if uiView.code != code {
             uiView.setCode(code)
         }
@@ -32,12 +50,11 @@ struct OTPRepresentable: UIViewRepresentable {
         uiView: OtpInput,
         context: Context
     ) -> CGSize? {
-        let minimumWidth = CGFloat(digitCount * 48 + (digitCount - 1) * 8)
-        let proposedWidth = proposal.width ?? minimumWidth
+        let preferredWidth = CGFloat(digitCount * 48 + (digitCount - 1) * 8)
 
-        return CGSize(
-            width: max(proposedWidth, minimumWidth),
-            height: 56
-        )
+        // Use the parent container's width, including Form row insets.
+        // SwiftUI can also probe with an unspecified or infinite proposal.
+        let width = proposal.width.flatMap { $0.isFinite ? max(0, $0) : nil }
+        return CGSize(width: width ?? preferredWidth, height: 56)
     }
 }

@@ -1,23 +1,16 @@
-//
-//  AppColors.swift
-//  walknjoy
-//
-//  Created by Eminov Togrul Punhan on 17.09.26.
-//
-
-import SwiftUI
+import UIKit
 
 enum AppColors {
-
-    static let navy = Color(
-        red: 6 / 255,
-        green: 30 / 255,
-        blue: 94 / 255
-    )
-
-    static let yellow = Color(
-        red: 255 / 255,
-        green: 193 / 255,
-        blue: 7 / 255
-    )
+    static let appBackground = UIColor(named: "appBackground")!
+    static let surfaceBackground = UIColor(named: "surfaceBackground")!
+    static let borderColor = UIColor(named: "borderColor")!
+    static let titleText = UIColor(named: "titleText")!
+    static let descriptionText = UIColor(named: "descriptionText")!
+    static let placeholderText = UIColor(named: "placeholderText")!
+    static let iconColor = UIColor(named: "iconColor")!
+    static let buttonBackground = UIColor(named: "buttonBackground")!
+    static let buttonText = UIColor(named: "buttonText")!
+    static let brandYellow = UIColor(named: "brandYellow")!
+    static let disabledBackground = UIColor(named: "disabledBackground")!
+    static let errorColor = UIColor(named: "errorColor")!
 }

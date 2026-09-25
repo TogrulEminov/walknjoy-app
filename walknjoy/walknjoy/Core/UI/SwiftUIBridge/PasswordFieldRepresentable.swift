@@ -2,6 +2,8 @@ import SwiftUI
 import UIKit
 
 struct PasswordFieldRepresentable: UIViewRepresentable {
+    @Environment(\.fieldHasValidationError) private var hasValidationError
+
     @Binding var text: String
     let placeHolder: String
 
@@ -23,10 +25,20 @@ struct PasswordFieldRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: PasswordField, context: Context) {
+        uiView.hasValidationError = hasValidationError
         context.coordinator.parent = self
         if uiView.textField.text != text {
             uiView.textField.text = text
         }
+    }
+
+    func sizeThatFits(
+        _ proposal: ProposedViewSize,
+        uiView: PasswordField,
+        context: Context
+    ) -> CGSize? {
+        guard let width = proposal.width, width.isFinite else { return nil }
+        return CGSize(width: width, height: uiView.intrinsicContentSize.height)
     }
 
     final class Coordinator: NSObject {

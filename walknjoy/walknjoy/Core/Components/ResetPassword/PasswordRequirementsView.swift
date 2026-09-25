@@ -11,47 +11,45 @@ struct PasswordRequirementsView: View {
     let password: String
 
     private var hasMinimumLength: Bool {
-        password.count >= 8
+        (8...128).contains(password.count)
     }
     private var hasUppercaseAndLowercase: Bool {
-        password.contains(where: \.isUppercase)
-            && password.contains(where: \.isLowercase)
+        password.range(of: "[A-Za-z]", options: .regularExpression) != nil
     }
     private var hasNumberOrSpecialCharacter: Bool {
-        password.contains(where: \.isNumber)
-            || password.contains(where: { !$0.isLetter && !$0.isNumber })
+        password.range(of: "[0-9]", options: .regularExpression) != nil
     }
     var body: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text(String(localized: "password.requirements.title"))
                 .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(Color.primaryBlue.opacity(0.65)).padding(.bottom,12)
+                .foregroundStyle(Color.titleText.opacity(0.65)).padding(.bottom,12)
 
             requirementRow(
-                "password.requirements.length",
+                "password.requirements.lengthRange",
                 isValid: hasMinimumLength
             )
 
             requirementRow(
-                "password.requirements.uppercaseLowercase",
+                "password.requirements.letter",
                 isValid: hasUppercaseAndLowercase
             )
 
             requirementRow(
-                "password.requirements.numberOrSpecial",
+                "password.requirements.digit",
                 isValid: hasNumberOrSpecialCharacter
             )
         }
         .padding(12)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.primaryBlue.opacity(0.035))
+        .background(Color.titleText.opacity(0.035))
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
     private func requirementRow(_ key: String, isValid: Bool) -> some View {
         let isEmpty = password.isEmpty
         let color: Color =
-            isEmpty ? Color.primaryBlue.opacity(0.25) : isValid ? .green : .red
+            isEmpty ? Color.titleText.opacity(0.25) : isValid ? .green : Color.errorColor
 
         return HStack(spacing: 7) {
             Image(
@@ -66,8 +64,8 @@ struct PasswordRequirementsView: View {
                 .font(.system(size: 13))
                 .foregroundStyle(
                     isEmpty
-                        ? Color.primaryBlue.opacity(0.45)
-                        : isValid ? .green : .red
+                        ? Color.titleText.opacity(0.45)
+                        : isValid ? .green : Color.errorColor
                 )
         }
     }

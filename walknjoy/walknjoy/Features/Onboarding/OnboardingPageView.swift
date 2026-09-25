@@ -81,16 +81,16 @@ extension OnboardingPageView {
     private func pageIcon(_ icon: String) -> some View {
         ZStack {
             Circle()
-                .fill(.white)
+                .fill(Color.surfaceBackground)
                 .frame(width: 72, height: 72)
 
             Circle()
-                .fill(AppColors.yellow.opacity(0.15))
+                .fill(Color.brandYellow.opacity(0.15))
                 .frame(width: 64, height: 64)
 
             Image(systemName: icon)
                 .font(.system(size: 25, weight: .semibold))
-                .foregroundStyle(AppColors.yellow)
+                .foregroundStyle(Color.brandYellow)
         }
     }
 }
@@ -101,12 +101,12 @@ extension OnboardingPageView {
                 VStack(spacing: 10) {
                     Text(page.title)
                         .font(.system(size: 23, weight: .bold))
-                        .foregroundStyle(AppColors.navy)
+                        .foregroundStyle(Color.titleText)
                         .multilineTextAlignment(.center)
 
                     Text(page.description)
                         .font(.system(size: 15))
-                        .foregroundStyle(AppColors.navy.opacity(0.70))
+                        .foregroundStyle(Color.titleText.opacity(0.70))
                         .multilineTextAlignment(.center)
                         .lineSpacing(4)
                         .padding(.horizontal, 8)
@@ -121,7 +121,7 @@ extension OnboardingPageView {
             .padding(.top, page.icon == nil ? 26 : 46)
             .padding(.bottom, 40)
             .frame(maxWidth: .infinity)
-            .background(Color.white)
+            .background(Color.surfaceBackground)
             .clipShape(
                 UnevenRoundedRectangle(
                     topLeadingRadius: 28,
@@ -138,7 +138,7 @@ extension OnboardingPageView {
 }
 extension OnboardingPageView {
 
-    fileprivate var bottomControls: some View {
+    private var bottomControls: some View {
         HStack {
 
             PageIndicator(
@@ -172,10 +172,10 @@ extension OnboardingPageView {
                             )
                     }
                 }
-                .foregroundStyle(AppColors.navy)
+                .foregroundStyle(Color.buttonText)
                 .frame(minWidth: 52)
                 .frame(height: 52)
-                .background(AppColors.yellow)
+                .background(Color.buttonBackground)
                 .clipShape(Capsule())
                
             }

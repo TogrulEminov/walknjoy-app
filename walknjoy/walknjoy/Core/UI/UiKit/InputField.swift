@@ -1,21 +1,30 @@
 import SnapKit
-//
-//  UiTextField.swift
-//  walknjoy
-//
-//  Created by Eminov Togrul Punhan on 16.09.26.
-//
 import UIKit
 
 final class InputField: UIView {
+
     private let iconImageView = UIImageView()
+    var hasValidationError = false {
+        didSet { updateColors() }
+    }
 
     let textField = UITextField()
-    init(placeholder: String, icon: String? = nil) {
+
+    init(
+        placeholder: String,
+        icon: String? = nil
+    ) {
         super.init(frame: .zero)
+
         setupUI()
-        setupConstraits()
-        textField.placeholder = placeholder
+        registerTraitChanges()
+        setupConstraints()
+
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [.foregroundColor: AppColors.placeholderText]
+        )
+
         if let icon {
             iconImageView.image = UIImage(systemName: icon)
         }
@@ -25,30 +34,34 @@ final class InputField: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var intrinsicContentSize: CGSize {
+        CGSize(
+            width: UIView.noIntrinsicMetric,
+            height: 56
+        )
+    }
+
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = AppColors.surfaceBackground
+
         layer.cornerRadius = 14
         layer.borderWidth = 1
-        layer.borderColor = UIColor.systemGray3.cgColor
         layer.masksToBounds = true
 
         iconImageView.contentMode = .scaleAspectFit
-        iconImageView.tintColor = .systemGray
+        iconImageView.tintColor = AppColors.iconColor
 
         textField.font = .systemFont(ofSize: 15)
-        textField.textColor = .label
+        textField.textColor = AppColors.titleText
+        textField.tintColor = AppColors.titleText
 
-        addSetupSubview()
-    }
+        updateColors()
 
-    private func addSetupSubview() {
         addSubview(iconImageView)
         addSubview(textField)
     }
 
-    private func setupConstraits() {
-        heightAnchor.constraint(equalToConstant: 56).isActive = true
-
+    private func setupConstraints() {
         iconImageView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(16)
             make.centerY.equalToSuperview()
@@ -56,9 +69,40 @@ final class InputField: UIView {
         }
 
         textField.snp.makeConstraints { make in
-            make.leading.equalTo(iconImageView.snp.trailing).offset(12)
-            make.trailing.equalToSuperview().offset(-16)
+            make.leading
+                .equalTo(iconImageView.snp.trailing)
+                .offset(12)
+
+            make.trailing
+                .equalToSuperview()
+                .offset(-16)
+
             make.top.bottom.equalToSuperview()
+        }
+    }
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateColors()
+    }
+
+    private func updateColors() {
+        backgroundColor = AppColors.surfaceBackground
+        layer.borderColor =
+            (hasValidationError ? AppColors.errorColor : AppColors.borderColor)
+            .resolvedColor(with: traitCollection)
+            .cgColor
+
+        iconImageView.tintColor = AppColors.iconColor
+        textField.textColor = AppColors.titleText
+        textField.tintColor = AppColors.titleText
+    }
+
+    private func registerTraitChanges() {
+        registerForTraitChanges(
+            [UITraitUserInterfaceStyle.self]
+        ) { (view: Self, _) in
+            view.updateColors()
         }
     }
 }
