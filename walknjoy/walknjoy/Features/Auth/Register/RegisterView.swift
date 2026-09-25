@@ -10,66 +10,15 @@ struct RegisterView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var registerVM = RegisterViewModel()
 
-    @State private var showValidationAlert = false
-    @State private var validationMessage = ""
 
     @State private var email = ""
     @State private var firstName = ""
     @State private var lastName = ""
     @State private var password = ""
-    private func validateForm() -> Bool {
 
-        if !FormValdation.isNotEmpty(firstName) {
-            validationMessage = String(
-                localized: "register.validation.firstName"
-            )
-            return false
-        }
-
-        if !FormValdation.isNotEmpty(lastName) {
-            validationMessage = String(
-                localized: "register.validation.lastName"
-            )
-            return false
-        }
-
-        if !FormValdation.isValidEmail(email) {
-            validationMessage = String(
-                localized: "register.validation.email"
-            )
-            return false
-        }
-
-        if !FormValdation.isValidPassword(password) {
-            validationMessage = String(
-                localized: "register.validation.password"
-            )
-            return false
-        }
-
-        return true
+    private var form: FormState<AuthField> {
+        AuthForms.register(firstName: firstName, lastName: lastName, email: email, password: password, isSubmitting: isLoading)
     }
-
-    var body: some View {
-        ZStack {
-           
-            BackgroundDecoration().ignoresSafeArea()
-
-            switch registerVM.state {
-            case .success: successContent
-            default: registerContent
-            }
-        }.alert(
-            "register.validation.title",
-            isPresented: $showValidationAlert
-        ) {
-            Button("common.ok", role: .cancel) {}
-        } message: {
-            Text(validationMessage)
-        }
-    }
-}
-extension RegisterView {
 
     private var isLoading: Bool {
         if case .loading = registerVM.state {
@@ -77,6 +26,20 @@ extension RegisterView {
         }
 
         return false
+    }
+
+
+    var body: some View {
+        ZStack {
+            Color.appBackground
+                .ignoresSafeArea()
+            BackgroundDecoration().ignoresSafeArea()
+
+            switch registerVM.state {
+            case .success: successContent
+            default: registerContent
+            }
+        }
     }
 }
 extension RegisterView {
@@ -99,7 +62,7 @@ extension RegisterView {
         if case .error(let message) = registerVM.state {
             Text(message)
                 .font(.system(size: 13, weight: .medium))
-                .foregroundStyle(.red)
+                .foregroundStyle(Color.errorColor)
                 .padding(.top, 12)
         }
     }
@@ -140,18 +103,10 @@ extension RegisterView {
         )
     }
 }
- 
 
 extension RegisterView {
     private var header: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("register.title").font(.system(size: 34, weight: .bold))
-                .foregroundStyle(Color.primary)
-            Text("register.description").font(
-                .system(size: 16, weight: .medium)
-            )
-            .foregroundStyle(Color.primary.opacity(0.45)).lineSpacing(3)
-        }
+        AuthHeader(title: "register.title", description: "register.description")
     }
 }
 extension RegisterView {
@@ -166,6 +121,7 @@ extension RegisterView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.firstName])
             InputFieldRepresentable(
                 text: $lastName,
                 placeholder: String(
@@ -175,6 +131,7 @@ extension RegisterView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.lastName])
 
             InputFieldRepresentable(
                 text: $email,
@@ -188,6 +145,7 @@ extension RegisterView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.email])
 
             PasswordFieldRepresentable(
                 text: $password,
@@ -197,6 +155,7 @@ extension RegisterView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.password])
 
         }
     }
@@ -207,7 +166,7 @@ extension RegisterView {
             Text("register.loginText")
             NavigationLink(value: AuthRoute.login) {
                 Text("register.login").fontWeight(.semibold).foregroundStyle(
-                    Color.primary
+                    Color.titleText
                 )
             }
 
@@ -217,37 +176,36 @@ extension RegisterView {
 
 extension RegisterView {
     private var registerButton: some View {
-        Button {
-
-            guard validateForm() else {
-                showValidationAlert = true
-                return
-            }
-
-            Task {
-                await registerVM.register(
-                    lastName: lastName,
-                    firstName: firstName,
-                    email: email,
-                    password: password
-                )
-
-            }
-        } label: {
-            HStack {
-                Text("register.button")
-                Image(systemName: "arrow.right")
-            }.font(.system(size: 16, weight: .semibold)).foregroundStyle(
-                Color.primary
-            ).frame(maxWidth: .infinity).frame(height: 56).background(
-                Color.primaryYellow
-            ).clipShape(RoundedRectangle(cornerRadius: 16))
-        }.buttonStyle(.plain)
+        SubmitButton(
+            title: "register.button",
+            icon: "arrow.right",
+            form: form,
+        ) {
+            submit()
+        }
 
     }
 }
 struct RegisterView_Previews: PreviewProvider {
     static var previews: some View {
         RegisterView()
+    }
+}
+
+extension RegisterView {
+    private func submit() {
+        guard form.canSubmit else {
+            return
+        }
+
+        Task {
+            await registerVM.register(
+                lastName: lastName,
+                firstName: firstName,
+                email: email,
+                password: password
+            )
+
+        }
     }
 }

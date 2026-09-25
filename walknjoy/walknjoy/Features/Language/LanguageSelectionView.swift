@@ -17,7 +17,7 @@ struct LanguageSelectionView: View {
             Spacer()
             continueButton
         }.padding(.horizontal, 24).padding(.top, 24).padding(.bottom, 16)
-            .background(Color(.systemBackground))
+            .background(Color.appBackground)
     }
 }
 extension LanguageSelectionView {
@@ -47,7 +47,7 @@ extension LanguageSelectionView {
             VStack(spacing: 10) {
                 Text("language.title").font(.system(size: 28, weight: .bold))
                 Text("language.subtitle").font(.system(size: 15))
-                    .foregroundStyle(.secondary).multilineTextAlignment(.center)
+                    .foregroundStyle(Color.descriptionText).multilineTextAlignment(.center)
             }
             languageList
         }
@@ -73,10 +73,10 @@ extension LanguageSelectionView {
 
                 Image(systemName: "arrow.right")
             }
-            .foregroundStyle(AppColors.navy)
+            .foregroundStyle(Color.buttonText)
             .frame(maxWidth: .infinity)
             .frame(height: 56)
-            .background(AppColors.yellow)
+            .background(Color.buttonBackground)
             .clipShape(
                 RoundedRectangle(cornerRadius: 16)
             )

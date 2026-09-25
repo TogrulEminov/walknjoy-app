@@ -15,7 +15,7 @@ struct LoadingStateView: View {
 
             if let message {
                 Text(message).font(.system(size: 14)).foregroundStyle(
-                    .secondary
+                    Color.descriptionText
                 )
             }
         }

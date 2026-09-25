@@ -11,9 +11,14 @@ struct LoginView: View {
     @State private var loginVM: LoginViewModel = LoginViewModel()
     @State private var email = ""
     @State private var password = ""
-    @State private var showValidationAlert = false
-    @State private var validationMessage = ""
 
+    private var form: FormState<AuthField> {
+        AuthForms.login(email: email, password: password, isSubmitting: isLoading)
+    }
+
+    private var isLoading: Bool {
+        loginVM.state == .loading
+    }
     private var isLoginSuccessful: Bool {
         if case .success = loginVM.state {
             return true
@@ -22,33 +27,14 @@ struct LoginView: View {
         return false
     }
 
-    private func validateForm() -> Bool {
 
-        if !FormValdation.isValidEmail(email) {
-            validationMessage = String(
-                localized: "login.validation.email"
-            )
-            return false
-        }
-
-        if !FormValdation.isValidPassword(password) {
-            validationMessage = String(
-                localized: "login.validation.password"
-            )
-            return false
-        }
-
-        return true
-    }
 
     var body: some View {
         ZStack {
+            Color.appBackground
+                .ignoresSafeArea()
             BackgroundDecoration().ignoresSafeArea()
             loginContent
-        }.alert("login.validation.title", isPresented: $showValidationAlert) {
-            Button("common.ok", role: .cancel) {}
-        } message: {
-            Text(validationMessage)
         }
         .onChange(of: isLoginSuccessful) { _, isSuccessfully in
             if isSuccessfully {
@@ -66,6 +52,9 @@ extension LoginView {
                 header
                 Spacer().frame(height: 32)
                 inputFields
+                if case .error(let message) = loginVM.state {
+                    Text(message).font(.caption).foregroundStyle(Color.errorColor)
+                }
                 Spacer().frame(height: 14)
                 forgotPassword
                 Spacer().frame(height: 38)
@@ -95,12 +84,7 @@ extension LoginView {
 
 extension LoginView {
     private var header: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("login.title").font(.system(size: 34, weight: .bold))
-                .foregroundStyle(Color.primary)
-            Text("login.description").font(.system(size: 16, weight: .medium))
-                .foregroundStyle(Color.primary.opacity(0.45)).lineSpacing(3)
-        }
+        AuthHeader(title: "login.title", description: "login.description")
     }
 }
 extension LoginView {
@@ -118,6 +102,7 @@ extension LoginView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.email])
 
             PasswordFieldRepresentable(
                 text: $password,
@@ -127,6 +112,7 @@ extension LoginView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.password])
 
         }
     }
@@ -137,7 +123,7 @@ extension LoginView {
             Text("login.noAccount")
             NavigationLink(value: AuthRoute.register) {
                 Text("login.register").fontWeight(.semibold).foregroundStyle(
-                    Color.primary
+                    Color.titleText
                 )
             }
 
@@ -151,37 +137,37 @@ extension LoginView {
             NavigationLink(value: AuthRoute.forgotPassword) {
                 Text("login.forgotPassword").font(
                     .system(size: 14, weight: .semibold)
-                ).foregroundStyle(Color.primary)
+                ).foregroundStyle(Color.titleText)
             }
 
         }
     }
 }
+
 extension LoginView {
     private var loginButton: some View {
-        Button {
-            guard validateForm() else {
-                showValidationAlert = true
-                return
-            }
-            Task {
-                await loginVM.login(email: email, password: password)
-            }
-        } label: {
-            HStack {
-                Text("login.button")
-                Image(systemName: "arrow.right")
-            }.font(.system(size: 16, weight: .semibold)).foregroundStyle(
-                Color.primary
-            ).frame(maxWidth: .infinity).frame(height: 56).background(
-                Color.primaryYellow
-            ).clipShape(RoundedRectangle(cornerRadius: 16))
-        }.buttonStyle(.plain)
-
+        SubmitButton(
+            title: "login.button",
+            icon: "arrow.right",
+            form: form
+        ) {
+            submit()
+        }
     }
 }
 struct LoginView_Previews: PreviewProvider {
     static var previews: some View {
         LoginView()
+    }
+}
+//MARK:FUNCTIONS
+extension LoginView {
+    private func submit() {
+        guard form.canSubmit else {
+            return
+        }
+        Task {
+            await loginVM.login(email: email, password: password)
+        }
     }
 }

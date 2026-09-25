@@ -16,6 +16,10 @@ final class WNJOTPTextField: UITextField {
 
 final class OtpInput: UIView, UITextFieldDelegate {
 
+    var hasValidationError = false {
+        didSet { updateBorderColors() }
+    }
+
     private let digitCount: Int
     private var textFields: [WNJOTPTextField] = []
     private let stackView = UIStackView()
@@ -27,10 +31,8 @@ final class OtpInput: UIView, UITextFieldDelegate {
     }
 
     override var intrinsicContentSize: CGSize {
-        let minimumWidth = CGFloat(digitCount * 44 + (digitCount - 1) * 8)
-
-        return CGSize(
-            width: minimumWidth,
+        CGSize(
+            width: UIView.noIntrinsicMetric,
             height: 56
         )
     }
@@ -42,14 +44,34 @@ final class OtpInput: UIView, UITextFieldDelegate {
         setupStackView()
         createTextFields()
         setupConstraints()
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: Self, _) in
+            view.updateBorderColors()
+        }
+        updateBorderColors()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateBorderColors()
+    }
+
+    private func updateBorderColors() {
+        let color = hasValidationError ? AppColors.errorColor : AppColors.borderColor
+        for field in textFields {
+            field.layer.borderWidth = 1
+            field.layer.borderColor = color.resolvedColor(with: traitCollection).cgColor
+        }
+    }
+
     private func setupStackView() {
+        setContentHuggingPriority(.defaultLow, for: .horizontal)
+        setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         stackView.axis = .horizontal
+        stackView.alignment = .fill
         stackView.spacing = 8
         stackView.distribution = .fillEqually
 
@@ -57,10 +79,8 @@ final class OtpInput: UIView, UITextFieldDelegate {
     }
 
     private func setupConstraints() {
-        snp.makeConstraints {
-            $0.height.equalTo(56)
-        }
-
+        // SwiftUI owns this view's frame. Constrain only its UIKit children;
+        // a constraint on self disables the hosting view's autoresizing mask.
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -89,23 +109,22 @@ final class OtpInput: UIView, UITextFieldDelegate {
     }
 
     private func configure(_ field: WNJOTPTextField) {
+        field.setContentHuggingPriority(.defaultLow, for: .horizontal)
+        field.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         field.keyboardType = .numberPad
         field.textAlignment = .center
-        field.font = .systemFont(ofSize: 20, weight: .semibold)
-        field.textColor = .label
-        field.backgroundColor = .systemBackground
+        field.font = .systemFont(ofSize: 24, weight: .semibold)
+        field.textColor = AppColors.titleText
+        field.tintColor = AppColors.buttonBackground
+        field.backgroundColor = AppColors.surfaceBackground
 
         field.layer.cornerRadius = 10
-        field.layer.borderWidth = 1
-        field.layer.borderColor = UIColor.systemGray4.cgColor
+        field.layer.borderWidth = 0
 
         field.delegate = self
         field.textContentType = .oneTimeCode
         field.autocorrectionType = .no
 
-        field.snp.makeConstraints {
-            $0.width.greaterThanOrEqualTo(44)
-        }
     }
 
     @objc

@@ -23,8 +23,6 @@ struct ForgotPasswordView: View {
 
     // MARK: - Validation State
 
-    @State private var showValidationAlert = false
-    @State private var validationMessage = ""
 
     // MARK: - Navigation State
 
@@ -34,6 +32,10 @@ struct ForgotPasswordView: View {
     @State private var resendAvailableInSeconds = 0
 
     // MARK: - Computed Properties
+
+    private var form: FormState<AuthField> {
+        AuthForms.forgotPassword(email: email, isSubmitting: isLoading)
+    }
 
     private var isLoading: Bool {
         if case .loading = forgotPasswordVM.state {
@@ -47,22 +49,14 @@ struct ForgotPasswordView: View {
 
     var body: some View {
         ZStack {
+            Color.appBackground
+                .ignoresSafeArea()
             BackgroundDecoration()
                 .ignoresSafeArea()
 
             contentView
         }
-        .alert(
-            "forgot.validation.title",
-            isPresented: $showValidationAlert
-        ) {
-            Button(
-                "common.ok",
-                role: .cancel
-            ) {}
-        } message: {
-            Text(validationMessage)
-        }
+        
         .navigationDestination(
             isPresented: $navigateToOtp
         ) {
@@ -149,7 +143,7 @@ extension ForgotPasswordView {
                         weight: .bold
                     )
                 )
-                .foregroundStyle(Color.primary)
+                .foregroundStyle(Color.titleText)
 
             Text("forgot.description")
                 .font(
@@ -159,7 +153,7 @@ extension ForgotPasswordView {
                     )
                 )
                 .foregroundStyle(
-                    Color.primary.opacity(0.45)
+                    Color.titleText.opacity(0.45)
                 )
                 .lineSpacing(3)
         }
@@ -188,6 +182,7 @@ extension ForgotPasswordView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.email])
         }
     }
 }
@@ -208,7 +203,7 @@ extension ForgotPasswordView {
                         weight: .medium
                     )
                 )
-                .foregroundStyle(.red)
+                .foregroundStyle(Color.errorColor)
                 .frame(
                     maxWidth: .infinity,
                     alignment: .leading
@@ -234,7 +229,7 @@ extension ForgotPasswordView {
                 Text("login.button")
                     .fontWeight(.semibold)
                     .foregroundStyle(
-                        Color.primary
+                        Color.titleText
                     )
             }
             .buttonStyle(.plain)
@@ -249,50 +244,13 @@ extension ForgotPasswordView {
 extension ForgotPasswordView {
 
     private var customButton: some View {
-        Button {
-
+        SubmitButton(
+            title: "forgot.button",
+            icon: "arrow.right",
+            form: form
+        ) {
             submit()
-
-        } label: {
-
-            HStack(spacing: 12) {
-
-                if isLoading {
-
-                    ProgressView()
-                        .tint(Color.primary)
-
-                } else {
-
-                    Text("forgot.button")
-
-                    Image(
-                        systemName: "arrow.right"
-                    )
-                }
-            }
-            .font(
-                .system(
-                    size: 16,
-                    weight: .semibold
-                )
-            )
-            .foregroundStyle(Color.primary)
-            .frame(maxWidth: .infinity)
-            .frame(height: 56)
-            .background(
-                Color.primaryYellow.opacity(
-                    isLoading ? 0.6 : 1
-                )
-            )
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: 16
-                )
-            )
         }
-        .buttonStyle(.plain)
-        .disabled(isLoading)
     }
 }
 
@@ -302,8 +260,7 @@ extension ForgotPasswordView {
 
     private func submit() {
 
-        guard validateForm() else {
-            showValidationAlert = true
+        guard form.canSubmit else {
             return
         }
 
@@ -316,19 +273,7 @@ extension ForgotPasswordView {
         }
     }
 
-    private func validateForm() -> Bool {
 
-        if !FormValdation.isValidEmail(email) {
-
-            validationMessage = String(
-                localized: "forgot.validation.email"
-            )
-
-            return false
-        }
-
-        return true
-    }
 }
 
 // MARK: - State Handler

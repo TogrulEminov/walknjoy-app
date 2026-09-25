@@ -9,7 +9,7 @@ import SwiftUI
 
 enum AppLanguage: String, CaseIterable, Identifiable {
     case az
-    case en
+//    case en
 
     var id: String {
         rawValue
@@ -22,8 +22,8 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         case .az:
             return "Azərbaycan dili"
 
-        case .en:
-            return "English"
+//        case .en:
+//            return "English"
 
         }
     }
@@ -36,8 +36,8 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         case .az:
             return "🇦🇿"
 
-        case .en:
-            return "🇬🇧"
+//        case .en:
+//            return "🇬🇧"
 
         }
     }

@@ -1,23 +1,20 @@
-//
-//  DefaultNetworkService.swift
-//  walknjoy
-//
-//  Created by Eminov Togrul Punhan on 19.09.26.
-//
-
 import Foundation
 
+@MainActor
 final class DefaultNetworkService: NetworkingService {
 
     private let session: URLSession
     private let decoder: JSONDecoder
+    private let tokenStorage: TokenStorageProtocol
 
     init(
         session: URLSession = .shared,
-        decoder: JSONDecoder = .apiDecoder
+        decoder: JSONDecoder? = nil,
+        tokenStorage: TokenStorageProtocol? = nil
     ) {
         self.session = session
-        self.decoder = decoder
+        self.decoder = decoder ?? .apiDecoder
+        self.tokenStorage = tokenStorage ?? TokenStorage()
     }
 
     func request<T: Decodable>(
@@ -25,13 +22,29 @@ final class DefaultNetworkService: NetworkingService {
         responseType: T.Type
     ) async throws -> T {
 
-        let request = try enpoint.makeRequest()
+        var request = try enpoint.makeRequest()
+
+        // MARK: - Authorization
+
+        if enpoint.requiresAuth {
+
+            guard let accessToken = tokenStorage.accessToken else {
+                throw NetworkError.unauthorized
+            }
+
+            request.setValue(
+                "\(HttpHeader.bearer) \(accessToken)",
+                forHTTPHeaderField: HttpHeader.authorization
+            )
+        }
 
         let data: Data
         let response: URLResponse
 
         do {
-            (data, response) = try await session.data(for: request)
+            (data, response) = try await session.data(
+                for: request
+            )
         } catch let error as URLError {
 
             if error.code == .notConnectedToInternet {
@@ -49,14 +62,17 @@ final class DefaultNetworkService: NetworkingService {
         }
 
         #if DEBUG
-            print("STATUS CODE:", httpResponse.statusCode)
             print(
-                "RESPONSE:",
-                String(data: data, encoding: .utf8) ?? "EMPTY"
+                "STATUS CODE:",
+                httpResponse.statusCode
             )
         #endif
 
-        guard (200...299).contains(httpResponse.statusCode) else {
+        guard
+            (200...299).contains(
+                httpResponse.statusCode
+            )
+        else {
 
             if let apiError = try? decoder.decode(
                 ApiErrorResponse.self,
@@ -82,7 +98,10 @@ final class DefaultNetworkService: NetworkingService {
         } catch {
 
             #if DEBUG
-                print("DECODING ERROR:", error)
+                print(
+                    "DECODING ERROR:",
+                    error
+                )
             #endif
 
             throw NetworkError.decodingError

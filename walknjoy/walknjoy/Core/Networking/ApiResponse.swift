@@ -10,4 +10,12 @@ import Foundation
 struct ApiResponse<T: Decodable>: Decodable {
     let success: Bool
     let data: T?
+    let meta: PaginationMeta?
+}
+
+struct PaginationMeta: Decodable {
+    let page: Int
+    let limit: Int
+    let total: Int
+    let totalPages: Int
 }

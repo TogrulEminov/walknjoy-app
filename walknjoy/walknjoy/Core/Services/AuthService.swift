@@ -13,7 +13,7 @@ protocol AuthServiceProtocol {
     func forgotPassword(
         request: ForgotPasswordRequest
     ) async throws -> ForgotPasswordResponse
-
+    func logout() async throws
     func verifyForgotPasswordOTP(
         request: VerifyForgotPasswordOTPRequest
     ) async throws -> VerifyForgotPasswordOTPResponse
@@ -21,18 +21,23 @@ protocol AuthServiceProtocol {
     func resetPassword(
         request: ResetPasswordRequest
     ) async throws
+
+    func refresh() async throws
+    func me() async throws -> AuthUser
+    func restoreSession() async throws
 }
 
 final class AuthService: AuthServiceProtocol {
     private let tokenStorage: TokenStorageProtocol
     private let networkService: NetworkingService
     init(
-        networkService: NetworkingService = DefaultNetworkService(),
-        tokenStorage: TokenStorageProtocol = TokenStorage()
+        networkService: NetworkingService? = nil,
+        tokenStorage: TokenStorageProtocol? = nil
     ) {
-        self.networkService = networkService
-        self.tokenStorage = tokenStorage
+        self.networkService = networkService ?? DefaultNetworkService()
+        self.tokenStorage = tokenStorage ?? TokenStorage()
     }
+
     func forgotPassword(request: ForgotPasswordRequest) async throws
         -> ForgotPasswordResponse
     {
@@ -47,6 +52,22 @@ final class AuthService: AuthServiceProtocol {
         return data
     }
 
+    func logout() async throws {
+        guard let refreshToken = tokenStorage.refreshToken else {
+            throw NetworkError.unauthorized
+        }
+
+        let request = LogoutRequest(
+            refreshToken: refreshToken
+        )
+
+        let _: ApiResponse<EmptyResponse> = try await networkService.request(
+            enpoint: AuthEndpoint.logout(request),
+            responseType: ApiResponse<EmptyResponse>.self
+        )
+
+        try tokenStorage.clear()
+    }
     func verifyForgotPasswordOTP(request: VerifyForgotPasswordOTPRequest)
         async throws -> VerifyForgotPasswordOTPResponse
     {
@@ -98,4 +119,80 @@ final class AuthService: AuthServiceProtocol {
         return data
     }
 
+    func refresh() async throws {
+        guard let refreshToken = tokenStorage.refreshToken else {
+            throw NetworkError.unauthorized
+        }
+        let request = RefreshTokenRequest(refreshToken: refreshToken)
+
+        let response: ApiResponse<RefreshTokenResponse> =
+            try await networkService.request(
+                enpoint: AuthEndpoint.refresh(request),
+                responseType: ApiResponse<RefreshTokenResponse>.self
+            )
+
+        guard let data = response.data else {
+            throw NetworkError.invalidResponse
+        }
+        try tokenStorage.save(
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken
+        )
+    }
+    func me() async throws -> AuthUser {
+        let response: ApiResponse<AuthUser> = try await networkService.request(
+            enpoint: AuthEndpoint.me,
+            responseType: ApiResponse<AuthUser>.self
+        )
+
+        guard let user = response.data else {
+            throw NetworkError.invalidResponse
+        }
+        return user
+    }
+
+    func restoreSession() async throws {
+        guard tokenStorage.refreshToken != nil else {
+            throw NetworkError.unauthorized
+        }
+        _ = try await refresh()
+    }
+
+}
+
+@MainActor
+protocol ChangePasswordServiceProtocol {
+    func requestPasswordChange(currentPassword: String) async throws -> ChangePasswordChallenge
+    func verifyPasswordChange(code: String) async throws -> ChangePasswordAuthorization
+    func changePassword(token: String, newPassword: String) async throws
+}
+
+extension AuthService: ChangePasswordServiceProtocol {
+    func requestPasswordChange(currentPassword: String) async throws -> ChangePasswordChallenge {
+        let response: ApiResponse<ChangePasswordChallenge> = try await networkService.request(
+            enpoint: AuthEndpoint.requestPasswordChange(.init(currentPassword: currentPassword)),
+            responseType: ApiResponse<ChangePasswordChallenge>.self
+        )
+        guard response.success, let data = response.data else { throw NetworkError.invalidResponse }
+        return data
+    }
+
+    func verifyPasswordChange(code: String) async throws -> ChangePasswordAuthorization {
+        let response: ApiResponse<ChangePasswordAuthorization> = try await networkService.request(
+            enpoint: AuthEndpoint.verifyPasswordChange(.init(code: code)),
+            responseType: ApiResponse<ChangePasswordAuthorization>.self
+        )
+        guard response.success, let data = response.data, !data.changePasswordToken.isEmpty else {
+            throw NetworkError.invalidResponse
+        }
+        return data
+    }
+
+    func changePassword(token: String, newPassword: String) async throws {
+        let response: ApiResponse<EmptyResponse> = try await networkService.request(
+            enpoint: AuthEndpoint.changePassword(.init(changePasswordToken: token, newPassword: newPassword)),
+            responseType: ApiResponse<EmptyResponse>.self
+        )
+        guard response.success else { throw NetworkError.invalidResponse }
+    }
 }

@@ -4,13 +4,15 @@ struct ResetPasswordView: View {
     let onSuccess: () -> Void
 
     var resetToken: String
-    @State private var showValidationAlert = false
-    @State private var validationMessage = ""
 
     @State private var viewModel: ResetPasswordViewModel =
         ResetPasswordViewModel()
 
     @State private var newPassword = ""
+
+    private var form: FormState<AuthField> {
+        AuthForms.resetPassword(password: newPassword, isSubmitting: isLoading, isBlocked: resetToken.isEmpty)
+    }
 
     private var isLoading: Bool {
         if case .loading = viewModel.state {
@@ -20,14 +22,12 @@ struct ResetPasswordView: View {
     }
     var body: some View {
         ZStack {
+            Color.appBackground
+                .ignoresSafeArea()
             BackgroundDecoration().ignoresSafeArea()
             contentView
         }
-        .alert("reset.validation.title", isPresented: $showValidationAlert) {
-            Button("common.ok", role: .cancel) {}
-        } message: {
-            Text(validationMessage)
-        }.onChange(of: viewModel.state) { _, newValue in
+        .onChange(of: viewModel.state) { _, newValue in
             handleStateChange(newValue)
         }
 
@@ -37,8 +37,7 @@ extension ResetPasswordView {
 
     private func submit() {
 
-        guard validateForm() else {
-            showValidationAlert = true
+        guard form.canSubmit else {
             return
         }
 
@@ -52,24 +51,7 @@ extension ResetPasswordView {
         }
     }
 
-    private func validateForm() -> Bool {
 
-        guard !newPassword.isEmpty else {
-            validationMessage = String(
-                localized: "reset.validation.passwordRequired"
-            )
-            return false
-        }
-
-        guard FormValdation.isValidPassword(newPassword) else {
-            validationMessage = String(
-                localized: "reset.validation.passwordInvalid"
-            )
-            return false
-        }
-
-        return true
-    }
 }
 extension ResetPasswordView {
 
@@ -87,9 +69,8 @@ extension ResetPasswordView {
 extension ResetPasswordView {
 
     private func handleStateChange(
-        _ state: ResetPasswordState
+        _ state: RequestState
     ) {
-        print("RESET STATE CHANGED:", state)
 
         switch state {
         case .idle,
@@ -113,6 +94,9 @@ extension ResetPasswordView {
                 header
                 Spacer().frame(height: 32)
                 inputFields
+                if case .error(let message) = viewModel.state {
+                    Text(message).font(.caption).foregroundStyle(Color.errorColor)
+                }
                 Spacer().frame(height: 38)
                 PasswordRequirementsView(password: newPassword)
                 Spacer().frame(height: 38)
@@ -142,14 +126,7 @@ extension ResetPasswordView {
 
 extension ResetPasswordView {
     private var header: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text("reset.title").font(.system(size: 34, weight: .bold))
-                .foregroundStyle(Color.primary)
-            Text("reset.description").font(
-                .system(size: 16, weight: .medium)
-            )
-            .foregroundStyle(Color.primary.opacity(0.45)).lineSpacing(3)
-        }
+        AuthHeader(title: "reset.title", description: "reset.description")
     }
 }
 extension ResetPasswordView {
@@ -163,6 +140,7 @@ extension ResetPasswordView {
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
+            .fieldValidation(form[.password])
 
         }
     }
@@ -173,7 +151,7 @@ extension ResetPasswordView {
             Text("login.back")
             NavigationLink(value: AuthRoute.login) {
                 Text("login.button").fontWeight(.semibold).foregroundStyle(
-                    Color.primary
+                    Color.titleText
                 )
             }
 
@@ -183,19 +161,9 @@ extension ResetPasswordView {
 
 extension ResetPasswordView {
     private var customButton: some View {
-        Button {
+        SubmitButton(title: "reset.button", icon: "arrow.right", form: form) {
             submit()
-        } label: {
-            HStack {
-                Text("reset.button")
-                Image(systemName: "arrow.right")
-            }.font(.system(size: 16, weight: .semibold)).foregroundStyle(
-                Color.primary
-            ).frame(maxWidth: .infinity).frame(height: 56).background(
-                Color.primaryYellow
-            ).clipShape(RoundedRectangle(cornerRadius: 16))
-        }.buttonStyle(.plain)
-
+        }
     }
 }
 struct ResetPasswordView_Previews: PreviewProvider {

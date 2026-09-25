@@ -22,7 +22,7 @@ struct SuccessStateView: View {
                     .font(.system(size: 24, weight: .bold))
                     .multilineTextAlignment(.center)
                 Text(message).font(.system(size: 15)).foregroundStyle(
-                    .secondary
+                    Color.descriptionText
                 ).multilineTextAlignment(.center).lineSpacing(4)
             }
             if let buttonTitle {
@@ -30,9 +30,9 @@ struct SuccessStateView: View {
                     onButtonTap?()
                 } label: {
                     Text(buttonTitle).font(.system(size: 16, weight: .semibold))
-                        .foregroundStyle(Color.primary).frame(
+                        .foregroundStyle(Color.buttonText).frame(
                             maxWidth: .infinity
-                        ).frame(height: 56).background(Color.primaryYellow)
+                        ).frame(height: 56).background(Color.buttonBackground)
                         .clipShape(RoundedRectangle(cornerRadius: 16))
                 }.buttonStyle(.plain)
 

@@ -20,8 +20,8 @@ struct PageIndicator: View {
                 Capsule()
                     .fill(
                         index == currentPage
-                            ? AppColors.navy
-                            : AppColors.navy.opacity(0.15)
+                            ? Color.titleText
+                            : Color.titleText.opacity(0.15)
                     )
                     .frame(
                         width: index == currentPage ? 20 : 7,

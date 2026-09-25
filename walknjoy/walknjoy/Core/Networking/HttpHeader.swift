@@ -10,6 +10,6 @@ import Foundation
 enum HttpHeader{
     static let authorization = "Authorization"
     static let accept = "Accept"
-    static let bearar = "Bearer"
+    static let bearer = "Bearer"
     static let contentType = "Content-Type"
 }

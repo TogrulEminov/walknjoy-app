@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct InputFieldRepresentable: UIViewRepresentable {
+    @Environment(\.fieldHasValidationError) private var hasValidationError
+
 
     @Binding var text: String
 
@@ -39,6 +41,7 @@ struct InputFieldRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: InputField, context: Context) {
+        uiView.hasValidationError = hasValidationError
         if uiView.textField.text != text {
             uiView.textField.text = text
         }

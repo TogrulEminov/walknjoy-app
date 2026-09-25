@@ -16,13 +16,13 @@ struct ErrorStateView: View {
         VStack(spacing: 24) {
             Image(systemName: "exclamationmark.circle.fill").font(
                 .system(size: 72)
-            ).foregroundStyle(.red)
+            ).foregroundStyle(Color.errorColor)
             VStack(spacing: 12) {
                 Text(title)
                     .font(.system(size: 24, weight: .bold))
                 Text(message)
                     .font(.system(size: 15))
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.descriptionText)
                     .multilineTextAlignment(.center)
             }
             if let retryTitle {

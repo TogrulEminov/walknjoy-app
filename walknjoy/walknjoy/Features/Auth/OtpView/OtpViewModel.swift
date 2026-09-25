@@ -10,11 +10,13 @@ final class OtpViewModel {
     var state: OtpViewState = .idle
 
     init(
-        authService: AuthServiceProtocol = AuthService()
+        authService: AuthServiceProtocol? = nil
     ) {
-        self.authService = authService
+        self.authService = authService ?? AuthService()
     }
     func resend(email: String) async {
+        guard AuthForms.forgotPassword(email: email).canSubmit else { return }
+        if case .loading = state { return }
         state = .loading
 
         do {
@@ -35,6 +37,8 @@ final class OtpViewModel {
         code: String
     ) async {
 
+        guard AuthForms.otp(code: code).canSubmit else { return }
+        if case .loading = state { return }
         state = .loading
 
         do {

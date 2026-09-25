@@ -4,6 +4,10 @@ import UIKit
 final class InputField: UIView {
 
     private let iconImageView = UIImageView()
+    var hasValidationError = false {
+        didSet { updateColors() }
+    }
+
     let textField = UITextField()
 
     init(
@@ -13,9 +17,13 @@ final class InputField: UIView {
         super.init(frame: .zero)
 
         setupUI()
+        registerTraitChanges()
         setupConstraints()
 
-        textField.placeholder = placeholder
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [.foregroundColor: AppColors.placeholderText]
+        )
 
         if let icon {
             iconImageView.image = UIImage(systemName: icon)
@@ -34,18 +42,18 @@ final class InputField: UIView {
     }
 
     private func setupUI() {
-        backgroundColor = .secondarySystemBackground
+        backgroundColor = AppColors.surfaceBackground
 
         layer.cornerRadius = 14
         layer.borderWidth = 1
         layer.masksToBounds = true
 
         iconImageView.contentMode = .scaleAspectFit
-        iconImageView.tintColor = .secondaryLabel
+        iconImageView.tintColor = AppColors.iconColor
 
         textField.font = .systemFont(ofSize: 15)
-        textField.textColor = .label
-        textField.tintColor = .label
+        textField.textColor = AppColors.titleText
+        textField.tintColor = AppColors.titleText
 
         updateColors()
 
@@ -73,17 +81,21 @@ final class InputField: UIView {
         }
     }
 
-    private func updateColors() {
-        backgroundColor = .secondarySystemBackground
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateColors()
+    }
 
+    private func updateColors() {
+        backgroundColor = AppColors.surfaceBackground
         layer.borderColor =
-            UIColor.separator
+            (hasValidationError ? AppColors.errorColor : AppColors.borderColor)
             .resolvedColor(with: traitCollection)
             .cgColor
 
-        iconImageView.tintColor = .secondaryLabel
-        textField.textColor = .label
-        textField.tintColor = .label
+        iconImageView.tintColor = AppColors.iconColor
+        textField.textColor = AppColors.titleText
+        textField.tintColor = AppColors.titleText
     }
 
     private func registerTraitChanges() {

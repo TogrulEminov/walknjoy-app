@@ -2,6 +2,8 @@ import SwiftUI
 import UIKit
 
 struct PasswordFieldRepresentable: UIViewRepresentable {
+    @Environment(\.fieldHasValidationError) private var hasValidationError
+
     @Binding var text: String
     let placeHolder: String
 
@@ -23,6 +25,7 @@ struct PasswordFieldRepresentable: UIViewRepresentable {
     }
 
     func updateUIView(_ uiView: PasswordField, context: Context) {
+        uiView.hasValidationError = hasValidationError
         context.coordinator.parent = self
         if uiView.textField.text != text {
             uiView.textField.text = text

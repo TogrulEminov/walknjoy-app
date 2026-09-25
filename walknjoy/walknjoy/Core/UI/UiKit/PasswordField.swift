@@ -2,12 +2,16 @@ import UIKit
 
 final class PasswordField: UIView {
 
+    var hasValidationError = false {
+        didSet { updateColors() }
+    }
+
     let textField: UITextField = {
         let textField = UITextField()
 
         textField.font = .systemFont(ofSize: 15)
-        textField.textColor = .label
-        textField.tintColor = .label
+        textField.textColor = AppColors.titleText
+        textField.tintColor = AppColors.titleText
 
         textField.isSecureTextEntry = true
         textField.textContentType = .password
@@ -25,7 +29,7 @@ final class PasswordField: UIView {
             for: .normal
         )
 
-        button.tintColor = .secondaryLabel
+        button.tintColor = AppColors.iconColor
         button.imageView?.contentMode = .scaleAspectFit
 
         button.addTarget(
@@ -42,7 +46,7 @@ final class PasswordField: UIView {
             image: UIImage(systemName: "lock")
         )
 
-        imageView.tintColor = .secondaryLabel
+        imageView.tintColor = AppColors.iconColor
         imageView.contentMode = .scaleAspectFit
 
         return imageView
@@ -56,8 +60,12 @@ final class PasswordField: UIView {
     init(placeholder: String) {
         super.init(frame: .zero)
 
-        textField.placeholder = placeholder
+        textField.attributedPlaceholder = NSAttributedString(
+            string: placeholder,
+            attributes: [.foregroundColor: AppColors.placeholderText]
+        )
         setupUI()
+        registerTraitChanges()
     }
 
     required init?(coder: NSCoder) {
@@ -83,19 +91,24 @@ final class PasswordField: UIView {
         updateColors()
     }
 
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        updateColors()
+    }
+
     private func updateColors() {
-        backgroundColor = .secondarySystemBackground
+        backgroundColor = AppColors.surfaceBackground
 
         layer.borderColor =
-            UIColor.separator
+            (hasValidationError ? AppColors.errorColor : AppColors.borderColor)
             .resolvedColor(with: traitCollection)
             .cgColor
 
-        textField.textColor = .label
-        textField.tintColor = .label
+        textField.textColor = AppColors.titleText
+        textField.tintColor = AppColors.titleText
 
-        lockImageView.tintColor = .secondaryLabel
-        visibilityButton.tintColor = .secondaryLabel
+        lockImageView.tintColor = AppColors.iconColor
+        visibilityButton.tintColor = AppColors.iconColor
     }
 
     private func registerTraitChanges() {

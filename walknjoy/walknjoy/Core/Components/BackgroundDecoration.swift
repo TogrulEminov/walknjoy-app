@@ -1,10 +1,3 @@
-//
-//  BackgroundDecoration.swift
-//  walknjoy
-//
-//  Created by Eminov Togrul Punhan on 18.09.26.
-//
-
 import SwiftUI
 
 struct BackgroundDecoration: View {
@@ -13,17 +6,23 @@ struct BackgroundDecoration: View {
     private var colorScheme
 
     private var decorationColor: Color {
-        colorScheme == .dark
-            ? .white
-            : .secondary
+        Color.iconColor
     }
 
     private var circleOpacity: Double {
-        colorScheme == .dark ? 0.12 : 0.08
+        colorScheme == .dark ? 0.045 : 0.08
     }
 
     private var iconOpacity: Double {
-        colorScheme == .dark ? 0.10 : 0.06
+        colorScheme == .dark ? 0.14 : 0.06
+    }
+
+    private var cloudOpacity: Double {
+        colorScheme == .dark ? 0.10 : 0.045
+    }
+
+    private var mountainOpacity: Double {
+        colorScheme == .dark ? 0.09 : 0.04
     }
 
     var body: some View {
@@ -31,7 +30,7 @@ struct BackgroundDecoration: View {
             ZStack {
                 Circle()
                     .fill(
-                        Color.primaryYellow.opacity(circleOpacity)
+                        Color.brandYellow.opacity(circleOpacity)
                     )
                     .frame(width: 230, height: 230)
                     .position(
@@ -40,9 +39,7 @@ struct BackgroundDecoration: View {
                     )
 
                 Image(systemName: "airplane")
-                    .font(
-                        .system(size: 38, weight: .medium)
-                    )
+                    .font(.system(size: 38, weight: .medium))
                     .foregroundStyle(
                         decorationColor.opacity(iconOpacity)
                     )
@@ -66,9 +63,7 @@ struct BackgroundDecoration: View {
                 Image(systemName: "cloud.fill")
                     .font(.system(size: 48))
                     .foregroundStyle(
-                        decorationColor.opacity(
-                            colorScheme == .dark ? 0.08 : 0.045
-                        )
+                        decorationColor.opacity(cloudOpacity)
                     )
                     .position(
                         x: geo.size.width - 65,
@@ -78,9 +73,7 @@ struct BackgroundDecoration: View {
                 Image(systemName: "mountain.2.fill")
                     .font(.system(size: 90))
                     .foregroundStyle(
-                        decorationColor.opacity(
-                            colorScheme == .dark ? 0.07 : 0.04
-                        )
+                        decorationColor.opacity(mountainOpacity)
                     )
                     .position(
                         x: geo.size.width - 80,
@@ -92,9 +85,10 @@ struct BackgroundDecoration: View {
         .accessibilityHidden(true)
     }
 }
+
 #Preview("Light Mode") {
     ZStack {
-        Color(.systemBackground)
+        Color.appBackground
             .ignoresSafeArea()
 
         BackgroundDecoration()
@@ -104,7 +98,7 @@ struct BackgroundDecoration: View {
 
 #Preview("Dark Mode") {
     ZStack {
-        Color(.systemBackground)
+        Color.appBackground
             .ignoresSafeArea()
 
         BackgroundDecoration()

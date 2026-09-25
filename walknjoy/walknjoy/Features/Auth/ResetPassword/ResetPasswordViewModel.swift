@@ -12,12 +12,14 @@ import Observation
 @Observable
 final class ResetPasswordViewModel {
     private let authService: AuthServiceProtocol
-    var state: ResetPasswordState = .idle
-    init(authService: AuthServiceProtocol = AuthService()) {
-        self.authService = authService
+    var state: RequestState = .idle
+    init(authService: AuthServiceProtocol? = nil) {
+        self.authService = authService ?? AuthService()
     }
 
     func resetPassword(password: String, resetToken: String) async  {
+        guard AuthForms.resetPassword(password: password, isBlocked: resetToken.isEmpty).canSubmit else { return }
+        if case .loading = state { return }
         state = .loading
 
         do {

@@ -5,15 +5,30 @@
 //  Created by Eminov Togrul Punhan on 17.09.26.
 //
 
-
 import Foundation
 
-enum TMDBImageURL {
+enum ImageURL {
+
     static func make(path: String?) -> URL? {
         guard let path, !path.isEmpty else {
             return nil
         }
-        let urlString = "\(APIConfig.imageUrl)/\(path)"
-        return URL(string: urlString)
+
+        if let url = URL(string: path),
+            url.scheme != nil
+        {
+            return url
+        }
+
+        let baseURL = APIConfig.imageUrl
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+
+        let cleanPath =
+            path
+            .trimmingCharacters(in: CharacterSet(charactersIn: "/"))
+
+        return URL(
+            string: "\(baseURL)/\(cleanPath)"
+        )
     }
 }

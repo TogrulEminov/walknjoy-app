@@ -11,11 +11,11 @@ import Observation
 @MainActor
 @Observable
 final class RegisterViewModel {
-    var state: RegisterViewState = .idle
+    var state: RequestState = .idle
     private let authService: AuthServiceProtocol
 
-    init(authService: AuthServiceProtocol = AuthService()) {
-        self.authService = authService
+    init(authService: AuthServiceProtocol? = nil) {
+        self.authService = authService ?? AuthService()
     }
 
     func register(
@@ -24,13 +24,15 @@ final class RegisterViewModel {
         email: String,
         password: String
     ) async {
+        guard AuthForms.register(firstName: firstName, lastName: lastName, email: email, password: password).canSubmit else { return }
+        if case .loading = state { return }
         state = .loading
 
         do {
             let request = RegisterRequest(
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
+                firstName: firstName.trimmingCharacters(in: .whitespacesAndNewlines),
+                lastName: lastName.trimmingCharacters(in: .whitespacesAndNewlines),
+                email: email.trimmingCharacters(in: .whitespacesAndNewlines),
                 password: password
             )
             _ = try await authService.register(request: request)

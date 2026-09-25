@@ -55,9 +55,7 @@ struct OtpView: View {
 
     // MARK: - Computed Properties
 
-    private var isCodeComplete: Bool {
-        code.count == 6
-    }
+
 
     private var isOtpExpired: Bool {
         otpRemainingSeconds <= 0
@@ -79,16 +77,16 @@ struct OtpView: View {
         formatTime(resendRemainingSeconds)
     }
 
-    private var canVerify: Bool {
-        isCodeComplete &&
-        !isOtpExpired &&
-        !isLoading
+    private var form: FormState<AuthField> {
+        AuthForms.otp(code: code, isSubmitting: isLoading, isBlocked: isOtpExpired)
     }
 
     // MARK: - Body
 
     var body: some View {
         ZStack {
+            Color.appBackground
+                .ignoresSafeArea()
             BackgroundDecoration()
                 .ignoresSafeArea()
 
@@ -174,35 +172,8 @@ extension OtpView {
 // MARK: - Header
 
 extension OtpView {
-
     private var header: some View {
-        VStack(
-            alignment: .leading,
-            spacing: 10
-        ) {
-            Text("otp.title")
-                .font(
-                    .system(
-                        size: 34,
-                        weight: .bold
-                    )
-                )
-                .foregroundStyle(
-                    Color.primary
-                )
-
-            Text("otp.description")
-                .font(
-                    .system(
-                        size: 16,
-                        weight: .medium
-                    )
-                )
-                .foregroundStyle(
-                    Color.primary.opacity(0.45)
-                )
-                .lineSpacing(3)
-        }
+        AuthHeader(title: "otp.title", description: "otp.description")
     }
 }
 
@@ -214,13 +185,13 @@ extension OtpView {
         HStack(spacing: 5) {
             Text("otp.sentTo")
                 .foregroundStyle(
-                    Color.primary.opacity(0.45)
+                    Color.titleText.opacity(0.45)
                 )
 
             Text(email)
                 .fontWeight(.semibold)
                 .foregroundStyle(
-                    Color.primary
+                    Color.titleText
                 )
 
             Spacer()
@@ -238,14 +209,11 @@ extension OtpView {
             code: $code,
             digitCount: 6
         )
-        .frame(
-            maxWidth: .infinity,
-            alignment: .leading
-        )
+        .frame(maxWidth: .infinity)
         .frame(height: 56)
+        .fieldValidation(form[.code])
         .disabled(
-            isLoading ||
-            isOtpExpired
+            isLoading || isOtpExpired
         )
     }
 }
@@ -264,7 +232,7 @@ extension OtpView {
                         weight: .medium
                     )
                 )
-                .foregroundStyle(.red)
+                .foregroundStyle(Color.errorColor)
                 .frame(
                     maxWidth: .infinity,
                     alignment: .leading
@@ -290,13 +258,13 @@ extension OtpView {
                             weight: .medium
                         )
                     )
-                    .foregroundStyle(.red)
+                    .foregroundStyle(Color.errorColor)
 
             } else {
 
                 Text("otp.expiresIn")
                     .foregroundStyle(
-                        Color.primary.opacity(0.45)
+                        Color.titleText.opacity(0.45)
                     )
 
                 Text(formattedExpireTime)
@@ -308,7 +276,7 @@ extension OtpView {
                         )
                     )
                     .foregroundStyle(
-                        Color.primary
+                        Color.titleText
                     )
             }
         }
@@ -328,7 +296,7 @@ extension OtpView {
             ) {
                 Text("otp.didNotReceive")
                     .foregroundStyle(
-                        Color.primary.opacity(0.45)
+                        Color.titleText.opacity(0.45)
                     )
 
                 Button {
@@ -338,16 +306,15 @@ extension OtpView {
                         .fontWeight(.semibold)
                         .foregroundStyle(
                             resendRemainingSeconds == 0
-                                ? Color.primary
-                                : Color.primary.opacity(0.35)
+                                ? Color.titleText
+                                : Color.titleText.opacity(0.35)
                         )
                 }
                 .disabled(
-                    resendRemainingSeconds > 0 ||
-                    isLoading
+                    resendRemainingSeconds > 0 || isLoading
                 )
                 Spacer()
-                
+
             }
 
             if resendRemainingSeconds > 0 {
@@ -355,7 +322,7 @@ extension OtpView {
 
                     Text("otp.resendAvailableIn")
                         .foregroundStyle(
-                            Color.primary.opacity(0.45)
+                            Color.titleText.opacity(0.45)
                         )
 
                     Text(formattedResendTime)
@@ -367,12 +334,12 @@ extension OtpView {
                             )
                         )
                         .foregroundStyle(
-                            Color.primary.opacity(0.45)
+                            Color.titleText.opacity(0.45)
                         )
-                    
+
                     Spacer()
                 }
-            } 
+            }
         }
         .font(.system(size: 14))
         .frame(maxWidth: .infinity)
@@ -384,45 +351,13 @@ extension OtpView {
 extension OtpView {
 
     private var continueButton: some View {
-        Button {
+        SubmitButton(
+            title: "otp.button",
+            icon: "arrow.right",
+            form: form
+        ) {
             verifyCode()
-        } label: {
-
-            HStack(spacing: 12) {
-
-                if isLoading {
-                    ProgressView()
-                        .tint(Color.primary)
-                } else {
-                    Text("otp.button")
-
-                    Image(
-                        systemName: "arrow.right"
-                    )
-                }
-            }
-            .font(
-                .system(
-                    size: 16,
-                    weight: .semibold
-                )
-            )
-            .foregroundStyle(Color.primary)
-            .frame(maxWidth: .infinity)
-            .frame(height: 56)
-            .background(
-                Color.primaryYellow.opacity(
-                    canVerify ? 1 : 0.45
-                )
-            )
-            .clipShape(
-                RoundedRectangle(
-                    cornerRadius: 16
-                )
-            )
         }
-        .buttonStyle(.plain)
-        .disabled(!canVerify)
     }
 }
 
@@ -431,7 +366,7 @@ extension OtpView {
 extension OtpView {
 
     private func verifyCode() {
-        guard canVerify else {
+        guard form.canSubmit else {
             return
         }
 
@@ -473,8 +408,8 @@ extension OtpView {
         switch state {
 
         case .idle,
-             .loading,
-             .error:
+            .loading,
+            .error:
             break
 
         case .resendSuccess(

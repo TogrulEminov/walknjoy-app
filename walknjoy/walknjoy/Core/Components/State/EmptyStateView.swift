@@ -18,14 +18,14 @@ struct EmptyStateView: View {
 
             Image(systemName: icon)
                 .font(.system(size: 56))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.iconColor)
 
             Text(title)
                 .font(.system(size: 20, weight: .semibold))
 
             Text(message)
                 .font(.system(size: 15))
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.descriptionText)
                 .multilineTextAlignment(.center)
         }
         .padding(.horizontal, 24)

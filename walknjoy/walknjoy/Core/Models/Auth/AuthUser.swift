@@ -14,7 +14,7 @@ struct AuthUser: Decodable {
     let lastName: String
 
     let phone: String?
-    let avatarUrl: String?
+    let avatarFile: UploadedFile?
 
     let role: String
     let status: String
