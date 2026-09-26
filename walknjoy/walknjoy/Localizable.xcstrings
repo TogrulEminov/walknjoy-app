@@ -4,6 +4,26 @@
     "" : {
 
     },
+    "%@ (%lld)" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$lld)"
+          }
+        }
+      }
+    },
+    "%@ %@" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ %2$@"
+          }
+        }
+      }
+    },
     "%lld" : {
 
     },
@@ -194,6 +214,76 @@
         }
       }
     },
+    "favorites.add" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sevimlilərə əlavə et"
+          }
+        }
+      }
+    },
+    "favorites.empty.description" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bəyəndiyiniz elanları yadda saxlayın, burada görünsün."
+          }
+        }
+      }
+    },
+    "favorites.empty.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hələ sevimli elanınız yoxdur"
+          }
+        }
+      }
+    },
+    "favorites.error" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Əməliyyat alınmadı"
+          }
+        }
+      }
+    },
+    "favorites.ok" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oldu"
+          }
+        }
+      }
+    },
+    "favorites.remove" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sevimlilərdən sil"
+          }
+        }
+      }
+    },
+    "favorites.retry" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yenidən cəhd et"
+          }
+        }
+      }
+    },
     "forgot.button" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -374,6 +464,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dil seçin"
+          }
+        }
+      }
+    },
+    "listing.type.activity" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktivlik"
+          }
+        }
+      }
+    },
+    "listing.type.experience" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təcrübə"
+          }
+        }
+      }
+    },
+    "listing.type.stay" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qalma yeri"
+          }
+        }
+      }
+    },
+    "listing.type.tour" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tur"
           }
         }
       }

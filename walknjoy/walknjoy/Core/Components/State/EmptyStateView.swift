@@ -1,33 +1,27 @@
-//
-//  EmptyStateView.swift
-//  walknjoy
-//
-//  Created by Eminov Togrul Punhan on 21.09.26.
-//
-
 import SwiftUI
 
 struct EmptyStateView: View {
-
     let icon: String
     let title: LocalizedStringKey
     let message: LocalizedStringKey
 
     var body: some View {
-        VStack(spacing: 16) {
-
-            Image(systemName: icon)
-                .font(.system(size: 56))
-                .foregroundStyle(Color.iconColor)
-
-            Text(title)
-                .font(.system(size: 20, weight: .semibold))
-
-            Text(message)
-                .font(.system(size: 15))
-                .foregroundStyle(Color.descriptionText)
-                .multilineTextAlignment(.center)
+        VStack(spacing: 24) {
+            StateIconView(icon: icon)
+            VStack(spacing: 10) {
+                Text(title)
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(Color.titleText)
+                Text(message)
+                    .font(.subheadline)
+                    .foregroundStyle(Color.descriptionText)
+                    .lineSpacing(3)
+            }
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(.horizontal, 24)
+        .frame(maxWidth: 360)
+        .padding(24)
+        .frame(maxWidth: .infinity)
     }
 }

@@ -154,8 +154,25 @@ final class PasswordField: UIView {
     @objc
     private func togglePasswordVisibility() {
         let wasSecure = textField.isSecureTextEntry
+        let text = textField.text
+        let selection = textField.selectedTextRange.map {
+            (
+                start: textField.offset(from: textField.beginningOfDocument, to: $0.start),
+                end: textField.offset(from: textField.beginningOfDocument, to: $0.end)
+            )
+        }
 
+        // Refresh the secure rendering without synthesizing an editing event.
+        // insertText invokes the active text-input interaction and changes selection.
         textField.isSecureTextEntry.toggle()
+        textField.text = text
+
+        if let selection,
+            let start = textField.position(from: textField.beginningOfDocument, offset: selection.start),
+            let end = textField.position(from: textField.beginningOfDocument, offset: selection.end)
+        {
+            textField.selectedTextRange = textField.textRange(from: start, to: end)
+        }
 
         visibilityButton.setImage(
             UIImage(
@@ -166,11 +183,5 @@ final class PasswordField: UIView {
             for: .normal
         )
 
-        if let text = textField.text,
-            textField.isFirstResponder
-        {
-            textField.text = nil
-            textField.insertText(text)
-        }
     }
 }

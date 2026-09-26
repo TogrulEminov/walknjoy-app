@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ListingType: String {
+enum ListingType: String, Decodable {
     case stay = "STAY"
     case tour = "TOUR"
     case activity = "ACTIVITY"

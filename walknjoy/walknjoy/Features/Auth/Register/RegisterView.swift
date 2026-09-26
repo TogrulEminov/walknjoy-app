@@ -52,7 +52,6 @@ extension RegisterView {
         ) {
             dismiss()
         }
-        .padding(.horizontal, 24)
     }
 }
 extension RegisterView {

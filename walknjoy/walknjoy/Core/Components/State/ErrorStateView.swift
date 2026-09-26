@@ -1,10 +1,3 @@
-//
-//  ErrorStateView.swift
-//  walknjoy
-//
-//  Created by Eminov Togrul Punhan on 21.09.26.
-//
-
 import SwiftUI
 
 struct ErrorStateView: View {
@@ -12,24 +5,32 @@ struct ErrorStateView: View {
     let message: String
     var retryTitle: LocalizedStringKey?
     var onRetry: (() -> Void)?
+
     var body: some View {
         VStack(spacing: 24) {
-            Image(systemName: "exclamationmark.circle.fill").font(
-                .system(size: 72)
-            ).foregroundStyle(Color.errorColor)
-            VStack(spacing: 12) {
+            StateIconView(
+                icon: "exclamationmark.triangle",
+                tint: .errorColor, background: .errorColor
+            )
+
+            VStack(spacing: 10) {
                 Text(title)
-                    .font(.system(size: 24, weight: .bold))
+                    .font(.title3.weight(.semibold))
+                    .foregroundStyle(Color.titleText)
                 Text(message)
-                    .font(.system(size: 15))
+                    .font(.subheadline)
                     .foregroundStyle(Color.descriptionText)
-                    .multilineTextAlignment(.center)
+                    .lineSpacing(3)
             }
-            if let retryTitle {
-                Button(retryTitle) { onRetry?() }.buttonStyle(
-                    .borderedProminent
-                )
+            .multilineTextAlignment(.center)
+            .fixedSize(horizontal: false, vertical: true)
+
+            if let retryTitle, let onRetry {
+                SubmitButton(title: retryTitle, icon: "arrow.clockwise", action: onRetry)
             }
-        }.padding(.horizontal, 24)
+        }
+        .frame(maxWidth: 360)
+        .padding(24)
+        .frame(maxWidth: .infinity)
     }
 }
