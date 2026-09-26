@@ -12,5 +12,10 @@ struct FavoriteRequest: Encodable {
 }
 struct FavoriteResponse: Decodable, Equatable {
     let isFavorite: Bool
-    let favoritedAt: String
+    let favoritedAt: String?
+}
+
+struct FavoritesPage {
+    let listings: [ListingResponse]
+    let meta: PaginationMeta?
 }

@@ -10,7 +10,7 @@ import Foundation
 enum FavoritesEndpoint {
     case addFavorites(String)
     case deleteFavorites(String)
-    case getFavorites
+    case getFavorites(limit: Int, page: Int, locale: String)
 }
 extension FavoritesEndpoint: Endpoint {
     var baseURL: String {
@@ -28,14 +28,15 @@ extension FavoritesEndpoint: Endpoint {
     }
 
     var httpBody: RequestBody {
-        switch self {
-        case .getFavorites: .none
-        case .addFavorites(let id): .json(id)
-        case .deleteFavorites(let id): .json(id)
-        }
+        .none
     }
     var queryItems: [URLQueryItem]? {
-        nil
+        guard case let .getFavorites(limit, page, locale) = self else { return nil }
+        return [
+            URLQueryItem(name: "limit", value: String(limit)),
+            URLQueryItem(name: "page", value: String(page)),
+            URLQueryItem(name: "locale", value: locale)
+        ]
     }
     var method: HttpMethod {
         switch self {

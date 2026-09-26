@@ -237,7 +237,7 @@ extension ProfileView {
             EmptyView()
 
         case .favorites:
-            EmptyView()
+            FavoritesView()
 
         case .reviews:
             EmptyView()
