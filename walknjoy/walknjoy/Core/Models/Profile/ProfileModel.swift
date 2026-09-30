@@ -13,13 +13,23 @@ struct ProfileModel: Decodable, Equatable {
     let firstName: String
     let lastName: String
     let phone: String?
-    let role: RoleEnum
+    let roleRawValue: String
     let status: UserStatus
     let emailVerifiedAt: String?
     let createdAt: String
     let updatedAt: String?
     let avatarFile: UploadedFile?
     let stats: ProfileStats
+
+    private enum CodingKeys: String, CodingKey {
+        case id, email, firstName, lastName, phone, status, emailVerifiedAt
+        case createdAt, updatedAt, avatarFile, stats
+        case roleRawValue = "role"
+    }
+
+    var role: RoleEnum? {
+        RoleEnum(rawValue: roleRawValue.uppercased())
+    }
 
     var fullName: String {
         "\(firstName) \(lastName)"
@@ -30,7 +40,7 @@ extension ProfileModel {
     func replacingAvatar(_ avatar: UploadedFile?) -> ProfileModel {
         ProfileModel(
             id: id, email: email, firstName: firstName, lastName: lastName,
-            phone: phone, role: role, status: status, emailVerifiedAt: emailVerifiedAt,
+            phone: phone, roleRawValue: roleRawValue, status: status, emailVerifiedAt: emailVerifiedAt,
             createdAt: createdAt, updatedAt: updatedAt, avatarFile: avatar, stats: stats
         )
     }

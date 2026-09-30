@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RoleEnum: String, Decodable {
+enum RoleEnum: String {
     case customer = "CUSTOMER"
     case admin = "ADMIN"
     case provider = "PROVIDER"

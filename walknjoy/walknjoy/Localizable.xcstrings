@@ -4,28 +4,103 @@
     "" : {
 
     },
-    "%@ (%lld)" : {
+    "%@: %lld" : {
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@ (%2$lld)"
+            "value" : "%1$@: %2$lld"
           }
         }
       }
     },
-    "%@ %@" : {
+    "auth.mobileAccessDenied" : {
+      "extractionState" : "manual",
       "localizations" : {
         "az" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ %2$@"
+            "state" : "translated",
+            "value" : "Bu əməliyyat üçün mobil tətbiqdən istifadə edin."
           }
         }
       }
     },
-    "%lld" : {
-
+    "common.apply" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tətbiq et"
+          }
+        }
+      }
+    },
+    "common.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ləğv et"
+          }
+        }
+      }
+    },
+    "common.close" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bağla"
+          }
+        }
+      }
+    },
+    "common.edit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redaktə et"
+          }
+        }
+      }
+    },
+    "common.loadMore" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daha çox yüklə"
+          }
+        }
+      }
+    },
+    "common.no" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xeyr"
+          }
+        }
+      }
+    },
+    "common.notSelected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilməyib"
+          }
+        }
+      }
     },
     "common.ok" : {
       "extractionState" : "manual",
@@ -34,6 +109,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Oldu"
+          }
+        }
+      }
+    },
+    "common.reset" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıfırla"
+          }
+        }
+      }
+    },
+    "common.retry" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yenidən cəhd et"
+          }
+        }
+      }
+    },
+    "common.seeAll" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hamısına bax"
+          }
+        }
+      }
+    },
+    "common.select" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçin"
+          }
+        }
+      }
+    },
+    "common.view" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bax"
+          }
+        }
+      }
+    },
+    "common.yes" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bəli"
           }
         }
       }
@@ -214,6 +355,17 @@
         }
       }
     },
+    "error.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xəta"
+          }
+        }
+      }
+    },
     "favorites.add" : {
       "localizations" : {
         "az" : {
@@ -327,17 +479,6 @@
         }
       }
     },
-    "forgot.title\n" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şifrəni unutmusunuz?\n"
-          }
-        }
-      }
-    },
     "forgot.validation.email" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -356,6 +497,248 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Məlumatları yoxlayın"
+          }
+        }
+      }
+    },
+    "home.activities.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fəaliyyətlər"
+          }
+        }
+      }
+    },
+    "home.ai.brand" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WalkNJoy AI"
+          }
+        }
+      }
+    },
+    "home.ai.button" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səyahət planla"
+          }
+        }
+      }
+    },
+    "home.ai.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səyahət planınızı süni intellektlə yaradın."
+          }
+        }
+      }
+    },
+    "home.ai.new" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni plan"
+          }
+        }
+      }
+    },
+    "home.categories.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kateqoriyalar"
+          }
+        }
+      }
+    },
+    "home.experiences.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təcrübələr"
+          }
+        }
+      }
+    },
+    "home.hero.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Növbəti unudulmaz səyahətinizi kəşf edin."
+          }
+        }
+      }
+    },
+    "home.hero.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səyahətə başla"
+          }
+        }
+      }
+    },
+    "home.main" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ana səhifə"
+          }
+        }
+      }
+    },
+    "home.notifications" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildirişlər"
+          }
+        }
+      }
+    },
+    "home.search.adultsFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Böyüklər: %1$lld"
+          }
+        }
+      }
+    },
+    "home.search.childrenFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uşaqlar: %1$lld"
+          }
+        }
+      }
+    },
+    "home.search.chooseDates" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarixləri seçin"
+          }
+        }
+      }
+    },
+    "home.search.guests" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qonaqlar"
+          }
+        }
+      }
+    },
+    "home.search.openHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İstiqamət və tarixləri seçmək üçün axtarışa toxunun."
+          }
+        }
+      }
+    },
+    "home.search.participantsFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İştirakçılar: %1$lld"
+          }
+        }
+      }
+    },
+    "home.search.placeholder" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hara getmək istəyirsiniz?"
+          }
+        }
+      }
+    },
+    "home.search.prompt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hara getmək istəyirsiniz?"
+          }
+        }
+      }
+    },
+    "home.search.subtitle" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sizə uyğun istirahəti tapın"
+          }
+        }
+      }
+    },
+    "home.stays.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qalmaq üçün yerlər"
+          }
+        }
+      }
+    },
+    "home.tours.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Turlar"
           }
         }
       }
@@ -468,6 +851,677 @@
         }
       }
     },
+    "listing.action.create" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni elan yarat"
+          }
+        }
+      }
+    },
+    "listing.action.resubmit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yenidən göndər"
+          }
+        }
+      }
+    },
+    "listing.action.save" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yadda saxla"
+          }
+        }
+      }
+    },
+    "listing.action.submit" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Göndər"
+          }
+        }
+      }
+    },
+    "listing.activity.difficulty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çətinlik səviyyəsi"
+          }
+        }
+      }
+    },
+    "listing.activity.equipment" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avadanlıq təmin olunur"
+          }
+        }
+      }
+    },
+    "listing.activity.section" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fəaliyyət məlumatları"
+          }
+        }
+      }
+    },
+    "listing.amenities" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmkanlar"
+          }
+        }
+      }
+    },
+    "listing.amenities.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu kateqoriya üçün imkan yoxdur."
+          }
+        }
+      }
+    },
+    "listing.category" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kateqoriya"
+          }
+        }
+      }
+    },
+    "listing.contentLocale" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məzmun dili"
+          }
+        }
+      }
+    },
+    "listing.create.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni elan"
+          }
+        }
+      }
+    },
+    "listing.difficulty.easy" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Asan"
+          }
+        }
+      }
+    },
+    "listing.difficulty.hard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çətin"
+          }
+        }
+      }
+    },
+    "listing.difficulty.moderate" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Orta"
+          }
+        }
+      }
+    },
+    "listing.duration.hoursFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld saat"
+          }
+        }
+      }
+    },
+    "listing.duration.minutesFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld dəqiqə"
+          }
+        }
+      }
+    },
+    "listing.duration.shortMinutesFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld dəq."
+          }
+        }
+      }
+    },
+    "listing.edit.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elanı redaktə et"
+          }
+        }
+      }
+    },
+    "listing.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hələ elan yoxdur"
+          }
+        }
+      }
+    },
+    "listing.experience.hostIncluded" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aparıcı daxildir"
+          }
+        }
+      }
+    },
+    "listing.experience.private" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fərdi təcrübə"
+          }
+        }
+      }
+    },
+    "listing.experience.section" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təcrübə məlumatları"
+          }
+        }
+      }
+    },
+    "listing.field.currency" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Valyuta"
+          }
+        }
+      }
+    },
+    "listing.guests.countFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld qonaq"
+          }
+        }
+      }
+    },
+    "listing.guests.summaryFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld nəfər üçün"
+          }
+        }
+      }
+    },
+    "listing.locale" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dil"
+          }
+        }
+      }
+    },
+    "listing.location" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məkan"
+          }
+        }
+      }
+    },
+    "listing.media" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şəkillər"
+          }
+        }
+      }
+    },
+    "listing.media.add" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şəkil əlavə et"
+          }
+        }
+      }
+    },
+    "listing.media.cover" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üz qabığı"
+          }
+        }
+      }
+    },
+    "listing.media.createFirst" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şəkil əlavə etmək üçün əvvəlcə elanı yadda saxlayın."
+          }
+        }
+      }
+    },
+    "listing.myListings" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elanlarım"
+          }
+        }
+      }
+    },
+    "listing.nights.minimumFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum gecə sayı: %1$lld"
+          }
+        }
+      }
+    },
+    "listing.notice.saved" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elan yadda saxlanıldı."
+          }
+        }
+      }
+    },
+    "listing.notice.submitted" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elan yoxlamaya göndərildi."
+          }
+        }
+      }
+    },
+    "listing.participants.maximumFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maksimum iştirakçı: %1$lld"
+          }
+        }
+      }
+    },
+    "listing.pricing.section" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qiymət və kateqoriya"
+          }
+        }
+      }
+    },
+    "listing.propertyType.apartment" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mənzil"
+          }
+        }
+      }
+    },
+    "listing.propertyType.cottage" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kənd evi"
+          }
+        }
+      }
+    },
+    "listing.propertyType.guest_house" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qonaq evi"
+          }
+        }
+      }
+    },
+    "listing.propertyType.hostel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hostel"
+          }
+        }
+      }
+    },
+    "listing.propertyType.hotel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Otel"
+          }
+        }
+      }
+    },
+    "listing.propertyType.house" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ev"
+          }
+        }
+      }
+    },
+    "listing.propertyType.other" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Digər"
+          }
+        }
+      }
+    },
+    "listing.propertyType.villa" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Villa"
+          }
+        }
+      }
+    },
+    "listing.rejection.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmtina səbəbi"
+          }
+        }
+      }
+    },
+    "listing.status.archived" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arxivləşdirilib"
+          }
+        }
+      }
+    },
+    "listing.status.draft" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qaralama"
+          }
+        }
+      }
+    },
+    "listing.status.pendingReview" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yoxlanılır"
+          }
+        }
+      }
+    },
+    "listing.status.published" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dərc edilib"
+          }
+        }
+      }
+    },
+    "listing.status.rejected" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmtina edilib"
+          }
+        }
+      }
+    },
+    "listing.status.unknown" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Naməlum status"
+          }
+        }
+      }
+    },
+    "listing.stay.instantBooking" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dərhal bron"
+          }
+        }
+      }
+    },
+    "listing.stay.propertyType" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Əmlak növü"
+          }
+        }
+      }
+    },
+    "listing.stay.section" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qalma məlumatları"
+          }
+        }
+      }
+    },
+    "listing.stay.summaryFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ · %2$lld qonaq"
+          }
+        }
+      }
+    },
+    "listing.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elan"
+          }
+        }
+      }
+    },
+    "listing.tour.private" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fərdi tur"
+          }
+        }
+      }
+    },
+    "listing.tour.section" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tur məlumatları"
+          }
+        }
+      }
+    },
+    "listing.translation.section" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təsvir"
+          }
+        }
+      }
+    },
     "listing.type.activity" : {
       "localizations" : {
         "az" : {
@@ -504,6 +1558,72 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Tur"
+          }
+        }
+      }
+    },
+    "listing.typeSelection" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elan növünü seçin"
+          }
+        }
+      }
+    },
+    "listing.unsaved.discard" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dəyişiklikləri sil və çıx"
+          }
+        }
+      }
+    },
+    "listing.unsaved.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Çıxmaq istədiyinizə əminsiniz? Dəyişikliklər itəcək."
+          }
+        }
+      }
+    },
+    "listing.unsaved.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dəyişikliklər yadda saxlanmayıb"
+          }
+        }
+      }
+    },
+    "listing.untitled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adsız elan"
+          }
+        }
+      }
+    },
+    "listing.validation.required" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Məcburi sahələri və məkan məlumatlarını düzgün doldurun."
           }
         }
       }
@@ -680,6 +1800,17 @@
         }
       }
     },
+    "notifications.destinationError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildirişdəki istiqamət açıla bilmədi."
+          }
+        }
+      }
+    },
     "notifications.discover" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -687,6 +1818,28 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yeniliklər və təkliflər"
+          }
+        }
+      }
+    },
+    "notifications.empty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildiriş yoxdur"
+          }
+        }
+      }
+    },
+    "notifications.emptyDescription" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni bildirişlər burada görünəcək."
           }
         }
       }
@@ -746,6 +1899,39 @@
         }
       }
     },
+    "notifications.offlineHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildirişlər yenilənə bilmir. İnternet bağlantınızı yoxlayın."
+          }
+        }
+      }
+    },
+    "notifications.openListing" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elanı aç"
+          }
+        }
+      }
+    },
+    "notifications.readAll" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hamısını oxunmuş et"
+          }
+        }
+      }
+    },
     "notifications.saved" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -753,6 +1939,50 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bildiriş seçimləri yadda saxlanıldı."
+          }
+        }
+      }
+    },
+    "notifications.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildirişlər"
+          }
+        }
+      }
+    },
+    "notifications.unreadCountFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oxunmamış bildirişlər: %1$lld"
+          }
+        }
+      }
+    },
+    "notifications.unreadOnly" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yalnız oxunmamışlar"
+          }
+        }
+      }
+    },
+    "notifications.updateError" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bildiriş yenilənmədi. Yenidən cəhd edin."
           }
         }
       }
@@ -1074,6 +2304,7 @@
       }
     },
     "profile.administration" : {
+      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {
@@ -1283,17 +2514,6 @@
         }
       }
     },
-    "profile.personalInformation\n" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şəxsi məlumatlar"
-          }
-        }
-      }
-    },
     "profile.personalInformation.description" : {
       "localizations" : {
         "az" : {
@@ -1406,6 +2626,182 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profil"
+          }
+        }
+      }
+    },
+    "provider.archive.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Arxivlə"
+          }
+        }
+      }
+    },
+    "provider.archive.message" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu elanı arxivləşdirmək istəyirsiniz?"
+          }
+        }
+      }
+    },
+    "provider.archive.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elanı arxivlə"
+          }
+        }
+      }
+    },
+    "provider.list.allStatuses" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bütün statuslar"
+          }
+        }
+      }
+    },
+    "provider.list.emptyHint" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni elan yaratmaq üçün + düyməsinə toxunun."
+          }
+        }
+      }
+    },
+    "provider.list.filteredEmpty" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçdiyiniz filtrlərə uyğun elan tapılmadı."
+          }
+        }
+      }
+    },
+    "provider.list.heading.count" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elanların sayı: %1$lld"
+          }
+        }
+      }
+    },
+    "provider.list.heading.countFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elanların sayı: %lld"
+          }
+        }
+      }
+    },
+    "provider.list.noReviews" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hələ rəy yoxdur"
+          }
+        }
+      }
+    },
+    "provider.list.search" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elanlarda axtar"
+          }
+        }
+      }
+    },
+    "provider.list.status" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Status"
+          }
+        }
+      }
+    },
+    "provider.validation.businessName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznesinizin adını daxil edin."
+          }
+        }
+      }
+    },
+    "provider.validation.email" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzgün e-poçt ünvanı daxil edin."
+          }
+        }
+      }
+    },
+    "provider.validation.logo" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes loqosunu əlavə edin."
+          }
+        }
+      }
+    },
+    "provider.validation.phone" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzgün telefon nömrəsi daxil edin."
+          }
+        }
+      }
+    },
+    "provider.validation.website" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Düzgün veb-sayt ünvanı daxil edin."
           }
         }
       }
@@ -1640,6 +3036,424 @@
         }
       }
     },
+    "search.action" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Axtar"
+          }
+        }
+      }
+    },
+    "search.adults" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Böyüklər"
+          }
+        }
+      }
+    },
+    "search.allDestinations" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bütün istiqamətlər"
+          }
+        }
+      }
+    },
+    "search.children" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uşaqlar"
+          }
+        }
+      }
+    },
+    "search.city.all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bütün şəhərlər"
+          }
+        }
+      }
+    },
+    "search.city.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şəhər"
+          }
+        }
+      }
+    },
+    "search.date.from" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlanğıc tarixi"
+          }
+        }
+      }
+    },
+    "search.date.to" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bitmə tarixi"
+          }
+        }
+      }
+    },
+    "search.destination" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İstiqamət"
+          }
+        }
+      }
+    },
+    "search.empty.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filtrləri dəyişib yenidən yoxlayın."
+          }
+        }
+      }
+    },
+    "search.empty.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nəticə tapılmadı"
+          }
+        }
+      }
+    },
+    "search.filter.amenities" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmkanlar"
+          }
+        }
+      }
+    },
+    "search.filter.any" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fərqi yoxdur"
+          }
+        }
+      }
+    },
+    "search.filter.category" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kateqoriya"
+          }
+        }
+      }
+    },
+    "search.filter.general" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ümumi filtrlər"
+          }
+        }
+      }
+    },
+    "search.filter.maxPrice" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maksimum qiymət"
+          }
+        }
+      }
+    },
+    "search.filter.minPrice" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum qiymət"
+          }
+        }
+      }
+    },
+    "search.filter.price" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qiymət aralığı"
+          }
+        }
+      }
+    },
+    "search.filter.propertyType" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Əmlak növü"
+          }
+        }
+      }
+    },
+    "search.filter.rating" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum reytinq"
+          }
+        }
+      }
+    },
+    "search.filter.schedule" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tarix və iştirakçılar"
+          }
+        }
+      }
+    },
+    "search.filter.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Filterlər"
+          }
+        }
+      }
+    },
+    "search.main" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Axtarış"
+          }
+        }
+      }
+    },
+    "search.participants" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İştirakçılar"
+          }
+        }
+      }
+    },
+    "search.resultCount" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld nəticə"
+          }
+        }
+      }
+    },
+    "search.resultCountFormat" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld nəticə"
+          }
+        }
+      }
+    },
+    "search.results.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Axtarış nəticələri"
+          }
+        }
+      }
+    },
+    "search.sort" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sıralama"
+          }
+        }
+      }
+    },
+    "search.sort.featured" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilmişlər"
+          }
+        }
+      }
+    },
+    "search.sort.newest" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ən yenilər"
+          }
+        }
+      }
+    },
+    "search.sort.priceAsc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Əvvəlcə ucuz"
+          }
+        }
+      }
+    },
+    "search.sort.priceDesc" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Əvvəlcə bahalı"
+          }
+        }
+      }
+    },
+    "search.sort.rating" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reytinqə görə"
+          }
+        }
+      }
+    },
+    "search.type" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elan növü"
+          }
+        }
+      }
+    },
+    "search.type.all" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bütün növlər"
+          }
+        }
+      }
+    },
+    "search.validation.dates" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlanğıc tarixi bitmə tarixindən əvvəl olmalıdır."
+          }
+        }
+      }
+    },
+    "search.validation.price" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum qiymət maksimum qiymətdən çox ola bilməz."
+          }
+        }
+      }
+    },
+    "search.validation.stayDates" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Giriş tarixi çıxış tarixindən əvvəl olmalıdır."
+          }
+        }
+      }
+    },
     "security.changePassword" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1673,7 +3487,7 @@
         }
       }
     },
-    "security.code.remaining %lld" : {
+    "security.code.remainingFormat" : {
       "extractionState" : "manual",
       "localizations" : {
         "az" : {
@@ -1772,7 +3586,7 @@
         }
       }
     },
-    "security.resend.remaining %lld" : {
+    "security.resend.remainingFormat" : {
       "extractionState" : "manual",
       "localizations" : {
         "az" : {
@@ -1955,39 +3769,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Dil və görünüş"
-          }
-        }
-      }
-    },
-    "upload.image.add" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şəkillər əlavə et"
-          }
-        }
-      }
-    },
-    "upload.image.change" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dəyiş"
-          }
-        }
-      }
-    },
-    "upload.image.description" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şəkil seçmək üçün toxunun"
           }
         }
       }

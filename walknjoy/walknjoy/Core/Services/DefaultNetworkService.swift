@@ -78,6 +78,9 @@ final class DefaultNetworkService: NetworkingService {
                 ApiErrorResponse.self,
                 from: data
             ) {
+                if enpoint.path.hasPrefix("/provider/listings") {
+                    throw APIRequestFailure(error: apiError.error)
+                }
                 throw NetworkError.from(
                     code: apiError.error.code,
                     message: apiError.error.message,
@@ -98,10 +101,11 @@ final class DefaultNetworkService: NetworkingService {
         } catch {
 
             #if DEBUG
-                print(
-                    "DECODING ERROR:",
-                    error
-                )
+                if enpoint.path.hasPrefix("/notifications") {
+                    print("Notification response decoding failed")
+                } else {
+                    print("DECODING ERROR:", error)
+                }
             #endif
 
             throw NetworkError.decodingError

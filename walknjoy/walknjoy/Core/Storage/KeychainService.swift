@@ -40,6 +40,7 @@ final class KeychainService {
         let status = SecItemAdd(query as CFDictionary, nil)
 
         if status == errSecDuplicateItem {
+            // Replace an existing value so callers can use save as an upsert.
             try update(data, for: account)
             return
         }
@@ -62,6 +63,7 @@ final class KeychainService {
         let status = SecItemCopyMatching(query as CFDictionary, &result)
 
         if status == errSecItemNotFound {
+            // A missing Keychain item is a normal empty result, not an error.
             return nil
         }
 
@@ -85,6 +87,7 @@ final class KeychainService {
 
         let status = SecItemDelete(query as CFDictionary)
 
+        // Deleting an absent item is already the desired end state.
         guard status == errSecSuccess || status == errSecItemNotFound else {
             throw KeychainServiceError.unexpectedStatus(status)
         }

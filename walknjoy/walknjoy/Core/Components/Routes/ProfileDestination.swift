@@ -20,6 +20,5 @@ enum ProfileDestination: Hashable {
     case security
 
     // Role
-    case businessDashboard
-    case adminDashboard
+    case businessDashboard 
 }

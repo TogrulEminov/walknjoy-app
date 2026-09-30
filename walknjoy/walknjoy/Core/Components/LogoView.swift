@@ -8,13 +8,14 @@
 import SwiftUI
 
 struct LogoView: View {
+    var usesWhiteLogo = false
 
     @Environment(\.colorScheme)
     private var colorScheme
 
     var body: some View {
         Image(
-            colorScheme == .dark
+            usesWhiteLogo || colorScheme == .dark
                 ? "logo-white"
                 : "logo-colorfull"
         )

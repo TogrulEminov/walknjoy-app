@@ -44,7 +44,7 @@ struct SecurityView: View {
 
                     if model.step == .code {
                         if model.codeSeconds > 0 {
-                            Text("security.code.remaining \(model.codeSeconds)")
+                            Text(String(format: String(localized: "security.code.remainingFormat"), model.codeSeconds))
                                 .font(.caption.monospacedDigit())
                                 .foregroundStyle(Color.descriptionText)
                         } else {
@@ -54,7 +54,7 @@ struct SecurityView: View {
                             Task { await model.resend() }
                         } label: {
                             if model.resendSeconds > 0 {
-                                Text("security.resend.remaining \(model.resendSeconds)")
+                                Text(String(format: String(localized: "security.resend.remainingFormat"), model.resendSeconds))
                             } else {
                                 Text("security.resend")
                             }

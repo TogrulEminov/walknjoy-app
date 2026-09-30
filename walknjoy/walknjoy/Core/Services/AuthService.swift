@@ -112,6 +112,7 @@ final class AuthService: AuthServiceProtocol {
         guard let data = response.data else {
             throw NetworkError.invalidResponse
         }
+        try validateMobileAccess(role: data.user.role)
         try tokenStorage.save(
             accessToken: data.accessToken,
             refreshToken: data.refreshToken
@@ -134,6 +135,8 @@ final class AuthService: AuthServiceProtocol {
         guard let data = response.data else {
             throw NetworkError.invalidResponse
         }
+        // A refresh begun by a previous session must not overwrite a newer login/logout.
+        guard tokenStorage.refreshToken == refreshToken else { throw NetworkError.unauthorized }
         try tokenStorage.save(
             accessToken: data.accessToken,
             refreshToken: data.refreshToken
@@ -148,6 +151,7 @@ final class AuthService: AuthServiceProtocol {
         guard let user = response.data else {
             throw NetworkError.invalidResponse
         }
+        try validateMobileAccess(role: user.role)
         return user
     }
 
@@ -155,9 +159,24 @@ final class AuthService: AuthServiceProtocol {
         guard tokenStorage.refreshToken != nil else {
             throw NetworkError.unauthorized
         }
-        _ = try await refresh()
+        do {
+            try await refresh()
+            _ = try await me()
+        } catch {
+            // A refreshed token alone is not proof of an allowed mobile account.
+            try? tokenStorage.clear()
+            throw error
+        }
     }
 
+    private func validateMobileAccess(role: String) throws {
+        do {
+            try MobileAccountAccess.validate(role: role)
+        } catch {
+            try tokenStorage.clear()
+            throw error
+        }
+    }
 }
 
 @MainActor

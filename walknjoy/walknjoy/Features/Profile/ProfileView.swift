@@ -37,6 +37,9 @@ struct ProfileView: View {
                         for: destination
                     )
                 }
+                .navigationDestination(for: ListingDetailsRoute.self) { route in
+                    ListingDetailView(data: route.listing)
+                }
                 .navigationTitle("profile.title")
                 .navigationBarTitleDisplayMode(.inline)
                 .task {
@@ -110,10 +113,10 @@ extension ProfileView {
                     )
                 }
 
-                if !viewModel.roleItems.isEmpty {
+                if let role = profile.role, !viewModel.roleItems.isEmpty {
                     ProfileSectionView(
                         title: roleSectionTitle(
-                            for: profile.role
+                            for: role
                         ),
                         items: viewModel.roleItems
                     ) { item in
@@ -159,7 +162,7 @@ extension ProfileView {
             return "profile.business"
 
         case .admin:
-            return "profile.administration"
+            return ""
         }
     }
 }
@@ -208,6 +211,7 @@ extension ProfileView {
     private func handleNavigation(
         _ destination: ProfileDestination
     ) {
+        guard destination != .favorites || viewModel.canViewFavorites else { return }
         path.append(destination)
     }
 }
@@ -215,7 +219,6 @@ extension ProfileView {
 // MARK: - Destinations
 
 extension ProfileView {
-
     @ViewBuilder
     private func destinationView(
         for destination: ProfileDestination
@@ -237,7 +240,9 @@ extension ProfileView {
             EmptyView()
 
         case .favorites:
-            FavoritesView()
+            if viewModel.canViewFavorites {
+                FavoritesView()
+            }
 
         case .reviews:
             EmptyView()
@@ -252,10 +257,7 @@ extension ProfileView {
             SecurityView()
 
         case .businessDashboard:
-            EmptyView()
-
-        case .adminDashboard:
-            EmptyView()
+            ListingListView()
         }
     }
 }

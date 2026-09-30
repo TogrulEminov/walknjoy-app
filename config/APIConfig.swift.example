@@ -1,7 +1,0 @@
-import Foundation
-
-// Copy to walknjoy/walknjoy/Core/Config/APIConfig.swift and set local values.
-// Keep this template free of real credentials and private endpoints.
-enum APIConfig {
-    static let imageUrl = "https://example.invalid"
-}

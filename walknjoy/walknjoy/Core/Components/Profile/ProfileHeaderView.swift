@@ -32,8 +32,10 @@ struct ProfileHeaderView: View {
                     .multilineTextAlignment(.center)
                     .textSelection(.enabled)
 
-                ProfileRoleBadge(role: profile.role)
-                    .padding(.top, 6)
+                if let role = profile.role {
+                    ProfileRoleBadge(role: role)
+                        .padding(.top, 6)
+                }
             }
 
             if let onEdit {

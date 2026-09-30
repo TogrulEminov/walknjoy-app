@@ -1,6 +1,8 @@
 import SwiftUI
 
 extension Color {
+    // Stable dark foreground/overlay for imagery and yellow brand surfaces.
+    static let brandInk = Color("brandInk")
     static let appBackground = Color("appBackground")
     static let surfaceBackground = Color("surfaceBackground")
     static let borderColor = Color("borderColor")

@@ -1,6 +1,7 @@
 import SwiftUI
 import UIKit
 
+/// Bridges the UIKit password field so its text and validation state stay in sync with SwiftUI.
 struct PasswordFieldRepresentable: UIViewRepresentable {
     @Environment(\.fieldHasValidationError) private var hasValidationError
 
@@ -26,6 +27,7 @@ struct PasswordFieldRepresentable: UIViewRepresentable {
 
     func updateUIView(_ uiView: PasswordField, context: Context) {
         uiView.hasValidationError = hasValidationError
+        // Refresh the coordinator's binding when SwiftUI recreates this representable value.
         context.coordinator.parent = self
         if uiView.textField.text != text {
             uiView.textField.text = text
@@ -50,6 +52,7 @@ struct PasswordFieldRepresentable: UIViewRepresentable {
 
         @objc
         func textChanged(_ sender: UITextField) {
+            // Publish UIKit editing changes through the current SwiftUI binding.
             parent.text = sender.text ?? ""
         }
     }

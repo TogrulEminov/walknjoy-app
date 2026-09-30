@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Defines token persistence independently of the storage implementation.
 protocol TokenStorageProtocol {
     var accessToken: String? { get }
     var refreshToken: String? { get }
@@ -16,6 +17,7 @@ protocol TokenStorageProtocol {
 }
 
 final class TokenStorage: TokenStorageProtocol {
+    // Stable Keychain account names let the app find tokens across launches.
     private enum Keys {
         static let accessToken = "auth.accessToken"
         static let refreshToken = "auth.refreshToken"
@@ -49,6 +51,7 @@ final class TokenStorage: TokenStorageProtocol {
         try keychain.delete(for: Keys.refreshToken)
     }
     private func readToken(for key: String) -> String? {
+        // Missing or unreadable credentials are treated as unavailable tokens.
         guard let data = try? keychain.read(for: key) else {
             return nil
         }

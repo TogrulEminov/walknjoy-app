@@ -27,6 +27,7 @@ final class ProfileViewModel {
         state = .loading
         do {
             let profile = try await profileService.getProfile()
+            try MobileAccountAccess.validate(role: profile.roleRawValue)
             state = .loaded(profile)
         } catch {
             state = .error(error.localizedDescription)
@@ -34,7 +35,12 @@ final class ProfileViewModel {
     }
 
     func setProfile(_ profile: ProfileModel) {
-        state = .loaded(profile)
+        do {
+            try MobileAccountAccess.validate(role: profile.roleRawValue)
+            state = .loaded(profile)
+        } catch {
+            state = .error(error.localizedDescription)
+        }
     }
     func logout() async throws {
         try await authService.logout()
@@ -63,6 +69,8 @@ extension ProfileViewModel {
 
     // MARK: - Account
 
+    var canViewFavorites: Bool { profile?.role == .customer }
+
     var accountItems: [ProfileMenuItem] {
         [
             ProfileMenuItem(
@@ -88,7 +96,7 @@ extension ProfileViewModel {
                 icon: "star",
                 destination: .reviews
             ),
-        ]
+        ].filter { $0.destination != .favorites || canViewFavorites }
     }
 
     // MARK: - Settings
@@ -125,11 +133,11 @@ extension ProfileViewModel {
         }
 
         switch profile.role {
-
-        case .customer:
+        case nil: return []
+        case .admin?, .customer?:
             return []
 
-        case .provider:
+        case .provider?:
             return [
                 ProfileMenuItem(
                     title: "profile.businessDashboard",
@@ -137,15 +145,7 @@ extension ProfileViewModel {
                     destination: .businessDashboard
                 )
             ]
-
-        case .admin:
-            return [
-                ProfileMenuItem(
-                    title: "profile.adminDashboard",
-                    icon: "shield",
-                    destination: .adminDashboard
-                )
-            ]
         }
+
     }
 }

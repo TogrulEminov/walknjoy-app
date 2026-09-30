@@ -6,7 +6,7 @@
 //
 import SwiftUI
 
-/// Measure the actual row width before crossing the SwiftUI/UIKit boundary.
+/// Adapts the UIKit OTP control to SwiftUI while keeping the entered code in a binding.
 struct OTPRepresentable: View {
     @Binding var code: String
     let digitCount: Int
@@ -31,6 +31,7 @@ private struct OTPUIKitBridge: UIViewRepresentable {
     func makeUIView(context: Context) -> OtpInput {
         let otpInput = OtpInput(digitCount: digitCount)
 
+        // Forward edits from the UIKit control to the SwiftUI source of truth.
         otpInput.onCodeChanged = { newCode in
             code = newCode
         }
@@ -40,6 +41,7 @@ private struct OTPUIKitBridge: UIViewRepresentable {
 
     func updateUIView(_ uiView: OtpInput, context: Context) {
         uiView.hasValidationError = hasValidationError
+        // Also apply programmatic changes, such as clearing the code after an error.
         if uiView.code != code {
             uiView.setCode(code)
         }
@@ -50,10 +52,9 @@ private struct OTPUIKitBridge: UIViewRepresentable {
         uiView: OtpInput,
         context: Context
     ) -> CGSize? {
+        // Use the available width when SwiftUI proposes one; otherwise size cells from their count.
         let preferredWidth = CGFloat(digitCount * 48 + (digitCount - 1) * 8)
 
-        // Use the parent container's width, including Form row insets.
-        // SwiftUI can also probe with an unspecified or infinite proposal.
         let width = proposal.width.flatMap { $0.isFinite ? max(0, $0) : nil }
         return CGSize(width: width ?? preferredWidth, height: 56)
     }

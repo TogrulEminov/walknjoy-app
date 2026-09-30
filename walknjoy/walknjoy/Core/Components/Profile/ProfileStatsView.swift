@@ -33,7 +33,7 @@ extension ProfileStatsView {
         title: LocalizedStringKey
     ) -> some View {
         VStack(spacing: 6) {
-            Text("\(value)")
+            Text(verbatim: "\(value)")
                 .font(.title2.weight(.bold))
                 .monospacedDigit()
                 .foregroundStyle(Color.titleText)

@@ -100,8 +100,10 @@ extension EditProfileView {
                     .foregroundStyle(Color.descriptionText)
                     .lineLimit(1)
 
-                ProfileRoleBadge(role: viewModel.profile.role)
-                    .padding(.top, 3)
+                if let role = viewModel.profile.role {
+                    ProfileRoleBadge(role: role)
+                        .padding(.top, 3)
+                }
             }
             .frame(
                 maxWidth: .infinity,
