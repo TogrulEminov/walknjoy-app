@@ -17,6 +17,11 @@ struct ProviderProfile: Decodable, Equatable {
     let updatedAt: Date
 }
 
+struct ProviderApplicationResponseData: Decodable {
+    let profile: ProviderProfile
+    let accessToken: String
+}
+
 struct ProviderApplicationInput: Encodable {
     let businessName: String
     let legalName: String?

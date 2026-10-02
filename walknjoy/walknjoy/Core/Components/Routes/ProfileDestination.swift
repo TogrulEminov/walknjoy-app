@@ -8,6 +8,7 @@
 import Foundation
 
 enum ProfileDestination: Hashable {
+    case listingDetails(PublicListing)
     // Account
     case editProfile 
     case bookings
@@ -20,5 +21,6 @@ enum ProfileDestination: Hashable {
     case security
 
     // Role
-    case businessDashboard 
+    case businessProfile
+    case businessDashboard
 }

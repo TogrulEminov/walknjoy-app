@@ -6,8 +6,7 @@
 //
 
 import SwiftUI
-
-/// Adapts the UIKit text field and forwards its text changes to the SwiftUI binding.
+ 
 struct InputFieldRepresentable: UIViewRepresentable {
     @Environment(\.fieldHasValidationError) private var hasValidationError
 
@@ -43,7 +42,6 @@ struct InputFieldRepresentable: UIViewRepresentable {
 
     func updateUIView(_ uiView: InputField, context: Context) {
         uiView.hasValidationError = hasValidationError
-        // Keep UIKit text aligned with edits made elsewhere in SwiftUI.
         if uiView.textField.text != text {
             uiView.textField.text = text
         }
@@ -63,7 +61,6 @@ struct InputFieldRepresentable: UIViewRepresentable {
 
         @objc
         func textChanged(_ sender: UITextField) {
-            // Publish user input from UITextField to the bound SwiftUI state.
             parent.text = sender.text ?? ""
         }
     }

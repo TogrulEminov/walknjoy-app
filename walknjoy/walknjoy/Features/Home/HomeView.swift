@@ -9,20 +9,22 @@ import SwiftUI
 
 @MainActor
 struct HomeView: View {
+    @Binding var selectedTab: MainTab
+    @Binding var searchCriteria: ListingSearchCriteria
     @Environment(AppState.self) private var appState
     @State private var favoriteError: String?
     @Environment(NotificationViewModel.self) private var notifications
     @State private var viewModel: HomeViewModel
-    @State private var searchCriteria = ListingSearchCriteria(type: .stay)
     @State private var showNotifications = false
-    @State private var submittedCriteria: ListingSearchCriteria?
 
-    init() {
+    @MainActor
+    init(
+        selectedTab: Binding<MainTab>,
+        searchCriteria: Binding<ListingSearchCriteria>
+    ) {
+        _selectedTab = selectedTab
+        _searchCriteria = searchCriteria
         _viewModel = State(initialValue: HomeViewModel())
-    }
-
-    init(viewModel: HomeViewModel) {
-        _viewModel = State(initialValue: viewModel)
     }
 
     var body: some View {
@@ -46,21 +48,14 @@ struct HomeView: View {
                     }
                 }
             }
-            .navigationDestination(for: ListingDetailsRoute.self) { route in
-                ListingDetailView(data: route.listing)
+            .navigationDestination(for: AppRoute.self) { route in
+                destination(for: route)
                     .toolbar(.visible, for: .navigationBar)
             }
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(isPresented: $showNotifications) {
                 NotificationListView()
                     .toolbar(.visible, for: .navigationBar)
-            }
-            .navigationDestination(item: $submittedCriteria) { criteria in
-                SearchResultsView(criteria: criteria)
-                    .toolbar(.visible, for: .navigationBar)
-            }
-            .navigationDestination(for: HomeNavigationRoute.self) { route in
-                homeDestination(for: route)
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -100,19 +95,24 @@ extension HomeView {
                             onImage: true
                         ) {
                             searchCriteria.page = 1
-                            submittedCriteria = searchCriteria
+                            selectedTab = .search
                         }
                     }
                     HomeListingTypesView { type in
-
+                        handleSeeAll(type)
                     }
                     if !content.categories.isEmpty {
                         HomeCategoriesView(
-                            categories: content.categories
+                            categories: content.categories,
+                            onSelect: handleCategoryTap
                         )
                     }
-                    AITravelBannerView {
-                        handleAITravelTap()
+                    if appState.hasLoadedCurrentUserRole,
+                        appState.currentUserRole == .customer
+                    {
+                        AITravelBannerView {
+                            handleAITravelTap()
+                        }
                     }
                     listingSection(
                         title: "home.stays.title",
@@ -137,6 +137,13 @@ extension HomeView {
                         type: .experience,
                         listings: content.experiences
                     )
+                    AdvantagesSection()
+                    if appState.hasLoadedCurrentUserRole,
+                        let role = appState.currentUserRole,
+                        role != .provider
+                    {
+                        ProviderApplySection()
+                    }
                 }
                 .padding(.bottom, 16)
             }
@@ -178,15 +185,16 @@ extension HomeView {
                             ) {
                                 handleFavoriteTap(listing)
                             }
-                            .frame(width: 280)
                         }
+                        .frame(width: 280)
                     }
-                    .padding(.horizontal, 20)
                 }
+                .padding(.horizontal, 20)
             }
         }
     }
 }
+
 extension HomeView {
 
     private func sectionHeader(
@@ -235,45 +243,44 @@ extension HomeView {
 extension HomeView {
 
     @ViewBuilder
-    private func homeDestination(for route: HomeNavigationRoute) -> some View {
+    private func destination(for route: AppRoute) -> some View {
         switch route {
+        case .listingDetails(let listing):
+            ListingDetailView(data: listing)
+                .toolbar(.visible, for: .navigationBar)
         case .allCategories:
             if case .loaded(let content) = viewModel.state {
-                HomeAllCategoriesView(categories: content.categories)
+                HomeAllCategoriesView(
+                    categories: content.categories,
+                    onSelect: handleCategoryTap
+                )
                     .toolbar(.visible, for: .navigationBar)
             }
-        case .category(let id):
-            SearchResultsView(criteria: searchCriteria(forCategoryID: id))
-                .toolbar(.visible, for: .navigationBar)
         }
     }
 
-    private func searchCriteria(forCategoryID id: String) -> ListingSearchCriteria {
-        var criteria = ListingSearchCriteria()
-        criteria.categoryId = id
-        return criteria
+    private func handleCategoryTap(_ category: CategoryModel) {
+        var criteria = searchCriteria
+        criteria.categoryId = category.id
+        criteria.page = 1
+        searchCriteria = criteria
+        selectedTab = .search
     }
 
     private func handleAITravelTap() {
-        print("Open AI travel planner")
+        selectedTab = .ai
     }
 
     private func handleSeeAll(
         _ type: ListingType
     ) {
-        switch type {
-        case .stay:
-            print("Open stays")
-
-        case .tour:
-            print("Open tours")
-
-        case .activity:
-            print("Open activities")
-
-        case .experience:
-            print("Open experiences")
-        }
+        var criteria = searchCriteria
+        criteria.type = type
+        criteria.categoryId = nil
+        criteria.amenityIds = []
+        criteria.page = 1
+        searchCriteria = criteria
+        selectedTab = .search
     }
 
     private func handleFavoriteTap(

@@ -25,34 +25,37 @@ struct SearchResultsView: View {
     }
 
     var body: some View {
-        VStack(spacing: 0) {
-            summary
-                .padding(.horizontal, 20)
-                .padding(.top, 12)
-                .padding(.bottom, 12)
+        ScrollView {
+            LazyVStack(spacing: 0) {
+                summary
+                    .padding(.horizontal, 20)
+                    .padding(.top, 12)
+                    .padding(.bottom, 12)
 
-            Group {
-                if viewModel.isInitialLoading && viewModel.listings.isEmpty {
-                    LoadingStateView()
-                } else if let error = viewModel.error,
-                    viewModel.listings.isEmpty
-                {
-                    ErrorStateView(title: "error.title", message: error) {
-                        Task { await viewModel.search() }
+                Group {
+                    if viewModel.isInitialLoading && viewModel.listings.isEmpty {
+                        LoadingStateView()
+                    } else if let error = viewModel.error,
+                        viewModel.listings.isEmpty
+                    {
+                        ErrorStateView(title: "error.title", message: error) {
+                            Task { await viewModel.search() }
+                        }
+                    } else if viewModel.listings.isEmpty {
+                        ContentUnavailableView(
+                            "search.empty.title",
+                            systemImage: "magnifyingglass",
+                            description: Text("search.empty.description")
+                        )
+                    } else {
+                        results
                     }
-                } else if viewModel.listings.isEmpty {
-                    ContentUnavailableView(
-                        "search.empty.title",
-                        systemImage: "magnifyingglass",
-                        description: Text("search.empty.description")
-                    )
-                } else {
-                    results
                 }
+                .frame(maxWidth: .infinity, minHeight: 160)
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .background(Color.appBg)
+        .refreshable { await viewModel.refresh() }
         .navigationTitle("search.results.title")
         .navigationBarTitleDisplayMode(.inline)
         .searchable(
@@ -102,43 +105,78 @@ struct SearchResultsView: View {
     }
 
     private var results: some View {
-        ScrollView {
-            LazyVStack(spacing: 0) {
-                ForEach(viewModel.listings) { listing in
-                    SearchListingRow(
-                        listing: listing,
-                        isFavorite: appState.isFavorite(listing),
-                        isUpdatingFavorite: appState.updatingFavoriteIDs
-                            .contains(listing.id),
-                        canFavorite: appState.canUseFavorites,
-                        onFavorite: {
-                            Task {
-                                do {
-                                    try await appState.setFavorite(
-                                        !appState.isFavorite(listing),
-                                        for: listing
-                                    )
-                                } catch {
-                                    viewModel.error = error.localizedDescription
-                                }
+        LazyVStack(spacing: 0) {
+                ForEach(viewModel.visibleListings) { listing in
+                SearchListingRow(
+                    listing: listing,
+                    isFavorite: appState.isFavorite(listing),
+                    isUpdatingFavorite: appState.updatingFavoriteIDs
+                        .contains(listing.id),
+                    canFavorite: appState.canUseFavorites,
+                    onFavorite: {
+                        Task {
+                            do {
+                                try await appState.setFavorite(
+                                    !appState.isFavorite(listing),
+                                    for: listing
+                                )
+                            } catch {
+                                viewModel.error = error.localizedDescription
                             }
                         }
-                    )
-                    .task {
-                        await viewModel.loadNextPageIfNeeded(
-                            currentItem: listing
-                        )
                     }
-                }
-
-                if viewModel.isLoadingNextPage {
-                    ProgressView().frame(height: 50)
-                }
+                )
             }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
+
+            if viewModel.canGoToPreviousPage || viewModel.canGoToNextPage {
+                HStack(spacing: 12) {
+                    Button {
+                        viewModel.goToPreviousPage()
+                    } label: {
+                        Label("search.pagination.previous", systemImage: "chevron.left")
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 46)
+                            .background(Color.surfaceBg, in: RoundedRectangle(cornerRadius: 12))
+                            .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.border))
+                    }
+                    .disabled(!viewModel.canGoToPreviousPage || viewModel.isLoadingNextPage)
+                    .opacity(viewModel.canGoToPreviousPage ? 1 : 0.45)
+
+                    Text(String(format: String(localized: "search.pagination.page"), viewModel.currentPage))
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(Color.description)
+                        .fixedSize()
+
+                    Button {
+                        Task { await viewModel.goToNextPage() }
+                    } label: {
+                        Group {
+                            if viewModel.isLoadingNextPage {
+                                ProgressView()
+                            } else {
+                                Label("search.pagination.next", systemImage: "chevron.right")
+                            }
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 46)
+                        .background(Color.surfaceBg, in: RoundedRectangle(cornerRadius: 12))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.border))
+                    }
+                    .disabled(!viewModel.canGoToNextPage || viewModel.isLoadingNextPage)
+                    .opacity(viewModel.canGoToNextPage ? 1 : 0.45)
+                }
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(Color.title)
+                .padding(.top, 16)
+                .padding(.bottom, 20)
+            } else if viewModel.isLoadingNextPage {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 18)
+            }
         }
-        .refreshable { await viewModel.refresh() }
+        .padding(.horizontal, 20)
+        .padding(.bottom, 20)
     }
 
     private var summary: some View {
@@ -273,6 +311,7 @@ struct SearchResultsView: View {
                             selected: viewModel.criteria.destinationId == nil
                         )
                     }
+                    .listRowBackground(Color.surfaceBackground)
                     ForEach(viewModel.destinations) { destination in
                         Button {
                             selectDestination(destination.id)
@@ -283,6 +322,7 @@ struct SearchResultsView: View {
                                 selected: viewModel.criteria.destinationId == destination.id
                             )
                         }
+                        .listRowBackground(Color.surfaceBackground)
                     }
                 case .type:
                     Button {
@@ -294,6 +334,7 @@ struct SearchResultsView: View {
                             selected: viewModel.criteria.type == nil
                         )
                     }
+                    .listRowBackground(Color.surfaceBackground)
                     ForEach(ListingType.allCases) { type in
                         Button {
                             selectType(type)
@@ -304,6 +345,7 @@ struct SearchResultsView: View {
                                 selected: viewModel.criteria.type == type
                             )
                         }
+                        .listRowBackground(Color.surfaceBackground)
                     }
                 }
             }
@@ -352,17 +394,58 @@ struct SearchResultsView: View {
     }
 }
 
-private struct SearchListingRow: View {
+struct SearchListingRow: View {
     let listing: PublicListing
     let isFavorite: Bool
     let isUpdatingFavorite: Bool
     let canFavorite: Bool
+    var usesProfileRoute = false
     let onFavorite: () -> Void
 
     var body: some View {
         HStack(spacing: 13) {
-            NavigationLink(value: ListingDetailsRoute(listing: listing)) {
-                HStack(spacing: 13) {
+            Group {
+                if usesProfileRoute {
+                    NavigationLink(value: ProfileDestination.listingDetails(listing)) {
+                        listingSummary
+                    }
+                } else {
+                    NavigationLink(value: AppRoute.listingDetails(listing)) {
+                        listingSummary
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+            if canFavorite {
+                Button(action: onFavorite) {
+                    Group {
+                        if isUpdatingFavorite {
+                            ProgressView()
+                        } else {
+                            Image(
+                                systemName: isFavorite ? "heart.fill" : "heart"
+                            )
+                        }
+                    }
+                    .foregroundStyle(
+                        isFavorite ? Color.errorC : Color.description
+                    )
+                    .frame(width: 42, height: 42)
+                    .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .disabled(isUpdatingFavorite)
+            }
+        }
+        .padding(.vertical, 12)
+        .foregroundStyle(Color.title)
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(Color.border).frame(height: 1)
+        }
+    }
+
+    private var listingSummary: some View {
+        HStack(spacing: 13) {
                     thumbnail
                     VStack(alignment: .leading, spacing: 5) {
                         Text(listing.title)
@@ -411,36 +494,8 @@ private struct SearchListingRow: View {
                         }
                     }
                     Spacer(minLength: 0)
-                }
-                .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-            if canFavorite {
-                Button(action: onFavorite) {
-                    Group {
-                        if isUpdatingFavorite {
-                            ProgressView()
-                        } else {
-                            Image(
-                                systemName: isFavorite ? "heart.fill" : "heart"
-                            )
-                        }
-                    }
-                    .foregroundStyle(
-                        isFavorite ? Color.errorC : Color.description
-                    )
-                    .frame(width: 42, height: 42)
-                    .contentShape(Rectangle())
-                }
-                .buttonStyle(.plain)
-                .disabled(isUpdatingFavorite)
-            }
         }
-        .padding(.vertical, 12)
-        .foregroundStyle(Color.title)
-        .overlay(alignment: .bottom) {
-            Rectangle().fill(Color.border).frame(height: 1)
-        }
+        .contentShape(Rectangle())
     }
 
     private var thumbnail: some View {

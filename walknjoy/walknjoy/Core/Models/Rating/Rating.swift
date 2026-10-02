@@ -5,7 +5,7 @@
 
 import Foundation
 
-struct Rating: Decodable, Equatable {
+struct Rating: Decodable, Hashable {
     let average: Double?
     let count: Int
 }

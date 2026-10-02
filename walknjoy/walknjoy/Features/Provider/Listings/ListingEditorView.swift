@@ -10,7 +10,14 @@ struct ListingTypeSelectionView: View {
                 Label(type.title, systemImage: type.icon)
             }
         }
+        .listRowBackground(Color.surfaceBackground)
+        .scrollContentBackground(.hidden)
+        .background(Color.appBackground)
+        .foregroundStyle(Color.titleText)
+        .tint(Color.buttonBackground)
         .navigationTitle("listing.typeSelection")
+        .toolbarBackground(Color.appBackground, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
     }
 }
 
@@ -54,7 +61,7 @@ struct ListingEditorView: View {
                 if model.busy { ProgressView() }
                 if let error = model.error {
                     Section {
-                        Text(error).foregroundStyle(.red)
+                        Text(error).foregroundStyle(Color.errorColor)
                         if !model.loaded {
                             Button("common.retry") {
                                 Task { await model.load() }
@@ -63,7 +70,7 @@ struct ListingEditorView: View {
                     }
                 }
                 if let notice = model.notice {
-                    Text(notice).foregroundStyle(.green)
+                    Text(notice).foregroundStyle(Color.titleText)
                 }
                 if let refreshError = model.refreshError {
                     Section {
@@ -121,7 +128,10 @@ struct ListingEditorView: View {
                         EditorScreen(html: $model.translation.description).id(
                             model.locale
                         )
-                        Text(verbatim: "\(model.translation.title.count)/200 · \(model.translation.shortDescription.count)/300 · \(model.translation.description.count)/5000")
+                        Text(
+                            verbatim:
+                                "\(model.translation.title.count)/200 · \(model.translation.shortDescription.count)/300 · \(model.translation.description.count)/5000"
+                        )
                         .font(.caption).foregroundStyle(Color.descriptionText)
                     }
                     Section("listing.pricing.section") {
@@ -182,7 +192,7 @@ struct ListingEditorView: View {
                                         { image in
                                             image.resizable().scaledToFill()
                                         } placeholder: {
-                                            Color.gray.opacity(0.15)
+                                            Color.placeholderText.opacity(0.2)
                                         }
                                         .frame(width: 120, height: 90)
                                         .clipShape(
@@ -234,7 +244,7 @@ struct ListingEditorView: View {
                     }
                     if model.id == nil {
                         Text("listing.media.createFirst").font(.caption)
-                            .foregroundStyle(.secondary)
+                            .foregroundStyle(Color.descriptionText)
                     }
                 }
                 if let message = model.validationMessage {
@@ -263,6 +273,7 @@ struct ListingEditorView: View {
             }
             .listRowBackground(Color.surfaceBackground)
         }
+        .listRowBackground(Color.surfaceBackground)
         .scrollContentBackground(.hidden)
         .background(Color.appBackground)
         .presentationBackground(Color.appBackground)

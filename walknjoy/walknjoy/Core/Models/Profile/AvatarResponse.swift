@@ -26,7 +26,6 @@ struct AvatarResponse: Decodable {
         } else {
             payload = root
         }
-        // A missing field is not the same as an explicitly removed avatar.
         guard payload.contains(.avatarFile) else {
             throw DecodingError.keyNotFound(
                 CodingKeys.avatarFile,

@@ -4,12 +4,122 @@
     "" : {
 
     },
+    "%@ (%lld)" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ (%2$lld)"
+          }
+        }
+      }
+    },
     "%@: %lld" : {
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@: %2$lld"
+          }
+        }
+      }
+    },
+    "ai.assistant.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI ilə yazış"
+          }
+        }
+      }
+    },
+    "ai.conversation.untitled" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni söhbət"
+          }
+        }
+      }
+    },
+    "ai.conversations.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Söhbətlər"
+          }
+        }
+      }
+    },
+    "ai.error.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "AI sorğusu alınmadı"
+          }
+        }
+      }
+    },
+    "ai.message.placeholder" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səyahət barədə sualını yaz..."
+          }
+        }
+      }
+    },
+    "ai.newConversation" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni söhbət"
+          }
+        }
+      }
+    },
+    "ai.suggestions.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Başlamaq üçün ideyalar"
+          }
+        }
+      }
+    },
+    "ai.thinking" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cavab hazırlanır..."
+          }
+        }
+      }
+    },
+    "ai.welcome.description" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hara getmək istədiyini yaz və sənə uyğun yerləri kəşf et."
+          }
+        }
+      }
+    },
+    "ai.welcome.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səyahətini birlikdə planlayaq"
           }
         }
       }
@@ -57,6 +167,9 @@
           }
         }
       }
+    },
+    "common.delete" : {
+
     },
     "common.edit" : {
       "extractionState" : "manual",
@@ -479,28 +592,6 @@
         }
       }
     },
-    "forgot.validation.email" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Düzgün e-poçt ünvanı daxil edin."
-          }
-        }
-      }
-    },
-    "forgot.validation.title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Məlumatları yoxlayın"
-          }
-        }
-      }
-    },
     "home.activities.title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -508,6 +599,99 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Fəaliyyətlər"
+          }
+        }
+      }
+    },
+    "home.advantages.offers.description" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keyfiyyətli qalma yerləri, turlar, fəaliyyətlər və təcrübələri bir yerdə kəşf et."
+          }
+        }
+      }
+    },
+    "home.advantages.offers.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Seçilmiş təkliflər"
+          }
+        }
+      }
+    },
+    "home.advantages.planning.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səyahətini asanlıqla planla, uyğun təklifləri tap və rezervasiyanı bir yerdən idarə et."
+          }
+        }
+      }
+    },
+    "home.advantages.planning.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rahat planlama"
+          }
+        }
+      }
+    },
+    "home.advantages.providers.description" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etibarlı xidmət təminatçılarının təqdim etdiyi təklifləri rahatlıqla kəşf et."
+          }
+        }
+      }
+    },
+    "home.advantages.providers.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Etibarlı providerlər"
+          }
+        }
+      }
+    },
+    "home.advantages.reviews.description" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Səyahətçilərin real təcrübələrinə əsaslanan rəy və qiymətləndirmələrlə daha rahat seçim et."
+          }
+        }
+      }
+    },
+    "home.advantages.reviews.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Real rəylər"
+          }
+        }
+      }
+    },
+    "home.advantages.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Üstünlüklərimiz"
           }
         }
       }
@@ -529,7 +713,7 @@
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Səyahət planla"
+            "value" : "AI ilə yazış"
           }
         }
       }
@@ -540,7 +724,7 @@
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Səyahət planınızı süni intellektlə yaradın."
+            "value" : "AI ilə yazış, səyahətin üçün uyğun yerləri tap."
           }
         }
       }
@@ -551,7 +735,7 @@
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Yeni plan"
+            "value" : "Yeni yazışma"
           }
         }
       }
@@ -618,6 +802,46 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bildirişlər"
+          }
+        }
+      }
+    },
+    "home.provider.badge" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provider ol"
+          }
+        }
+      }
+    },
+    "home.provider.button" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müraciət et"
+          }
+        }
+      }
+    },
+    "home.provider.description" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qalma yeri, tur, fəaliyyət və ya təcrübə təqdim edirsən? WalkNJoy-a qoşul və xidmətlərini səyahətçilərə çatdır."
+          }
+        }
+      }
+    },
+    "home.provider.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xidmətlərini WalkNJoy-da təklif et"
           }
         }
       }
@@ -1701,39 +1925,6 @@
         }
       }
     },
-    "login.validation.email" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Düzgün e-poçt ünvanı daxil edin."
-          }
-        }
-      }
-    },
-    "login.validation.password" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şifrə ən azı 8 simvoldan ibarət olmalı, ən azı bir hərf və bir rəqəm ehtiva etməlidir."
-          }
-        }
-      }
-    },
-    "login.validation.title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Məlumatları yoxlayın"
-          }
-        }
-      }
-    },
     "notifications.activity" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2303,17 +2494,6 @@
         }
       }
     },
-    "profile.administration" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İdarəetmə paneli"
-          }
-        }
-      }
-    },
     "profile.appearance" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2331,17 +2511,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profil şəklini sil"
-          }
-        }
-      }
-    },
-    "profile.avatar.updating" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Profil şəkli yenilənir..."
           }
         }
       }
@@ -2375,6 +2544,17 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Biznes paneli"
+          }
+        }
+      }
+    },
+    "profile.businessProfile" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes profilim"
           }
         }
       }
@@ -2534,17 +2714,6 @@
         }
       }
     },
-    "profile.phone.invalid" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Telefon nömrəsini tam daxil edin"
-          }
-        }
-      }
-    },
     "profile.reviews" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -2626,6 +2795,183 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Profil"
+          }
+        }
+      }
+    },
+    "provider.apply.business" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes məlumatları"
+          }
+        }
+      }
+    },
+    "provider.apply.businessName" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznesin adı"
+          }
+        }
+      }
+    },
+    "provider.apply.contact" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Əlaqə məlumatları"
+          }
+        }
+      }
+    },
+    "provider.apply.description" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müraciət üçün biznesiniz və təqdim etdiyiniz xidmətlər haqqında qısa məlumat verin."
+          }
+        }
+      }
+    },
+    "provider.apply.descriptionField" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes haqqında"
+          }
+        }
+      }
+    },
+    "provider.apply.email" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-poçt ünvanı"
+          }
+        }
+      }
+    },
+    "provider.apply.error" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müraciət göndərilmədi"
+          }
+        }
+      }
+    },
+    "provider.apply.heading" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WalkNJoy partnyoru olun"
+          }
+        }
+      }
+    },
+    "provider.apply.legalName" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hüquqi ad (istəyə bağlı)"
+          }
+        }
+      }
+    },
+    "provider.apply.logoUrl" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Loqo URL-i (istəyə bağlı)"
+          }
+        }
+      }
+    },
+    "provider.apply.phone" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefon nömrəsi"
+          }
+        }
+      }
+    },
+    "provider.apply.submit" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müraciəti göndər"
+          }
+        }
+      }
+    },
+    "provider.apply.success.message" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müraciətiniz qeydə alındı. Nəticə barədə sizə məlumat veriləcək."
+          }
+        }
+      }
+    },
+    "provider.apply.success.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müraciət göndərildi"
+          }
+        }
+      }
+    },
+    "provider.apply.taxId" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "VÖEN (istəyə bağlı)"
+          }
+        }
+      }
+    },
+    "provider.apply.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provider müraciəti"
+          }
+        }
+      }
+    },
+    "provider.apply.website" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Veb-sayt (istəyə bağlı)"
           }
         }
       }
@@ -2747,6 +3093,87 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Status"
+          }
+        }
+      }
+    },
+    "provider.profile.description" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes məlumatlarınızı və əlaqə detallarınızı yeniləyin."
+          }
+        }
+      }
+    },
+    "provider.profile.heading" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes məlumatları"
+          }
+        }
+      }
+    },
+    "provider.profile.loadMissing" : {
+      "extractionState" : "stale",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes profili tapılmadı. Yenidən yoxlayın."
+          }
+        }
+      }
+    },
+    "provider.profile.missing" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes profili yüklənmədi."
+          }
+        }
+      }
+    },
+    "provider.profile.save" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dəyişiklikləri yadda saxla"
+          }
+        }
+      }
+    },
+    "provider.profile.saved.message" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes profiliniz yeniləndi."
+          }
+        }
+      }
+    },
+    "provider.profile.saved.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Profil yadda saxlanıldı"
+          }
+        }
+      }
+    },
+    "provider.profile.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Biznes profili"
           }
         }
       }
@@ -2978,39 +3405,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Yeni şifrə təyin edin"
-          }
-        }
-      }
-    },
-    "reset.validation.passwordInvalid" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şifrə minimum 8 simvoldan ibarət olmalı, böyük və kiçik hərf, rəqəm və ya xüsusi simvol ehtiva etməlidir."
-          }
-        }
-      }
-    },
-    "reset.validation.passwordRequired" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Zəhmət olmasa, yeni şifrənizi daxil edin."
-          }
-        }
-      }
-    },
-    "reset.validation.title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Xəta"
           }
         }
       }
@@ -3298,6 +3692,21 @@
             "value" : "İştirakçılar"
           }
         }
+      }
+    },
+    "search.pagination.previous" : {
+      "localizations" : {
+        "az" : { "stringUnit" : { "state" : "translated", "value" : "Geri" } }
+      }
+    },
+    "search.pagination.next" : {
+      "localizations" : {
+        "az" : { "stringUnit" : { "state" : "translated", "value" : "İrəli" } }
+      }
+    },
+    "search.pagination.page" : {
+      "localizations" : {
+        "az" : { "stringUnit" : { "state" : "translated", "value" : "Səhifə %lld" } }
       }
     },
     "search.resultCount" : {

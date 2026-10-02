@@ -7,18 +7,26 @@ struct FavoritesView: View {
 
     var body: some View {
         ScrollView {
-            LazyVStack(spacing: 20) {
+            LazyVStack(spacing: 0) {
                 ForEach(viewModel.listings) { listing in
-                    ListingCard(
-                        listing: listing, isFavorite: true,
+                    SearchListingRow(
+                        listing: listing,
+                        isFavorite: appState.isFavorite(listing),
                         isUpdatingFavorite: appState.updatingFavoriteIDs.contains(listing.id),
-                        canFavorite: appState.canUseFavorites
-                    ) {
-                        Task {
-                            do {
-                                try await appState.setFavorite(false, for: listing)
-                                await viewModel.refresh(locale: appState.language.rawValue)
-                            } catch { favoriteError = error.localizedDescription }
+                        canFavorite: appState.canUseFavorites,
+                        usesProfileRoute: true,
+                        onFavorite: {
+                            Task {
+                                do {
+                                    try await appState.setFavorite(false, for: listing)
+                                    await viewModel.refresh(locale: appState.language.rawValue)
+                                } catch { favoriteError = error.localizedDescription }
+                            }
+                        }
+                    )
+                    .task {
+                        if listing.id == viewModel.listings.last?.id {
+                            await viewModel.loadNextPage()
                         }
                     }
                 }

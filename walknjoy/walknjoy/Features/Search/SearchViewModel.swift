@@ -20,6 +20,24 @@ final class SearchViewModel {
     var error: String?
     var favoriteOverrides: [String: Bool] = [:]
     var updatingFavoriteIDs: Set<String> = []
+    private(set) var currentPage = 1
+
+    var visibleListings: [PublicListing] {
+        let pageSize = max(1, criteria.limit)
+        let start = (currentPage - 1) * pageSize
+        guard start < listings.count else { return [] }
+        return Array(listings.dropFirst(start).prefix(pageSize))
+    }
+
+    var canGoToPreviousPage: Bool { currentPage > 1 }
+
+    var canGoToNextPage: Bool {
+        currentPage < loadedPageCount || pagination.hasMore
+    }
+
+    private var loadedPageCount: Int {
+        max(1, (listings.count + max(1, criteria.limit) - 1) / max(1, criteria.limit))
+    }
 
     var hasMorePages: Bool {
         pagination.hasMore
@@ -39,6 +57,7 @@ final class SearchViewModel {
     }
 
     func search() async {
+        currentPage = 1
         criteria.page = 1
         error = nil
         let criteria = criteria
@@ -58,6 +77,11 @@ final class SearchViewModel {
     func loadNextPageIfNeeded(currentItem: PublicListing) async {
         guard currentItem.id == listings.last?.id,
               hasMorePages, !isLoadingNextPage, !isInitialLoading else { return }
+        await loadNextPage()
+    }
+
+    func loadNextPage() async {
+        guard hasMorePages, !isLoadingNextPage, !isInitialLoading else { return }
         error = nil
         let criteria = criteria
         let service = listingService
@@ -69,6 +93,25 @@ final class SearchViewModel {
             return PaginationPage(items: result.listings, meta: result.meta)
         })
         if case .error(let message) = pagination.state { error = message }
+    }
+
+    func goToPreviousPage() {
+        guard canGoToPreviousPage else { return }
+        currentPage -= 1
+    }
+
+    func goToNextPage() async {
+        guard canGoToNextPage, !isLoadingNextPage else { return }
+        if currentPage < loadedPageCount {
+            currentPage += 1
+            return
+        }
+
+        let previousCount = listings.count
+        await loadNextPage()
+        if listings.count > previousCount {
+            currentPage += 1
+        }
     }
 
     func applyFilters(_ updated: ListingSearchCriteria) async {

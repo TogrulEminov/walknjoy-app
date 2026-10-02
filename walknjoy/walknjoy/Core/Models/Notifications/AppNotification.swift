@@ -16,7 +16,6 @@ struct NotificationData: Codable, Hashable {
     var listingId: String?
     var listingSlug: String?
 
-    // Never open server-provided URLs or interpret arbitrary route strings.
     var validatedListingSlug: String? {
         guard route == nil || ["listing", "listing_detail"].contains(route!),
               let listingSlug, Self.isSafeIdentifier(listingSlug) else { return nil }

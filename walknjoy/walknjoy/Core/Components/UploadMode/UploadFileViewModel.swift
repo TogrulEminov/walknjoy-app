@@ -122,11 +122,8 @@ final class UploadFileViewModel {
                     id: uploadedFile.id
                 )
             } catch {
-                print(
-                    "Delete upload failed:",
-                    error.localizedDescription
-                )
-
+                
+               
                 return
             }
         }

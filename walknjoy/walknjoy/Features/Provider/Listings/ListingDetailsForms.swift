@@ -216,7 +216,8 @@ struct AmenityPickerView: View {
                 )
             }
             if amenities.isEmpty {
-                Text("listing.amenities.empty").foregroundStyle(.secondary)
+                Text("listing.amenities.empty")
+                    .foregroundStyle(Color.descriptionText)
             }
         }
     }

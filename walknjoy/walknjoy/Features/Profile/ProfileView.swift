@@ -37,8 +37,8 @@ struct ProfileView: View {
                         for: destination
                     )
                 }
-                .navigationDestination(for: ListingDetailsRoute.self) { route in
-                    ListingDetailView(data: route.listing)
+                .navigationDestination(for: AppRoute.self) { route in
+                    destination(for: route)
                 }
                 .navigationTitle("profile.title")
                 .navigationBarTitleDisplayMode(.inline)
@@ -220,10 +220,23 @@ extension ProfileView {
 
 extension ProfileView {
     @ViewBuilder
+    private func destination(for route: AppRoute) -> some View {
+        switch route {
+        case .listingDetails(let listing):
+            ListingDetailView(data: listing)
+        case .allCategories:
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
     private func destinationView(
         for destination: ProfileDestination
     ) -> some View {
         switch destination {
+
+        case .listingDetails(let listing):
+            ListingDetailView(data: listing)
 
         case .editProfile:
             if let profile = viewModel.profile {
@@ -255,6 +268,9 @@ extension ProfileView {
 
         case .security:
             SecurityView()
+
+        case .businessProfile:
+            ProviderBusinessProfileView()
 
         case .businessDashboard:
             ListingListView()

@@ -11,9 +11,7 @@ final class EditProfileViewModel {
 
     var firstName: String
     var lastName: String
-
-    /// Yalnız local hissə saxlanılır.
-    /// Məsələn: 552624037
+ 
     var phone: String
 
     var phoneCountry: PhoneCountry
@@ -219,21 +217,7 @@ extension EditProfileViewModel {
                     ? newPhone
                     : nil
         )
-
-        print(
-            "UPDATE PROFILE INPUT:",
-            input
-        )
-
-        print(
-            "LOCAL PHONE:",
-            phone
-        )
-
-        print(
-            "FULL PHONE:",
-            newPhone
-        )
+ 
 
         do {
             let updatedProfile =
@@ -248,11 +232,7 @@ extension EditProfileViewModel {
             return true
 
         } catch {
-            print(
-                "UPDATE PROFILE ERROR:",
-                error
-            )
-
+            
             saveErrorMessage =
                 error.localizedDescription
 

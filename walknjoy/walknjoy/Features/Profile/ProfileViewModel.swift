@@ -140,6 +140,11 @@ extension ProfileViewModel {
         case .provider?:
             return [
                 ProfileMenuItem(
+                    title: "profile.businessProfile",
+                    icon: "building.2",
+                    destination: .businessProfile
+                ),
+                ProfileMenuItem(
                     title: "profile.businessDashboard",
                     icon: "briefcase",
                     destination: .businessDashboard

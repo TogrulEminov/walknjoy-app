@@ -18,6 +18,8 @@ final class AppState {
     let notifications: NotificationViewModel
     private var isAppActive = true
     private(set) var canUseFavorites = false
+    private(set) var currentUserRole: RoleEnum?
+    private(set) var hasLoadedCurrentUserRole = false
     private(set) var favoriteOverrides: [String: Bool] = [:]
     private(set) var updatingFavoriteIDs: Set<String> = []
     private var favoriteSession = UUID()
@@ -28,10 +30,14 @@ final class AppState {
         do {
             let user = try await authService.me()
             guard session == favoriteSession else { return }
-            canUseFavorites = user.role.uppercased() == "CUSTOMER"
+            currentUserRole = RoleEnum(rawValue: user.role.uppercased())
+            canUseFavorites = currentUserRole == .customer
+            hasLoadedCurrentUserRole = true
         } catch {
             guard session == favoriteSession else { return }
             canUseFavorites = false
+            currentUserRole = nil
+            hasLoadedCurrentUserRole = true
         }
     }
 
@@ -102,6 +108,8 @@ final class AppState {
     func finishLogout() {
         favoriteSession = UUID()
         canUseFavorites = false
+        currentUserRole = nil
+        hasLoadedCurrentUserRole = false
         favoriteOverrides = [:]
         updatingFavoriteIDs = []
         flow = .auth

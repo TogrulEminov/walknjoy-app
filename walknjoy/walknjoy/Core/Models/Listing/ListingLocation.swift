@@ -1,6 +1,6 @@
 import Foundation
 
-struct ListingLocation: Codable, Equatable {
+struct ListingLocation: Codable, Hashable {
     var id: String? = nil
     var cityId: String? = nil
     var countryCode: String

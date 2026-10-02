@@ -5,7 +5,7 @@ enum NetworkError: LocalizedError {
     case invalidURL
     case invalidResponse
     case serverError(statusCode: Int)
-    case decodingError
+    case decodingError(details: String)
     case encodingError
     case noInternet
     case unknown(Error)
@@ -143,8 +143,8 @@ extension NetworkError {
             return "Serverdən düzgün cavab alınmadı."
         case .serverError(let statusCode):
             return "Server xətası baş verdi. Kod: \(statusCode)"
-        case .decodingError:
-            return "Serverdən gələn məlumat oxuna bilmədi."
+        case .decodingError(let details):
+            return "Serverdən gələn məlumat oxuna bilmədi. (details)"
         case .encodingError:
             return "Göndərilən məlumat hazırlanmadı."
         case .noInternet:

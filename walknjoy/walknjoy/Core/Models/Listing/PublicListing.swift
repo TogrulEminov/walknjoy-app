@@ -10,37 +10,37 @@ enum MediaType: String, Codable {
     case panorama360 = "panorama_360"
 }
 
-struct ListingCategory: Decodable, Equatable {
+struct ListingCategory: Decodable, Hashable {
     let id: String
     let name: String
     let slug: String
 }
 
-struct CoverMedia: Decodable, Equatable {
+struct CoverMedia: Decodable, Hashable {
     let type: MediaType
     let url: String
 }
 
-enum ListingCardDetails: Equatable {
+enum ListingCardDetails: Hashable {
     case stay(StayCardDetails?)
     case tour(TourCardDetails?)
     case activity(ActivityCardDetails?)
     case experience
 }
 
-struct StayCardDetails: Decodable, Equatable {
+struct StayCardDetails: Decodable, Hashable {
     let maxGuests: Int
 }
 
-struct TourCardDetails: Decodable, Equatable {
+struct TourCardDetails: Decodable, Hashable {
     let durationMinutes: Int?
 }
 
-struct ActivityCardDetails: Decodable, Equatable {
+struct ActivityCardDetails: Decodable, Hashable {
     let durationMinutes: Int?
 }
 
-struct PublicListing: Decodable, Identifiable, Equatable {
+struct PublicListing: Decodable, Identifiable, Hashable {
     let id: String
     let type: ListingType
     let title: String

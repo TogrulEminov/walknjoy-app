@@ -1,6 +1,5 @@
 import SwiftUI
-
-/// Shared icon treatment for full-page states.
+ 
 struct StateIconView: View {
     let icon: String
     var tint: Color = .iconColor

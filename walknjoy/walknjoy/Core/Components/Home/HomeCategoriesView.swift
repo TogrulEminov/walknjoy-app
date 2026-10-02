@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeCategoriesView: View {
     let categories: [CategoryModel]
+    let onSelect: (CategoryModel) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -12,7 +13,7 @@ struct HomeCategoriesView: View {
                     ForEach(categories) { category in
                         CategoryCard(
                             category: category,
-                            destination: .category(id: category.id)
+                            onTap: { onSelect(category) }
                         )
                     }
                 }
@@ -29,7 +30,7 @@ struct HomeCategoriesView: View {
 
             Spacer()
 
-            NavigationLink(value: HomeNavigationRoute.allCategories) {
+            NavigationLink(value: AppRoute.allCategories) {
                 HStack(spacing: 6) {
                     Text("common.seeAll")
                     Image(systemName: "arrow.right")
