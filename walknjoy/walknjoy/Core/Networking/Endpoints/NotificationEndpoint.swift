@@ -15,14 +15,21 @@ enum NotificationEndpoint: Endpoint {
         }
     }
     var method: HttpMethod {
-        switch self { case .list, .unreadCount: .get; case .read, .readAll: .post }
+        switch self {
+        case .list, .unreadCount: .get
+        case .read, .readAll: .post
+        }
     }
     var requiresAuth: Bool { true }
     var queryItems: [URLQueryItem]? {
         guard case .list(let unreadOnly, let page) = self else { return nil }
         var items: [URLQueryItem] = []
-        if unreadOnly { items.append(URLQueryItem(name: "unreadOnly", value: "true")) }
-        if page > 1 { items.append(URLQueryItem(name: "page", value: String(page))) }
+        if unreadOnly {
+            items.append(URLQueryItem(name: "unreadOnly", value: "true"))
+        }
+        if page > 1 {
+            items.append(URLQueryItem(name: "page", value: String(page)))
+        }
         return items
     }
 }

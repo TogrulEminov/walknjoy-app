@@ -136,7 +136,9 @@ final class AuthService: AuthServiceProtocol {
             throw NetworkError.invalidResponse
         }
         // A refresh begun by a previous session must not overwrite a newer login/logout.
-        guard tokenStorage.refreshToken == refreshToken else { throw NetworkError.unauthorized }
+        guard tokenStorage.refreshToken == refreshToken else {
+            throw NetworkError.unauthorized
+        }
         try tokenStorage.save(
             accessToken: data.accessToken,
             refreshToken: data.refreshToken
@@ -181,37 +183,54 @@ final class AuthService: AuthServiceProtocol {
 
 @MainActor
 protocol ChangePasswordServiceProtocol {
-    func requestPasswordChange(currentPassword: String) async throws -> ChangePasswordChallenge
-    func verifyPasswordChange(code: String) async throws -> ChangePasswordAuthorization
+    func requestPasswordChange(currentPassword: String) async throws
+        -> ChangePasswordChallenge
+    func verifyPasswordChange(code: String) async throws
+        -> ChangePasswordAuthorization
     func changePassword(token: String, newPassword: String) async throws
 }
 
 extension AuthService: ChangePasswordServiceProtocol {
-    func requestPasswordChange(currentPassword: String) async throws -> ChangePasswordChallenge {
-        let response: ApiResponse<ChangePasswordChallenge> = try await networkService.request(
-            enpoint: AuthEndpoint.requestPasswordChange(.init(currentPassword: currentPassword)),
-            responseType: ApiResponse<ChangePasswordChallenge>.self
-        )
-        guard response.success, let data = response.data else { throw NetworkError.invalidResponse }
+    func requestPasswordChange(currentPassword: String) async throws
+        -> ChangePasswordChallenge
+    {
+        let response: ApiResponse<ChangePasswordChallenge> =
+            try await networkService.request(
+                enpoint: AuthEndpoint.requestPasswordChange(
+                    .init(currentPassword: currentPassword)
+                ),
+                responseType: ApiResponse<ChangePasswordChallenge>.self
+            )
+        guard response.success, let data = response.data else {
+            throw NetworkError.invalidResponse
+        }
         return data
     }
 
-    func verifyPasswordChange(code: String) async throws -> ChangePasswordAuthorization {
-        let response: ApiResponse<ChangePasswordAuthorization> = try await networkService.request(
-            enpoint: AuthEndpoint.verifyPasswordChange(.init(code: code)),
-            responseType: ApiResponse<ChangePasswordAuthorization>.self
-        )
-        guard response.success, let data = response.data, !data.changePasswordToken.isEmpty else {
+    func verifyPasswordChange(code: String) async throws
+        -> ChangePasswordAuthorization
+    {
+        let response: ApiResponse<ChangePasswordAuthorization> =
+            try await networkService.request(
+                enpoint: AuthEndpoint.verifyPasswordChange(.init(code: code)),
+                responseType: ApiResponse<ChangePasswordAuthorization>.self
+            )
+        guard response.success, let data = response.data,
+            !data.changePasswordToken.isEmpty
+        else {
             throw NetworkError.invalidResponse
         }
         return data
     }
 
     func changePassword(token: String, newPassword: String) async throws {
-        let response: ApiResponse<EmptyResponse> = try await networkService.request(
-            enpoint: AuthEndpoint.changePassword(.init(changePasswordToken: token, newPassword: newPassword)),
-            responseType: ApiResponse<EmptyResponse>.self
-        )
+        let response: ApiResponse<EmptyResponse> =
+            try await networkService.request(
+                enpoint: AuthEndpoint.changePassword(
+                    .init(changePasswordToken: token, newPassword: newPassword)
+                ),
+                responseType: ApiResponse<EmptyResponse>.self
+            )
         guard response.success else { throw NetworkError.invalidResponse }
     }
 }

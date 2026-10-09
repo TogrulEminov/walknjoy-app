@@ -31,11 +31,13 @@ extension FavoritesEndpoint: Endpoint {
         .none
     }
     var queryItems: [URLQueryItem]? {
-        guard case let .getFavorites(limit, page, locale) = self else { return nil }
+        guard case .getFavorites(let limit, let page, let locale) = self else {
+            return nil
+        }
         return [
             URLQueryItem(name: "limit", value: String(limit)),
             URLQueryItem(name: "page", value: String(page)),
-            URLQueryItem(name: "locale", value: locale)
+            URLQueryItem(name: "locale", value: locale),
         ]
     }
     var method: HttpMethod {

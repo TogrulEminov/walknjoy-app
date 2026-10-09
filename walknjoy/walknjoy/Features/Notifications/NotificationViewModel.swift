@@ -311,7 +311,7 @@ final class NotificationViewModel {
             try await service.markRead(id: notification.id)
             guard epoch == id, active else { return false }
             if let index = notifications.firstIndex(where: {
-                $0.id == notification.id && !$0.isRead
+                $0.id == notification.id && $0.isRead
             }) {
                 notifications[index].isRead = true
                 unreadCount = max(0, unreadCount - 1)

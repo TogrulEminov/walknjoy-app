@@ -39,7 +39,7 @@ enum ListingType: String, Codable, CaseIterable, Hashable, Identifiable,
             "figure.hiking"
 
         case .experience:
-            "sparkles"
+            "rosette"
         }
     }
 }

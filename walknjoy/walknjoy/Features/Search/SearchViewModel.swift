@@ -4,6 +4,7 @@ import Observation
 @MainActor
 @Observable
 final class SearchViewModel {
+    static var makeDefault: (ListingSearchCriteria) -> SearchViewModel = { SearchViewModel(criteria: $0) }
     private let listingService: ListingServicesProtocol
     private let discoveryService: DiscoveryServicesProtocol
     private let favoritesService: FavoritesServicesProtocol
@@ -135,6 +136,8 @@ final class SearchViewModel {
             (destinations, categories, amenities) = try await (
                 destinationsRequest, categoriesRequest, amenitiesRequest
             )
+        } catch is CancellationError {
+            return
         } catch {
             self.error = error.localizedDescription
         }
@@ -145,6 +148,8 @@ final class SearchViewModel {
             async let categoriesRequest = discoveryService.getCategories(type: criteria.type, locale: criteria.locale)
             async let amenitiesRequest = discoveryService.getAmenities(type: criteria.type, locale: criteria.locale)
             (categories, amenities) = try await (categoriesRequest, amenitiesRequest)
+        } catch is CancellationError {
+            return
         } catch {
             self.error = error.localizedDescription
         }

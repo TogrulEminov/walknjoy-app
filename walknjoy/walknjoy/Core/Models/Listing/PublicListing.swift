@@ -14,11 +14,22 @@ struct ListingCategory: Decodable, Hashable {
     let id: String
     let name: String
     let slug: String
+
+    init(id: String, name: String, slug: String) {
+        self.id = id
+        self.name = name
+        self.slug = slug
+    }
 }
 
 struct CoverMedia: Decodable, Hashable {
     let type: MediaType
     let url: String
+
+    init(type: MediaType, url: String) {
+        self.type = type
+        self.url = url
+    }
 }
 
 enum ListingCardDetails: Hashable {
@@ -30,14 +41,20 @@ enum ListingCardDetails: Hashable {
 
 struct StayCardDetails: Decodable, Hashable {
     let maxGuests: Int
+
+    init(maxGuests: Int) { self.maxGuests = maxGuests }
 }
 
 struct TourCardDetails: Decodable, Hashable {
     let durationMinutes: Int?
+
+    init(durationMinutes: Int?) { self.durationMinutes = durationMinutes }
 }
 
 struct ActivityCardDetails: Decodable, Hashable {
     let durationMinutes: Int?
+
+    init(durationMinutes: Int?) { self.durationMinutes = durationMinutes }
 }
 
 struct PublicListing: Decodable, Identifiable, Hashable {
@@ -56,6 +73,38 @@ struct PublicListing: Decodable, Identifiable, Hashable {
     let isFavorite: Bool
     let details: ListingCardDetails
 
+    init(
+        id: String,
+        type: ListingType,
+        title: String,
+        slug: String,
+        shortDescription: String? = nil,
+        basePrice: Decimal,
+        currency: String,
+        isFeatured: Bool = false,
+        category: ListingCategory? = nil,
+        location: ListingLocation? = nil,
+        coverMedia: CoverMedia? = nil,
+        rating: Rating = Rating(average: nil, count: 0),
+        isFavorite: Bool = false,
+        details: ListingCardDetails = .experience
+    ) {
+        self.id = id
+        self.type = type
+        self.title = title
+        self.slug = slug
+        self.shortDescription = shortDescription
+        self.basePrice = basePrice
+        self.currency = currency
+        self.isFeatured = isFeatured
+        self.category = category
+        self.location = location
+        self.coverMedia = coverMedia
+        self.rating = rating
+        self.isFavorite = isFavorite
+        self.details = details
+    }
+
     private enum CodingKeys: String, CodingKey {
         case id, type, title, slug, shortDescription, basePrice, currency
         case isFeatured, category, location, coverMedia, rating, isFavorite, details, media
@@ -66,7 +115,7 @@ struct PublicListing: Decodable, Identifiable, Hashable {
         id = try container.decode(String.self, forKey: .id)
         type = try container.decode(ListingType.self, forKey: .type)
         title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
-        slug = try container.decodeIfPresent(String.self, forKey: .slug) ?? id
+        slug = try container.decodeIfPresent(String.self, forKey: .slug) ?? ""
         shortDescription = try container.decodeIfPresent(String.self, forKey: .shortDescription)
         if let value = try? container.decode(String.self, forKey: .basePrice),
            let decimal = Decimal(string: value, locale: Locale(identifier: "en_US_POSIX")) {

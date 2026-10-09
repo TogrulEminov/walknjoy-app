@@ -322,7 +322,6 @@ final class ListingEditorViewModel {
                     )
                 )
             }
-            // Retain the new ID immediately: retry after a details failure must PATCH, never create twice.
             id = saved.id
             status = saved.status
             try await service.saveDetails(

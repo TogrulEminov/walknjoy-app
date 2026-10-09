@@ -1,6 +1,8 @@
 import SwiftUI
 
 struct ListingCard: View {
+    @Environment(AppState.self) private var appState
+    private var currentRating: Rating? { appState.reviews.rating(for: listing.id, fallback: listing.rating) }
     let listing: PublicListing
     var isFavorite: Bool
     var isUpdatingFavorite = false
@@ -27,7 +29,7 @@ struct ListingCard: View {
                                     in: Capsule()
                                 )
                             Spacer()
-                            if let average = listing.rating.average {
+                            if let average = currentRating?.average {
                                 Label(
                                     average.formatted(
                                         .number.precision(.fractionLength(1))
@@ -74,8 +76,8 @@ struct ListingCard: View {
                             Text(formattedPrice).font(.headline)
                             Text(listing.currency).font(.subheadline)
                             Spacer()
-                            if listing.rating.count > 0 {
-                                Text(verbatim: "(\(listing.rating.count))")
+                            if let rating = currentRating, rating.count > 0 {
+                                Text(verbatim: "(\(rating.count))")
                                     .font(.caption).foregroundStyle(
                                         Color.description
                                     )

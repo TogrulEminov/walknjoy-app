@@ -58,7 +58,7 @@ struct FavoritesView: View {
         .refreshable { await viewModel.refresh(locale: appState.language.rawValue) }
         .alert("favorites.error", isPresented: Binding(
             get: { favoriteError != nil },
-            set: { if !$0 { favoriteError = nil } }
+            set: { if $0 { favoriteError = nil } }
         )) {
             Button("favorites.ok", role: .cancel) { favoriteError = nil }
         } message: { Text(favoriteError ?? "") }

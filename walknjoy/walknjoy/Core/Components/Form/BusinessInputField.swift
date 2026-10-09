@@ -1,15 +1,27 @@
 import SwiftUI
- 
+
 struct BusinessInputField: View {
-    let title: String
+    @Environment(\.locale) private var locale
+
+    let title: LocalizedStringResource
     @Binding var text: String
     var icon: String
     var keyboard: UIKeyboardType
     var capitalization: UITextAutocapitalizationType
 
-    init(_ title: String, text: Binding<String>, icon: String = "pencil",
-         keyboard: UIKeyboardType = .default,
-         capitalization: UITextAutocapitalizationType = .sentences) {
+    private var placeholder: String {
+        var resource = title
+        resource.locale = locale
+        return String(localized: resource)
+    }
+
+    init(
+        _ title: LocalizedStringResource,
+        text: Binding<String>,
+        icon: String = "pencil",
+        keyboard: UIKeyboardType = .default,
+        capitalization: UITextAutocapitalizationType = .sentences
+    ) {
         self.title = title
         self._text = text
         self.icon = icon
@@ -20,12 +32,12 @@ struct BusinessInputField: View {
     var body: some View {
         InputFieldRepresentable(
             text: $text,
-            placeholder: String(localized: String.LocalizationValue(title)),
+            placeholder: placeholder,
             icon: icon,
             keyboardType: keyboard,
             autocapitalizationType: capitalization
         )
         .frame(height: 56)
-        .accessibilityLabel(Text(LocalizedStringKey(title)))
+        .accessibilityLabel(Text(verbatim: placeholder))
     }
 }

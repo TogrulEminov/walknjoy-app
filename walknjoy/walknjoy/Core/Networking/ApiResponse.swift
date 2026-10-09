@@ -30,14 +30,21 @@ struct PaginationMeta: Decodable {
     var hasNextPage: Bool { page < totalPages }
 
     init(page: Int, limit: Int, total: Int, totalPages: Int) {
-        self.page = page; self.limit = limit; self.total = total; self.totalPages = totalPages
+        self.page = page
+        self.limit = limit
+        self.total = total
+        self.totalPages = totalPages
     }
 
-    private enum CodingKeys: String, CodingKey { case page, limit, pageSize, total, totalPages }
+    private enum CodingKeys: String, CodingKey {
+        case page, limit, pageSize, total, totalPages
+    }
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         page = try c.decode(Int.self, forKey: .page)
-        limit = try c.decodeIfPresent(Int.self, forKey: .pageSize) ?? c.decode(Int.self, forKey: .limit)
+        limit =
+            try c.decodeIfPresent(Int.self, forKey: .pageSize)
+            ?? c.decode(Int.self, forKey: .limit)
         total = try c.decode(Int.self, forKey: .total)
         totalPages = try c.decode(Int.self, forKey: .totalPages)
     }

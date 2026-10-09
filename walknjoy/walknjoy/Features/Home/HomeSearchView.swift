@@ -75,7 +75,6 @@ struct HomeSearchView: View {
 private struct HomeSearchSheet: View {
     @Environment(\.dismiss) private var dismiss
     @State private var draft: ListingSearchCriteria
-    @State private var activeOptions: OptionGroup?
     let cities: [ListingCity]
     let onSearch: (ListingSearchCriteria) -> Void
 
@@ -93,35 +92,34 @@ private struct HomeSearchSheet: View {
         NavigationStack {
             Form {
                 Section {
-                    Button {
-                        activeOptions = .city
-                    } label: {
-                        selectionRow(
+                    NavigationLink {
+                        OptionListView(
                             title: "search.city.title",
-                            value: draft.city
-                                ?? String(localized: "search.city.all")
+                            options: cityOptions,
+                            selection: cityBinding
                         )
-                    }
-                    .buttonStyle(.plain)
-                } header: {
-                    Text("search.city.title")
-                }
-                .listRowBackground(Color.surfaceBg)
-                Section {
-                    Button {
-                        activeOptions = .type
                     } label: {
-                        selectionRow(
-                            title: "search.type",
-                            value: draft.type.map(localizedTypeTitle)
-                                ?? String(localized: "search.type.all")
+                        optionRow(
+                            title: "search.city.title",
+                            value: title(of: cityOptions, for: draft.city)
                         )
                     }
-                    .buttonStyle(.plain)
-                } header: {
-                    Text("search.type")
+
+                    NavigationLink {
+                        OptionListView(
+                            title: "search.type",
+                            options: typeOptions,
+                            selection: $draft.type
+                        )
+                    } label: {
+                        optionRow(
+                            title: "search.type",
+                            value: title(of: typeOptions, for: draft.type)
+                        )
+                    }
                 }
                 .listRowBackground(Color.surfaceBg)
+
                 if let type = draft.type {
                     Section("search.filter.schedule") {
                         Toggle("home.search.chooseDates", isOn: datesEnabled)
@@ -144,6 +142,7 @@ private struct HomeSearchSheet: View {
                         }
                     }
                     .listRowBackground(Color.surfaceBg)
+
                     if type == .stay {
                         Section("home.search.guests") {
                             Stepper(value: $draft.adults, in: 1...99) {
@@ -192,23 +191,6 @@ private struct HomeSearchSheet: View {
             .tint(Color.button)
             .scrollContentBackground(.hidden)
             .background(Color.appBg)
-            .confirmationDialog(
-                activeOptions == .city ? "search.city.title" : "search.type",
-                isPresented: optionsPresented,
-                titleVisibility: .visible
-            ) {
-                if activeOptions == .city {
-                    Button("search.city.all") { selectCity(nil) }
-                    ForEach(cities) { city in
-                        Button(city.name) { selectCity(city.name) }
-                    }
-                } else if activeOptions == .type {
-                    Button("search.type.all") { draft.type = nil }
-                    ForEach(ListingType.allCases) { type in
-                        Button(type.title) { draft.type = type }
-                    }
-                }
-            }
             .toolbarBackground(Color.appBackground, for: .navigationBar)
             .toolbarBackground(.visible, for: .navigationBar)
             .navigationTitle("search.action")
@@ -245,33 +227,46 @@ private struct HomeSearchSheet: View {
         }
     }
 
-    private enum OptionGroup: Equatable {
-        case city
-        case type
+    // MARK: - Options
+
+    private var cityOptions: [OptionListView<String?>.Option] {
+        [.init(title: String(localized: "search.city.all"), value: nil)]
+            + cities.map { .init(title: $0.name, value: Optional($0.name)) }
     }
 
-    private var optionsPresented: Binding<Bool> {
-        Binding(
-            get: { activeOptions != nil },
-            set: { if !$0 { activeOptions = nil } }
-        )
+    private var typeOptions: [OptionListView<ListingType?>.Option] {
+        [.init(title: String(localized: "search.type.all"), value: nil)]
+            + ListingType.allCases.map {
+                .init(title: localizedTypeTitle($0), value: Optional($0))
+            }
     }
 
-    private func selectionRow(
-        title: LocalizedStringKey,
-        value: String
-    ) -> some View {
+    private func title<Value: Hashable>(
+        of options: [OptionListView<Value>.Option],
+        for value: Value
+    ) -> String {
+        options.first { $0.value == value }?.title ?? ""
+    }
+
+    private func optionRow(title: LocalizedStringKey, value: String)
+        -> some View
+    {
         HStack {
             Text(title).foregroundStyle(Color.title)
             Spacer()
             Text(value)
                 .foregroundStyle(Color.description)
                 .lineLimit(1)
-            Image(systemName: "chevron.up.chevron.down")
-                .font(.caption.weight(.semibold))
-                .foregroundStyle(Color.description)
         }
-        .contentShape(Rectangle())
+    }
+
+    // MARK: - Bindings
+
+    private var cityBinding: Binding<String?> {
+        Binding(
+            get: { draft.city },
+            set: { selectCity($0) }
+        )
     }
 
     private func selectCity(_ city: String?) {
@@ -311,6 +306,7 @@ private struct HomeSearchSheet: View {
             }
         )
     }
+
     private var startDate: Binding<Date> {
         Binding(
             get: {
@@ -325,6 +321,7 @@ private struct HomeSearchSheet: View {
             }
         )
     }
+
     private var endDate: Binding<Date> {
         Binding(
             get: {
@@ -339,6 +336,7 @@ private struct HomeSearchSheet: View {
             }
         )
     }
+
     private var validationError: LocalizedStringKey? {
         guard draft.type != nil, datesEnabled.wrappedValue else { return nil }
         if draft.type == .stay {

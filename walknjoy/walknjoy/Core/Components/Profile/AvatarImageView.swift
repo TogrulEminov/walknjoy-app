@@ -36,7 +36,7 @@ struct AvatarImageView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 .buttonStyle(.plain)
-                .accessibilityLabel(Text("retry"))
+                .accessibilityLabel(Text("common.retry"))
             } else if file != nil {
                 ProgressView().tint(Color.iconColor)
             } else {

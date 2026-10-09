@@ -17,8 +17,10 @@ struct NotificationData: Codable, Hashable {
     var listingSlug: String?
 
     var validatedListingSlug: String? {
-        guard route == nil || ["listing", "listing_detail"].contains(route!),
-              let listingSlug, Self.isSafeIdentifier(listingSlug) else { return nil }
+        if let route, !["listing", "listing_detail"].contains(route) {
+            return nil
+        }
+        guard let listingSlug, Self.isSafeIdentifier(listingSlug) else { return nil }
         return listingSlug
     }
 

@@ -70,8 +70,10 @@ extension AuthEndpoint: Endpoint {
     }
     var requiresAuth: Bool {
         switch self {
-        case .me, .logout, .requestPasswordChange, .verifyPasswordChange, .changePassword: return true
-            
+        case .me, .logout, .requestPasswordChange, .verifyPasswordChange,
+            .changePassword:
+            return true
+
         default: return false
         }
     }

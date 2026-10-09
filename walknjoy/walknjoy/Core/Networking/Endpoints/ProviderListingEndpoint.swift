@@ -16,10 +16,14 @@ enum ProviderListingEndpoint: Endpoint {
     var path: String {
         switch self {
         case .list, .create: "/provider/listings"
-        case .get(let id), .update(let id, _), .updatePrice(let id, _), .archive(let id): "/provider/listings/\(id)"
-        case .getDetails(let id), .details(let id, _): "/provider/listings/\(id)/details"
+        case .get(let id), .update(let id, _), .updatePrice(let id, _),
+            .archive(let id):
+            "/provider/listings/\(id)"
+        case .getDetails(let id), .details(let id, _):
+            "/provider/listings/\(id)/details"
         case .addMedia(let id, _): "/provider/listings/\(id)/media"
-        case .deleteMedia(let id, let mediaId): "/provider/listings/\(id)/media/\(mediaId)"
+        case .deleteMedia(let id, let mediaId):
+            "/provider/listings/\(id)/media/\(mediaId)"
         case .submit(let id): "/provider/listings/\(id)/submit"
         }
     }
@@ -66,9 +70,16 @@ enum ListingTaxonomyEndpoint: Endpoint {
     var queryItems: [URLQueryItem]? {
         switch self {
         case .cities(let locale, let countryCode):
-            [URLQueryItem(name: "locale", value: locale.rawValue), URLQueryItem(name: "countryCode", value: countryCode)]
-        case .categories(let type, let locale), .amenities(let type, let locale):
-            [URLQueryItem(name: "type", value: type.rawValue), URLQueryItem(name: "locale", value: locale.rawValue)]
+            [
+                URLQueryItem(name: "locale", value: locale.rawValue),
+                URLQueryItem(name: "countryCode", value: countryCode),
+            ]
+        case .categories(let type, let locale),
+            .amenities(let type, let locale):
+            [
+                URLQueryItem(name: "type", value: type.rawValue),
+                URLQueryItem(name: "locale", value: locale.rawValue),
+            ]
         }
     }
 }

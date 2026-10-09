@@ -42,7 +42,7 @@ extension MainView {
             AITravelAssistantView()
         }
         .tabItem {
-            Label("ai.assistant.title", systemImage: "sparkles")
+            Label("ai.assistant.title", systemImage: "ellipsis.bubble")
         }
     }
 

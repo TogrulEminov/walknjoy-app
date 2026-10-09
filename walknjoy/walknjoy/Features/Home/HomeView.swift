@@ -12,19 +12,21 @@ struct HomeView: View {
     @Binding var selectedTab: MainTab
     @Binding var searchCriteria: ListingSearchCriteria
     @Environment(AppState.self) private var appState
-    @State private var favoriteError: String?
     @Environment(NotificationViewModel.self) private var notifications
+    @State private var favoriteError: String?
     @State private var viewModel: HomeViewModel
     @State private var showNotifications = false
+    @State private var isScrolled = false
 
     @MainActor
     init(
         selectedTab: Binding<MainTab>,
-        searchCriteria: Binding<ListingSearchCriteria>
+        searchCriteria: Binding<ListingSearchCriteria>,
+        viewModel: HomeViewModel? = nil
     ) {
         _selectedTab = selectedTab
         _searchCriteria = searchCriteria
-        _viewModel = State(initialValue: HomeViewModel())
+        _viewModel = State(initialValue: viewModel ?? HomeViewModel.makeDefault())
     }
 
     var body: some View {
@@ -42,17 +44,17 @@ struct HomeView: View {
 
                 case .error(let message):
                     ErrorStateView(title: "error.title", message: message) {
-                        Task {
-                            await viewModel.refresh()
-                        }
+                        Task { await viewModel.refresh() }
                     }
                 }
             }
+            .background(Color.appBg)
+            .overlay(alignment: .top) { topBar }
+            .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: AppRoute.self) { route in
                 destination(for: route)
                     .toolbar(.visible, for: .navigationBar)
             }
-            .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(isPresented: $showNotifications) {
                 NotificationListView()
                     .toolbar(.visible, for: .navigationBar)
@@ -71,23 +73,76 @@ struct HomeView: View {
         } message: {
             Text(favoriteError ?? "")
         }
-        .task {
-            await viewModel.load()
-        }
-        .refreshable {
-            await viewModel.load()
+        .task(id: appState.language) {
+            await viewModel.load(locale: appState.language.rawValue)
         }
     }
 }
+
+// MARK: - Top bar (logo solda, notification sağda)
+
+extension HomeView {
+    private var topBar: some View {
+        HStack {
+            Image(isScrolled ? "logo-colorfull" : "logo-white")
+                .resizable()
+                .scaledToFit()
+                .frame(height: 30)
+                .accessibilityHidden(true)
+
+            Spacer()
+
+            Button {
+                showNotifications = true
+            } label: {
+                Image(systemName: "bell")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(isScrolled ? Color.titleText : Color.white)
+                    .frame(width: 40, height: 40)
+                    .background(.ultraThinMaterial, in: Circle())
+                    .overlay(
+                        Circle().stroke(
+                            isScrolled ? Color.borderColor : Color.white.opacity(0.25),
+                            lineWidth: 1
+                        )
+                    )
+                    .overlay(alignment: .topTrailing) {
+                        if notifications.unreadCount > 0 {
+                            Text(badgeText)
+                                .font(.system(size: 10, weight: .bold))
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 5)
+                                .frame(minWidth: 16, minHeight: 16)
+                                .background(Color.errorC, in: Capsule())
+                                .offset(x: 4, y: -4)
+                        }
+                    }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("notifications.title")
+        }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 8)
+        .frame(height: Self.topBarHeight)
+        .animation(.easeInOut(duration: 0.2), value: isScrolled)
+    }
+
+    private static let topBarHeight: CGFloat = 56
+
+    private var badgeText: String {
+        notifications.unreadCount > 99 ? "99+" : "\(notifications.unreadCount)"
+    }
+}
+
+// MARK: - Content
+
 extension HomeView {
     private func contentView(_ content: HomeContent) -> some View {
         GeometryReader { geometry in
             ScrollView {
                 LazyVStack(spacing: 28) {
                     HomeHeroView(
-                        topInset: geometry.safeAreaInsets.top,
-                        unreadCount: notifications.unreadCount,
-                        onNotificationTap: { showNotifications = true }
+                        topInset: geometry.safeAreaInsets.top + Self.topBarHeight
                     ) {
                         HomeSearchView(
                             criteria: $searchCriteria,
@@ -98,15 +153,18 @@ extension HomeView {
                             selectedTab = .search
                         }
                     }
+
                     HomeListingTypesView { type in
                         handleSeeAll(type)
                     }
+
                     if !content.categories.isEmpty {
                         HomeCategoriesView(
                             categories: content.categories,
                             onSelect: handleCategoryTap
                         )
                     }
+
                     if appState.hasLoadedCurrentUserRole,
                         appState.currentUserRole == .customer
                     {
@@ -114,6 +172,7 @@ extension HomeView {
                             handleAITravelTap()
                         }
                     }
+
                     listingSection(
                         title: "home.stays.title",
                         type: .stay,
@@ -137,7 +196,9 @@ extension HomeView {
                         type: .experience,
                         listings: content.experiences
                     )
+
                     AdvantagesSection()
+
                     if appState.hasLoadedCurrentUserRole,
                         let role = appState.currentUserRole,
                         role != .provider
@@ -148,15 +209,22 @@ extension HomeView {
                 .padding(.bottom, 16)
             }
             .ignoresSafeArea(.container, edges: .top)
+            .onScrollGeometryChange(for: Bool.self) { scroll in
+                scroll.contentOffset.y + scroll.contentInsets.top > 8
+            } action: { _, newValue in
+                isScrolled = newValue
+            }
             .background(Color.appBg)
             .refreshable {
-                await viewModel.refresh()
+                await Task { await viewModel.refresh() }.value
             }
         }
     }
 }
-extension HomeView {
 
+// MARK: - Sections
+
+extension HomeView {
     @ViewBuilder
     private func listingSection(
         title: LocalizedStringKey,
@@ -165,15 +233,9 @@ extension HomeView {
     ) -> some View {
         if !listings.isEmpty {
             VStack(alignment: .leading, spacing: 16) {
-                sectionHeader(
-                    title: title,
-                    type: type
-                )
+                sectionHeader(title: title, type: type)
 
-                ScrollView(
-                    .horizontal,
-                    showsIndicators: false
-                ) {
+                ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: 16) {
                         ForEach(listings) { listing in
                             ListingCard(
@@ -185,17 +247,14 @@ extension HomeView {
                             ) {
                                 handleFavoriteTap(listing)
                             }
+                            .frame(width: 280)
                         }
-                        .frame(width: 280)
                     }
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, 20)
             }
         }
     }
-}
-
-extension HomeView {
 
     private func sectionHeader(
         title: LocalizedStringKey,
@@ -203,12 +262,7 @@ extension HomeView {
     ) -> some View {
         HStack(spacing: 12) {
             Text(title)
-                .font(
-                    .system(
-                        size: 22,
-                        weight: .bold
-                    )
-                )
+                .font(.system(size: 22, weight: .bold))
                 .foregroundStyle(Color.title)
 
             Spacer()
@@ -218,20 +272,9 @@ extension HomeView {
             } label: {
                 HStack(spacing: 6) {
                     Text("common.seeAll")
-                        .font(
-                            .system(
-                                size: 14,
-                                weight: .medium
-                            )
-                        )
-
+                        .font(.system(size: 14, weight: .medium))
                     Image(systemName: "chevron.right")
-                        .font(
-                            .system(
-                                size: 12,
-                                weight: .semibold
-                            )
-                        )
+                        .font(.system(size: 12, weight: .semibold))
                 }
                 .foregroundStyle(Color.icon)
             }
@@ -240,21 +283,21 @@ extension HomeView {
         .padding(.horizontal, 20)
     }
 }
-extension HomeView {
 
+// MARK: - Navigation & actions
+
+extension HomeView {
     @ViewBuilder
     private func destination(for route: AppRoute) -> some View {
         switch route {
         case .listingDetails(let listing):
             ListingDetailView(data: listing)
-                .toolbar(.visible, for: .navigationBar)
         case .allCategories:
             if case .loaded(let content) = viewModel.state {
                 HomeAllCategoriesView(
                     categories: content.categories,
                     onSelect: handleCategoryTap
                 )
-                    .toolbar(.visible, for: .navigationBar)
             }
         }
     }
@@ -271,9 +314,7 @@ extension HomeView {
         selectedTab = .ai
     }
 
-    private func handleSeeAll(
-        _ type: ListingType
-    ) {
+    private func handleSeeAll(_ type: ListingType) {
         var criteria = searchCriteria
         criteria.type = type
         criteria.categoryId = nil
@@ -283,16 +324,16 @@ extension HomeView {
         selectedTab = .search
     }
 
-    private func handleFavoriteTap(
-        _ listing: ListingResponse
-    ) {
+    private func handleFavoriteTap(_ listing: ListingResponse) {
         Task {
             do {
                 try await appState.setFavorite(
                     !appState.isFavorite(listing),
                     for: listing
                 )
-            } catch { favoriteError = error.localizedDescription }
+            } catch {
+                favoriteError = error.localizedDescription
+            }
         }
     }
 }

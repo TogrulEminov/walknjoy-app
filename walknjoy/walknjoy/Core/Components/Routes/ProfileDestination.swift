@@ -12,6 +12,7 @@ enum ProfileDestination: Hashable {
     // Account
     case editProfile 
     case bookings
+    case bookingDetail(id: String, role: RoleEnum)
     case favorites
     case reviews
 

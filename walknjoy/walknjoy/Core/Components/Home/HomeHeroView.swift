@@ -2,14 +2,10 @@ import SwiftUI
 
 struct HomeHeroView<SearchContent: View>: View {
     var topInset: CGFloat = 0
-    var unreadCount = 0
-    let onNotificationTap: () -> Void
     @ViewBuilder let searchContent: () -> SearchContent
 
     var body: some View {
         VStack(alignment: .leading, spacing: 28) {
-            HomeHeaderView(onImage: true, unreadCount: unreadCount, onNotificationTap: onNotificationTap)
-
             VStack(alignment: .leading, spacing: 12) {
                 Capsule()
                     .fill(Color.brandYellow)
@@ -38,27 +34,44 @@ struct HomeHeroView<SearchContent: View>: View {
         .padding(.bottom, 28)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background {
-            GeometryReader { geometry in
-                Image("hero-banner")
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: geometry.size.width, height: geometry.size.height)
-                    .clipped()
-                    .overlay {
-                        LinearGradient(
-                            stops: [
-                                .init(color: Color.brandInk.opacity(0.50), location: 0),
-                                .init(color: Color.brandInk.opacity(0.30), location: 0.3),
-                                .init(color: Color.brandInk.opacity(0.70), location: 0.65),
-                                .init(color: Color.brandInk.opacity(0.94), location: 1)
-                            ],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                    }
-                    .accessibilityHidden(true)
-            }
+            Color.clear
+                .overlay {
+                    Image("hero-banner")
+                        .resizable()
+                        .scaledToFill()
+                }
+                .clipped()
+                .overlay {
+                    LinearGradient(
+                        stops: [
+                            .init(
+                                color: Color.brandInk.opacity(0.50),
+                                location: 0
+                            ),
+                            .init(
+                                color: Color.brandInk.opacity(0.30),
+                                location: 0.3
+                            ),
+                            .init(
+                                color: Color.brandInk.opacity(0.70),
+                                location: 0.65
+                            ),
+                            .init(
+                                color: Color.brandInk.opacity(0.94),
+                                location: 1
+                            ),
+                        ],
+                        startPoint: .top,
+                        endPoint: .bottom
+                    )
+                }
+                .clipShape(
+                    UnevenRoundedRectangle(
+                        bottomLeadingRadius: 32,
+                        bottomTrailingRadius: 32
+                    )
+                )
+                .accessibilityHidden(true)
         }
-        .clipShape(UnevenRoundedRectangle(bottomLeadingRadius: 32, bottomTrailingRadius: 32))
     }
 }

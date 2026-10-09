@@ -42,8 +42,18 @@ import Foundation
         try await listing(.update(id: id, input: input))
     }
 
-    func updatePrice(id: String, amount: Decimal, currency: ProviderCurrency) async throws -> ProviderListingEditorDTO {
-        try await listing(.updatePrice(id: id, input: ProviderPriceUpdateRequest(basePrice: amount, currency: currency)))
+    func updatePrice(id: String, amount: Decimal, currency: ProviderCurrency)
+        async throws -> ProviderListingEditorDTO
+    {
+        try await listing(
+            .updatePrice(
+                id: id,
+                input: ProviderPriceUpdateRequest(
+                    basePrice: amount,
+                    currency: currency
+                )
+            )
+        )
     }
 
     func submit(id: String) async throws -> ProviderListingEditorDTO {
@@ -88,7 +98,9 @@ import Foundation
         return data
     }
 
-    func uploadAndAddMedia(id: String, input: UploadFileInput, altText: String?) async throws {
+    func uploadAndAddMedia(id: String, input: UploadFileInput, altText: String?)
+        async throws
+    {
         let uploaded = try await FileUploadService().uploadOne(input)
         _ = try await addMedia(id: id, fileId: uploaded.id, altText: altText)
     }
@@ -147,10 +159,11 @@ import Foundation
         guard response.success, let data = response.data else {
             throw NetworkError.invalidResponse
         }
-        return data.filter {
-            !$0.isDeleted && (type == nil || $0.listingTypes.isEmpty
-                || $0.listingTypes.contains(type!)
-            )
+        return data.filter { category in
+            guard category.isDeleted != true else { return false }
+            guard let type else { return true }
+            return category.listingTypes.isEmpty
+                || category.listingTypes.contains(type)
         }
     }
 
@@ -168,7 +181,8 @@ import Foundation
             throw NetworkError.invalidResponse
         }
         return data.filter {
-            !$0.isDeleted && ($0.listingTypes.isEmpty || $0.listingTypes.contains(type))
+            $0.isDeleted != true
+                && ($0.listingTypes.isEmpty || $0.listingTypes.contains(type))
         }
     }
 

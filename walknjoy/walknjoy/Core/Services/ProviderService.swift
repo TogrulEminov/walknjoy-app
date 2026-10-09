@@ -3,8 +3,10 @@ import Foundation
 @MainActor
 protocol ProviderServiceProtocol {
     func getProfile() async throws -> ProviderProfile
-    func apply(_ input: ProviderApplicationInput) async throws -> ProviderProfile
-    func updateProfile(_ input: UpdateProviderProfileInput) async throws -> ProviderProfile
+    func apply(_ input: ProviderApplicationInput) async throws
+        -> ProviderProfile
+    func updateProfile(_ input: UpdateProviderProfileInput) async throws
+        -> ProviderProfile
 }
 
 @MainActor
@@ -24,7 +26,9 @@ final class ProviderService: ProviderServiceProtocol {
         try await request(.getProfile)
     }
 
-    func apply(_ input: ProviderApplicationInput) async throws -> ProviderProfile {
+    func apply(_ input: ProviderApplicationInput) async throws
+        -> ProviderProfile
+    {
         let response = try await networkService.request(
             enpoint: ProviderEndpoint.apply(input),
             responseType: ApiResponse<ProviderApplicationResponseData>.self
@@ -36,11 +40,15 @@ final class ProviderService: ProviderServiceProtocol {
         return data.profile
     }
 
-    func updateProfile(_ input: UpdateProviderProfileInput) async throws -> ProviderProfile {
+    func updateProfile(_ input: UpdateProviderProfileInput) async throws
+        -> ProviderProfile
+    {
         try await request(.updateProfile(input))
     }
 
-    private func request(_ endpoint: ProviderEndpoint) async throws -> ProviderProfile {
+    private func request(_ endpoint: ProviderEndpoint) async throws
+        -> ProviderProfile
+    {
         let response = try await networkService.request(
             enpoint: endpoint,
             responseType: ApiResponse<ProviderProfile>.self

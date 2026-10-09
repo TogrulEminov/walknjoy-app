@@ -17,7 +17,9 @@ enum DiscoveryEndpoint: Endpoint {
         var items = [URLQueryItem(name: "locale", value: "az")]
         if case .amenities(let type, let locale) = self {
             items = [URLQueryItem(name: "locale", value: locale)]
-            if let type { items.append(URLQueryItem(name: "type", value: type.rawValue)) }
+            if let type {
+                items.append(URLQueryItem(name: "type", value: type.rawValue))
+            }
         }
         return items
     }

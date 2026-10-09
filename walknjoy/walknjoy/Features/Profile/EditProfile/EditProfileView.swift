@@ -25,7 +25,7 @@ struct EditProfileView: View {
                 if let item = singleFiles.first, case .failed(let message) = item.state {
                     VStack(alignment: .leading, spacing: 8) {
                         errorText(message)
-                        Button("retry") {
+                        Button("common.retry") {
                             Task { await UploadFileViewModel().retry(item, files: $singleFiles, onUploaded: attachAvatar) }
                         }
                         .disabled(isAvatarLoading)
@@ -34,7 +34,7 @@ struct EditProfileView: View {
                 }
                 if viewModel.avatarErrorMessage != nil,
                    let item = singleFiles.first, case .uploaded = item.state {
-                    Button("retry") {
+                    Button("common.retry") {
                         if let file = item.uploadedFile {
                             Task { await attachAvatar(file) }
                         }

@@ -263,7 +263,7 @@ extension UploadFileView {
                     )
                     .font(.system(size: 28))
 
-                    Text("retry")
+                    Text("common.retry")
                         .font(
                             .caption.weight(.semibold)
                         )

@@ -16,9 +16,11 @@ final class AppState {
         }
     }
     let notifications: NotificationViewModel
+    let reviews = ReviewStore()
     private var isAppActive = true
     private(set) var canUseFavorites = false
     private(set) var currentUserRole: RoleEnum?
+    private(set) var currentUserID: String?
     private(set) var hasLoadedCurrentUserRole = false
     private(set) var favoriteOverrides: [String: Bool] = [:]
     private(set) var updatingFavoriteIDs: Set<String> = []
@@ -31,12 +33,14 @@ final class AppState {
             let user = try await authService.me()
             guard session == favoriteSession else { return }
             currentUserRole = RoleEnum(rawValue: user.role.uppercased())
+            currentUserID = user.id
             canUseFavorites = currentUserRole == .customer
             hasLoadedCurrentUserRole = true
         } catch {
             guard session == favoriteSession else { return }
             canUseFavorites = false
             currentUserRole = nil
+            currentUserID = nil
             hasLoadedCurrentUserRole = true
         }
     }
@@ -47,15 +51,19 @@ final class AppState {
 
     func setFavorite(_ favorite: Bool, for listing: PublicListing) async throws
     {
-        guard canUseFavorites, updatingFavoriteIDs.insert(listing.id).inserted
+        try await setFavorite(favorite, listingID: listing.id)
+    }
+
+    func setFavorite(_ favorite: Bool, listingID: String) async throws {
+        guard canUseFavorites, updatingFavoriteIDs.insert(listingID).inserted
         else { return }
         let session = favoriteSession
         defer {
             if session == favoriteSession {
-                updatingFavoriteIDs.remove(listing.id)
+                updatingFavoriteIDs.remove(listingID)
             }
         }
-        let request = FavoriteRequest(listingId: listing.id)
+        let request = FavoriteRequest(listingId: listingID)
         let response =
             try await
             (favorite
@@ -65,7 +73,7 @@ final class AppState {
         guard response.isFavorite == favorite else {
             throw NetworkError.invalidResponse
         }
-        favoriteOverrides[listing.id] = response.isFavorite
+        favoriteOverrides[listingID] = response.isFavorite
     }
 
     var mode: Mode = .light
@@ -109,6 +117,8 @@ final class AppState {
         favoriteSession = UUID()
         canUseFavorites = false
         currentUserRole = nil
+        currentUserID = nil
+        reviews.reset()
         hasLoadedCurrentUserRole = false
         favoriteOverrides = [:]
         updatingFavoriteIDs = []

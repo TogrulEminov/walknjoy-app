@@ -3,8 +3,7 @@ import Foundation
 enum ListingLocale: String, Codable, CaseIterable, Identifiable {
     case az, en, ru
     var id: String { rawValue }
-
-    /// Provider menus follow the languages enabled for the app.
+ 
     static var available: [ListingLocale] {
         AppLanguage.allCases.compactMap { ListingLocale(rawValue: $0.rawValue) }
     }

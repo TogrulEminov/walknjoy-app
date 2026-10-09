@@ -59,7 +59,7 @@ struct AITravelAssistantView: View {
             "ai.error.title",
             isPresented: Binding(
                 get: { model.errorMessage != nil },
-                set: { if !$0 { model.dismissError() } }
+                set: { if $0 { model.dismissError() } }
             )
         ) {
             if model.retryMessage != nil {

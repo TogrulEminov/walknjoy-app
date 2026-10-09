@@ -2,22 +2,45 @@ import PhotosUI
 import SwiftUI
 
 struct ListingTypeSelectionView: View {
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         List(ListingType.allCases) { type in
             NavigationLink {
                 CreateListingView(type: type)
             } label: {
-                Label(type.title, systemImage: type.icon)
+                HStack(spacing: 12) {
+                    Image(systemName: type.icon)
+                        .font(.system(size: 18, weight: .medium))
+                        .foregroundStyle(Color.iconColor)
+                        .frame(width: 36, height: 36)
+                        .background(Color.appBackground, in: RoundedRectangle(cornerRadius: 10))
+                    Text(type.title)
+                        .font(.body.weight(.medium))
+                        .foregroundStyle(Color.titleText)
+                }
+                .padding(.vertical, 4)
+            }
+            .listRowBackground(Color.surfaceBackground)
+            .listRowSeparatorTint(Color.borderColor)
+        }
+        .scrollContentBackground(.hidden)
+        .background(Color.appBackground.ignoresSafeArea())
+        .foregroundStyle(Color.titleText)
+        .tint(Color.titleText)
+        .navigationTitle("listing.typeSelection")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text("listing.typeSelection")
+                    .font(.headline)
+                    .foregroundStyle(Color.titleText)
+                    .accessibilityAddTraits(.isHeader)
             }
         }
-        .listRowBackground(Color.surfaceBackground)
-        .scrollContentBackground(.hidden)
-        .background(Color.appBackground)
-        .foregroundStyle(Color.titleText)
-        .tint(Color.buttonBackground)
-        .navigationTitle("listing.typeSelection")
         .toolbarBackground(Color.appBackground, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarColorScheme(colorScheme, for: .navigationBar)
     }
 }
 
@@ -50,6 +73,7 @@ struct EditListingView: View {
 
 struct ListingEditorView: View {
     @State var model: ListingEditorViewModel
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.dismiss) private var dismiss
     @State private var confirmingClose = false
     @State private var selectingImages = false
@@ -281,6 +305,7 @@ struct ListingEditorView: View {
         .tint(Color.buttonBackground)
         .toolbarBackground(Color.appBackground, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarColorScheme(colorScheme, for: .navigationBar)
         .pickerStyle(.menu)
         .disabled(model.busy || selectingImages)
         .navigationTitle(

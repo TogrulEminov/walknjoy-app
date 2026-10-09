@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum HttpHeader{
+enum HttpHeader {
     static let authorization = "Authorization"
     static let accept = "Accept"
     static let bearer = "Bearer"

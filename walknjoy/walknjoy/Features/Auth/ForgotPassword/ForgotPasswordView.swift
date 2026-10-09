@@ -23,7 +23,6 @@ struct ForgotPasswordView: View {
 
     // MARK: - Validation State
 
-
     // MARK: - Navigation State
 
     @State private var navigateToOtp = false
@@ -56,7 +55,7 @@ struct ForgotPasswordView: View {
 
             contentView
         }
-        
+
         .navigationDestination(
             isPresented: $navigateToOtp
         ) {
@@ -272,7 +271,6 @@ extension ForgotPasswordView {
             )
         }
     }
-
 
 }
 

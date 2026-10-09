@@ -11,4 +11,5 @@ import Foundation
 protocol NetworkingService {
     func request<T: Decodable>(enpoint: Endpoint, responseType: T.Type)
         async throws -> T
+    func requestData(enpoint: Endpoint) async throws -> Data
 }

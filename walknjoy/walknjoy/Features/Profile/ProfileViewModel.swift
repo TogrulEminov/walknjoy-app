@@ -13,14 +13,18 @@ import Observation
 
 final class ProfileViewModel {
     private let profileService: ProfileServiceProtocol
+    private let providerService: ProviderServiceProtocol
     private(set) var state: LoadState<ProfileModel> = .idle
     private let authService: AuthServiceProtocol
+    private(set) var isApprovedProvider = false
     init(
         profileService: ProfileServiceProtocol? = nil,
-        authService: AuthServiceProtocol? = nil
+        authService: AuthServiceProtocol? = nil,
+        providerService: ProviderServiceProtocol? = nil
     ) {
         self.profileService = profileService ?? ProfileService()
         self.authService = authService ?? AuthService()
+        self.providerService = providerService ?? ProviderService()
     }
 
     func loadProfile() async {
@@ -28,6 +32,11 @@ final class ProfileViewModel {
         do {
             let profile = try await profileService.getProfile()
             try MobileAccountAccess.validate(role: profile.roleRawValue)
+            if profile.role == .provider {
+                isApprovedProvider = (try? await providerService.getProfile().status) == .approved
+            } else {
+                isApprovedProvider = false
+            }
             state = .loaded(profile)
         } catch {
             state = .error(error.localizedDescription)
@@ -38,6 +47,7 @@ final class ProfileViewModel {
         do {
             try MobileAccountAccess.validate(role: profile.roleRawValue)
             state = .loaded(profile)
+            if profile.role != .provider { isApprovedProvider = false }
         } catch {
             state = .error(error.localizedDescription)
         }
@@ -70,6 +80,13 @@ extension ProfileViewModel {
     // MARK: - Account
 
     var canViewFavorites: Bool { profile?.role == .customer }
+    var canViewBookings: Bool {
+        switch profile?.role {
+        case .customer, .admin: true
+        case .provider: isApprovedProvider
+        case nil: false
+        }
+    }
 
     var accountItems: [ProfileMenuItem] {
         [
@@ -96,7 +113,13 @@ extension ProfileViewModel {
                 icon: "star",
                 destination: .reviews
             ),
-        ].filter { $0.destination != .favorites || canViewFavorites }
+        ].filter { item in
+            switch item.destination {
+            case .bookings: canViewBookings
+            case .favorites, .reviews: canViewFavorites
+            default: true
+            }
+        }
     }
 
     // MARK: - Settings

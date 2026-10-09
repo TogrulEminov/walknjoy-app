@@ -22,7 +22,9 @@ final class ForgotPasswordViewModel {
         if case .loading = state { return }
         state = .loading
         do {
-            let request = ForgotPasswordRequest(email: email.trimmingCharacters(in: .whitespacesAndNewlines))
+            let request = ForgotPasswordRequest(
+                email: email.trimmingCharacters(in: .whitespacesAndNewlines)
+            )
 
             let response = try await authService.forgotPassword(
                 request: request

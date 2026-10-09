@@ -9,6 +9,26 @@ struct ListingLocation: Codable, Hashable {
     var addressLine: String? = nil
     var latitude: Double?
     var longitude: Double?
+
+    init(
+        id: String? = nil,
+        cityId: String? = nil,
+        countryCode: String,
+        city: String? = nil,
+        district: String? = nil,
+        addressLine: String? = nil,
+        latitude: Double? = nil,
+        longitude: Double? = nil
+    ) {
+        self.id = id
+        self.cityId = cityId
+        self.countryCode = countryCode
+        self.city = city
+        self.district = district
+        self.addressLine = addressLine
+        self.latitude = latitude
+        self.longitude = longitude
+    }
 }
 
 struct ListingCity: Decodable, Identifiable, Equatable {

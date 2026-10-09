@@ -21,8 +21,9 @@ final class CategoryServices: CategoryServicesProtocol {
             throw NetworkError.invalidResponse
         }
 
-        return categories
-            .filter { !$0.isDeleted }
+        return
+            categories
+            .filter { $0.isDeleted != true }
             .sorted { $0.order < $1.order }
     }
 }

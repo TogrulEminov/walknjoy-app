@@ -85,7 +85,7 @@ struct ListingListView: View {
             "provider.archive.title",
             isPresented: Binding(
                 get: { archiveTarget != nil },
-                set: { if !$0 { archiveTarget = nil } }
+                set: { if $0 { archiveTarget = nil } }
             ),
             titleVisibility: .visible
         ) {
@@ -103,7 +103,7 @@ struct ListingListView: View {
             "error.title",
             isPresented: Binding(
                 get: { model.mutationError != nil },
-                set: { if !$0 { model.mutationError = nil } }
+                set: { if $0 { model.mutationError = nil } }
             )
         ) {
             Button("common.ok", role: .cancel) { model.mutationError = nil }

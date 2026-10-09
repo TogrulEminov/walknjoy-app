@@ -12,6 +12,9 @@ struct ProfileView: View {
 
     @Environment(AppState.self) private var appState
     @State private var isAvatarSheetPresented = false
+    @State private var showLogoutConfirmation = false
+    @State private var isLoggingOut = false
+    @State private var logoutError: String?
     @State private var path: [ProfileDestination] = []
     @State private var viewModel: ProfileViewModel
 
@@ -37,9 +40,6 @@ struct ProfileView: View {
                         for: destination
                     )
                 }
-                .navigationDestination(for: AppRoute.self) { route in
-                    destination(for: route)
-                }
                 .navigationTitle("profile.title")
                 .navigationBarTitleDisplayMode(.inline)
                 .task {
@@ -48,6 +48,17 @@ struct ProfileView: View {
                     }
                 }
         }
+        .alert("profile.logoutConfirmTitle", isPresented: $showLogoutConfirmation) {
+            Button("common.cancel", role: .cancel) {}
+            Button("profile.logout", role: .destructive) {
+                Task { await confirmLogout() }
+            }
+        } message: {
+            Text("profile.logoutConfirmMessage")
+        }
+        .alert("error.title", isPresented: Binding(get: { logoutError != nil }, set: { if !$0 { logoutError = nil } })) {
+            Button("common.ok", role: .cancel) {}
+        } message: { Text(logoutError ?? "") }
     }
 }
 
@@ -173,11 +184,7 @@ extension ProfileView {
 
     private var logoutButton: some View {
         Button {
-            Task {
-                try await viewModel.logout()
-
-                appState.finishLogout()
-            }
+            showLogoutConfirmation = true
         } label: {
             HStack {
                 Image(
@@ -201,6 +208,19 @@ extension ProfileView {
             )
         }
         .buttonStyle(.plain)
+        .disabled(isLoggingOut)
+    }
+
+    private func confirmLogout() async {
+        guard !isLoggingOut else { return }
+        isLoggingOut = true
+        defer { isLoggingOut = false }
+        do {
+            try await viewModel.logout()
+            appState.finishLogout()
+        } catch {
+            logoutError = error.localizedDescription
+        }
     }
 }
 
@@ -212,6 +232,7 @@ extension ProfileView {
         _ destination: ProfileDestination
     ) {
         guard destination != .favorites || viewModel.canViewFavorites else { return }
+        guard destination != .bookings || viewModel.canViewBookings else { return }
         path.append(destination)
     }
 }
@@ -219,16 +240,6 @@ extension ProfileView {
 // MARK: - Destinations
 
 extension ProfileView {
-    @ViewBuilder
-    private func destination(for route: AppRoute) -> some View {
-        switch route {
-        case .listingDetails(let listing):
-            ListingDetailView(data: listing)
-        case .allCategories:
-            EmptyView()
-        }
-    }
-
     @ViewBuilder
     private func destinationView(
         for destination: ProfileDestination
@@ -250,7 +261,14 @@ extension ProfileView {
             }
 
         case .bookings:
-            EmptyView()
+            if let profile = viewModel.profile, viewModel.canViewBookings {
+                BookingListView(role: profile.role ?? .customer)
+            } else {
+                EmptyView()
+            }
+
+        case .bookingDetail(let id, let role):
+            BookingDetailView(bookingID: id, role: role)
 
         case .favorites:
             if viewModel.canViewFavorites {
@@ -258,7 +276,7 @@ extension ProfileView {
             }
 
         case .reviews:
-            EmptyView()
+            MyReviewsView()
 
         case .preferences:
             PreferencesView()

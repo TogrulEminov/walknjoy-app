@@ -15,9 +15,11 @@ protocol Endpoint {
     var queryItems: [URLQueryItem]? { get }
     var httpBody: RequestBody { get }
     var requiresAuth: Bool { get }
+    var usesOptionalAuth: Bool { get }
 }
 
 extension Endpoint {
+    var usesOptionalAuth: Bool { false }
     var baseURL: String {
         APIConfig.baseURL
     }

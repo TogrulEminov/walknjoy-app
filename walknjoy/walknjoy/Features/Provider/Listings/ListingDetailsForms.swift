@@ -158,7 +158,7 @@ struct ExperienceDetailsForm: View {
 }
 
 private struct OptionalNumberField: View {
-    let title: String
+    let title:LocalizedStringResource
     @Binding var value: Int?
     var body: some View {
         BusinessInputField(title, text: Binding(

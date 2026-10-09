@@ -16,7 +16,19 @@ final class HomeViewModel {
     private let categoryServices: CategoryServicesProtocol
     private let discoveryServices: DiscoveryServicesProtocol
 
+    static var makeDefault: () -> HomeViewModel = { HomeViewModel() }
+
     var state: LoadState<HomeContent> = .idle
+    private var locale = "az"
+    private var generation = UUID()
+
+    func load(locale: String) async {
+        if self.locale != locale {
+            self.locale = locale
+            state = .idle
+        }
+        await load()
+    }
 
     init(
         listingService: ListingServicesProtocol? = nil,
@@ -48,6 +60,8 @@ final class HomeViewModel {
     }
 
     private func loadListings(keepCurrentContentOnError: Bool = false) async {
+        generation = UUID()
+        let request = generation
         do {
             async let stayRequest = listingServices.getListings(
                 query: makeQuery(for: .stay)
@@ -80,8 +94,12 @@ final class HomeViewModel {
                 activities: activitiesResponse,
                 experiences: experiencesResponse
             )
+            try Task.checkCancellation()
+            guard generation == request else { return }
             state = .loaded(content)
         } catch {
+            guard generation == request else { return }
+            if error is CancellationError { state = .idle; return }
             if !keepCurrentContentOnError {
                 state = .error(error.localizedDescription)
             }
@@ -93,6 +111,7 @@ extension HomeViewModel {
         for type: ListingType
     ) -> ListingQuery {
         ListingQuery(
+            locale: locale,
             type: type,
             page: 1,
             limit: 6

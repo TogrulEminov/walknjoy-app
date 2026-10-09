@@ -17,7 +17,9 @@ enum CategoryEndpoint: Endpoint {
         case .getCategories: return [URLQueryItem(name: "locale", value: "az")]
         case .filtered(let type, let locale):
             var items = [URLQueryItem(name: "locale", value: locale)]
-            if let type { items.append(URLQueryItem(name: "type", value: type.rawValue)) }
+            if let type {
+                items.append(URLQueryItem(name: "type", value: type.rawValue))
+            }
             return items
         }
     }

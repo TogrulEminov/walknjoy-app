@@ -8,8 +8,13 @@
 import Foundation
 
 enum ListingEndpoint {
+    case getListingByID(id: String, locale: String)
     case getListings(ListingQuery)
-    case getListing(slug: String, locale: String)
+    case getListing(
+        slug: String,
+        locale: String,
+        includeCustomerToken: Bool = false
+    )
 }
 
 extension ListingEndpoint: Endpoint {
@@ -18,15 +23,17 @@ extension ListingEndpoint: Endpoint {
     }
     var path: String {
         switch self {
+        case .getListingByID(let id, _):
+            "/listings/id/\(id)"
         case .getListings:
             "/listings"
-        case .getListing(let slug, _):
-            "/listings/\(slug.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed.subtracting(CharacterSet(charactersIn: "/?#"))) ?? slug)"
+        case .getListing(let slug, _, _):
+            "/listings/\(slug.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed.subtracting(CharacterSet(charactersIn: "/?#%"))) ?? slug)"
         }
     }
     var method: HttpMethod {
         switch self {
-        case .getListings, .getListing:
+        case .getListings, .getListing, .getListingByID:
             .get
         }
     }
@@ -37,14 +44,22 @@ extension ListingEndpoint: Endpoint {
         switch self {
         case .getListings(let query):
             return query.queryItems()
-        case .getListing(_, let locale):
+        case .getListingByID(_, let locale), .getListing(_, let locale, _):
             return [URLQueryItem(name: "locale", value: locale)]
         }
     }
     var httpBody: RequestBody {
         switch self {
-        case .getListings, .getListing: .none
+        case .getListings, .getListing, .getListingByID: .none
         }
+    }
+
+    var usesOptionalAuth: Bool {
+        if case .getListing(_, _, let includeToken) = self {
+            return includeToken
+        }
+        if case .getListingByID = self { return true }
+        return false
     }
 
     var requiresAuth: Bool {
