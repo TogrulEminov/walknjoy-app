@@ -4,17 +4,12 @@ import SwiftUI
 struct BookingTicketView: View {
     let pdfData: Data
     @Environment(\.dismiss) private var dismiss
-    @State private var shareURL: URL?
-    @State private var showShare = false
-    @State private var error: String?
 
     var body: some View {
         VStack {
             PDFKitRepresentable(data: pdfData)
 
-            Button {
-                sharePDF()
-            } label: {
+            ShareLink(item: BookingTicketDocument(data: pdfData), preview: SharePreview(Text("listing.detail.ticket"))) {
                 Label("common.share", systemImage: "square.and.arrow.up")
                     .font(.subheadline.bold())
                     .foregroundStyle(Color.brandInk)
@@ -27,12 +22,6 @@ struct BookingTicketView: View {
                     .padding()
             }
         }
-        .sheet(isPresented: $showShare) {
-            if let shareURL { BookingPDFShareView(url: shareURL) }
-        }
-        .alert("error.title", isPresented: Binding(get: { error != nil }, set: { if !$0 { error = nil } })) {
-            Button("common.ok", role: .cancel) {}
-        } message: { Text(error ?? "") }
         .navigationTitle("listing.detail.ticket")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -42,17 +31,6 @@ struct BookingTicketView: View {
         }
     }
 
-    private func sharePDF() {
-        let tempURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("ticket.pdf")
-        do {
-            try pdfData.write(to: tempURL)
-            shareURL = tempURL
-            showShare = true
-        } catch {
-            self.error = error.localizedDescription
-        }
-    }
 }
 
 struct PDFKitRepresentable: UIViewRepresentable {
@@ -73,13 +51,4 @@ struct PDFKitRepresentable: UIViewRepresentable {
             uiView.document = document
         }
     }
-}
-
-
-private struct BookingPDFShareView: UIViewControllerRepresentable {
-    let url: URL
-    func makeUIViewController(context: Context) -> UIActivityViewController {
-        UIActivityViewController(activityItems: [url], applicationActivities: nil)
-    }
-    func updateUIViewController(_ controller: UIActivityViewController, context: Context) {}
 }

@@ -31,7 +31,7 @@ Məlumat axını: `View → ViewModel → Service protocol → Service → Netwo
 
 View-lar layout, binding və naviqasiya göstərir. ViewModel-lər sorğuları, input validation, loading/error/empty vəziyyətlərini və məlumat hazırlığını idarə edir. Service-lər protocol vasitəsilə inject edilir. Ortaq `LoadState`, `RequestState`, `PaginationController`, form validation və tema komponentləri təkrar istifadə olunur. Planner sessiya yaddaşı da ayrıca `PlannerSessionStoring` protocol-u ilə inject edilir.
 
-Adi mətn və şifrə sahələri native SwiftUI-dır. UIKit ekran arxitekturası kimi istifadə edilmir: xüsusi telefon maskası və OTP giriş koordinasiyası `UIViewRepresentable`, PDF görünüşü və paylaşımı isə PDFKit/`UIViewControllerRepresentable` adapterləri ilə qoşulur. `UIImage` avatar decode və cache qatında istifadə olunur.
+Adi mətn və şifrə sahələri native SwiftUI-dır. UIKit ekran arxitekturası kimi istifadə edilmir: xüsusi telefon maskası və OTP giriş koordinasiyası `UIViewRepresentable`, PDF görünüşü isə PDFKit/`UIViewRepresentable` adapteri ilə qoşulur. PDF paylaşımı native SwiftUI `ShareLink` və `Transferable` ilə edilir. `UIImage` avatar decode və cache qatında istifadə olunur.
 
 Swift Package Manager asılılıqları: **SDWebImageSwiftUI/SDWebImage**, **SnapKit**, **InputMask** və **SwiftRichHTMLEditor**. Dəqiq versiyalar `Package.resolved` daxilində sabitlənib. SnapKit mövcud xüsusi UIKit giriş adapterləri üçündür.
 
