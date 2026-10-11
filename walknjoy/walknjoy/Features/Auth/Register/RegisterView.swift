@@ -111,32 +111,26 @@ extension RegisterView {
 extension RegisterView {
     private var inputFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            InputFieldRepresentable(
+            AppTextField(
                 text: $firstName,
-                placeholder: String(
-                    localized: "input.firstName"
-                ),
+                placeholder: "input.firstName",
                 icon: "person",
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
             .fieldValidation(form[.firstName])
-            InputFieldRepresentable(
+            AppTextField(
                 text: $lastName,
-                placeholder: String(
-                    localized: "input.lastName"
-                ),
+                placeholder: "input.lastName",
                 icon: "person",
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)
             .fieldValidation(form[.lastName])
 
-            InputFieldRepresentable(
+            AppTextField(
                 text: $email,
-                placeholder: String(
-                    localized: "input.email"
-                ),
+                placeholder: "input.email",
                 icon: "envelope",
                 keyboardType: .emailAddress,
                 textContentType: .emailAddress,
@@ -146,11 +140,9 @@ extension RegisterView {
             .frame(height: 56)
             .fieldValidation(form[.email])
 
-            PasswordFieldRepresentable(
+            AppPasswordField(
                 text: $password,
-                placeHolder: String(
-                    localized: "input.password"
-                )
+                placeholder: "input.password"
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)

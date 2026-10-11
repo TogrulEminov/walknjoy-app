@@ -1,6 +1,7 @@
 import Foundation
 
 @MainActor protocol ProviderListingsManaging {
+    func categories(type: ListingType?, locale: ListingLocale) async throws -> [CategoryModel]
     func list(query: ProviderListingsQuery) async throws -> ApiResponse<
         [ProviderListingCardDTO]
     >

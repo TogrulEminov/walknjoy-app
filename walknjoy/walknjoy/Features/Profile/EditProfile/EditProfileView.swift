@@ -284,7 +284,7 @@ extension EditProfileView {
             formField(
                 title: "profile.firstName"
             ) {
-                InputFieldRepresentable(
+                AppTextField(
                     text: $viewModel.firstName,
                     placeholder: String(
                         localized:
@@ -301,7 +301,7 @@ extension EditProfileView {
             formField(
                 title: "profile.lastName"
             ) {
-                InputFieldRepresentable(
+                AppTextField(
                     text: $viewModel.lastName,
                     placeholder: String(
                         localized:
@@ -546,21 +546,13 @@ extension EditProfileView {
 
     private func attachAvatar(_ file: UploadedFile) async {
         let previewData = singleFiles.first(where: { $0.uploadedFile?.id == file.id })?.previewData
-        let previousID = viewModel.profile.avatarFile?.id
-        let updated = await viewModel.updateAvatar(fileId: file.id)
+        let updated = await viewModel.updateAvatar(fileId: file.id, previewData: previewData)
         guard updated else { return }
-        if let previewData, let image = UIImage(data: previewData) {
-            AvatarImageCache.shared.store(image, for: file.id)
-        }
-        if let previousID, previousID != file.id {
-            AvatarImageCache.shared.remove(previousID)
-        }
         onProfileUpdated(viewModel.profile)
         singleFiles = []
     }
 
     private func deleteAvatar() async {
-        let previousID = viewModel.profile.avatarFile?.id
         let deleted =
             await viewModel.deleteAvatar()
 
@@ -568,7 +560,6 @@ extension EditProfileView {
             return
         }
 
-        if let previousID { AvatarImageCache.shared.remove(previousID) }
         singleFiles = []
 
         onProfileUpdated(

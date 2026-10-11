@@ -132,11 +132,9 @@ extension ResetPasswordView {
 extension ResetPasswordView {
     private var inputFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            PasswordFieldRepresentable(
+            AppPasswordField(
                 text: $newPassword,
-                placeHolder: String(
-                    localized: "input.password"
-                )
+                placeholder: "input.password"
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)

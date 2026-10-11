@@ -3,6 +3,9 @@ import Observation
 
 @MainActor @Observable final class ProviderListingsViewModel {
     var query = ProviderListingsQuery()
+    private(set) var categories: [CategoryModel] = []
+    private(set) var catalogError: String?
+    private var catalogGeneration = UUID()
     private let pagination: PaginationController<ProviderListingCardDTO>
     var listings: [ProviderListingCardDTO] { pagination.items }
     var loading: Bool { pagination.isLoading && listings.isEmpty }
@@ -20,6 +23,22 @@ import Observation
     }
     var hasMore: Bool { pagination.hasMore }
     var totalCount: Int { meta?.total ?? listings.count }
+
+    func loadCategories() async {
+        let token = UUID()
+        catalogGeneration = token
+        let type = query.type
+        let locale = query.locale
+        catalogError = nil
+        do {
+            let values = try await service.categories(type: type, locale: locale)
+            guard !Task.isCancelled, catalogGeneration == token, type == query.type, locale == query.locale else { return }
+            categories = values
+        } catch {
+            guard !Task.isCancelled, catalogGeneration == token else { return }
+            catalogError = error.localizedDescription
+        }
+    }
 
     func reload(debounce: Bool = false) async {
         let query = query

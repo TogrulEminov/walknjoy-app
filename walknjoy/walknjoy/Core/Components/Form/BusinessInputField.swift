@@ -30,7 +30,7 @@ struct BusinessInputField: View {
     }
 
     var body: some View {
-        InputFieldRepresentable(
+        AppTextField(
             text: $text,
             placeholder: placeholder,
             icon: icon,

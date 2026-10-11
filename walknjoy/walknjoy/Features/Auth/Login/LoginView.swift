@@ -90,11 +90,9 @@ extension LoginView {
 extension LoginView {
     private var inputFields: some View {
         VStack(alignment: .leading, spacing: 10) {
-            InputFieldRepresentable(
+            AppTextField(
                 text: $email,
-                placeholder: String(
-                    localized: "input.email"
-                ),
+                placeholder: "input.email",
                 icon: "envelope",
                 keyboardType: .emailAddress,
                 textContentType: .emailAddress,
@@ -104,11 +102,9 @@ extension LoginView {
             .frame(height: 56)
             .fieldValidation(form[.email])
 
-            PasswordFieldRepresentable(
+            AppPasswordField(
                 text: $password,
-                placeHolder: String(
-                    localized: "input.password"
-                )
+                placeholder: "input.password"
             )
             .frame(maxWidth: .infinity)
             .frame(height: 56)

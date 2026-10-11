@@ -6,6 +6,7 @@ import SwiftUI
 final class EditProfileViewModel {
 
     private let profileService: ProfileServiceProtocol
+    private let avatarCache: AvatarImageCaching
 
     private(set) var profile: ProfileModel
 
@@ -25,7 +26,8 @@ final class EditProfileViewModel {
 
     init(
         profile: ProfileModel,
-        profileService: ProfileServiceProtocol? = nil
+        profileService: ProfileServiceProtocol? = nil,
+        avatarCache: AvatarImageCaching? = nil
     ) {
         let country = PhoneCountry.detect(
             from: profile.phone
@@ -35,6 +37,7 @@ final class EditProfileViewModel {
             from: profile.phone
         )
 
+        self.avatarCache = avatarCache ?? AvatarImageService.shared
         self.profile = profile
         self.profileService = profileService ?? ProfileService()
 
@@ -101,7 +104,8 @@ extension EditProfileViewModel {
 
     @discardableResult
     func updateAvatar(
-        fileId: String
+        fileId: String,
+        previewData: Data? = nil
     ) async -> Bool {
 
         guard !isAvatarProcessing && !isSaving else {
@@ -116,12 +120,15 @@ extension EditProfileViewModel {
         }
 
         do {
+            let previousID = profile.avatarFile?.id
             let response = try await profileService.updateAvatar(
                 fileId: fileId,
                 altText: nil
             )
 
             profile = profile.replacingAvatar(response.avatarFile)
+            if let previewData { avatarCache.storePreview(previewData, for: fileId) }
+            if let previousID, previousID != fileId { avatarCache.remove(previousID) }
 
             return true
 
@@ -148,9 +155,10 @@ extension EditProfileViewModel {
         }
 
         do {
+            let previousID = profile.avatarFile?.id
             let response = try await profileService.deleteAvatar()
-
             profile = profile.replacingAvatar(response.avatarFile)
+            if let previousID { avatarCache.remove(previousID) }
 
             return true
 

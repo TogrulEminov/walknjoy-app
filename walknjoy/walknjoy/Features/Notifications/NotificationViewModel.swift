@@ -9,6 +9,7 @@ final class NotificationViewModel {
     private(set) var isLoading = false
     private(set) var isMarkingRead = false
     private var paginationMeta: PaginationMeta?
+    var visibleNotifications: [AppNotification] { notifications.filter { !unreadOnly || !$0.isRead } }
     var hasMore: Bool { paginationMeta?.hasNextPage ?? false }
     private(set) var unreadOnly = false
     var error: String?

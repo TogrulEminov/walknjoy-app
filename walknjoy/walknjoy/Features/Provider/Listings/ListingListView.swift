@@ -5,8 +5,6 @@ struct ListingListView: View {
     @State private var editing: ProviderListingCardDTO?
     @State private var archiveTarget: ProviderListingCardDTO?
     @State private var creating = false
-    @State private var categories: [CategoryModel] = []
-    @State private var catalogError: String?
 
     var body: some View {
         @Bindable var model = model
@@ -14,11 +12,11 @@ struct ListingListView: View {
             VStack(spacing: 18) {
                 pageHeading
                 filters
-                if let error = model.error ?? catalogError {
+                if let error = model.error ?? model.catalogError {
                     Text(error).foregroundStyle(Color.errorC)
                     Button("common.retry") {
                         Task {
-                            await loadCategories()
+                            await model.loadCategories()
                             await model.reload()
                         }
                     }
@@ -67,7 +65,7 @@ struct ListingListView: View {
         .task(
             id:
                 "\(model.query.locale.rawValue)-\(model.query.type?.rawValue ?? "all")"
-        ) { await loadCategories() }
+        ) { await model.loadCategories() }
         .refreshable { await model.reload() }
         .sheet(item: $editing, onDismiss: refresh) { listing in
             NavigationStack {
@@ -169,12 +167,12 @@ struct ListingListView: View {
             HStack(spacing: 8) {
                 Menu {
                     Button("search.filter.any") { model.query.categoryId = nil }
-                    ForEach(categories) { category in
+                    ForEach(model.categories) { category in
                         Button(category.name) { model.query.categoryId = category.id }
                     }
                 } label: {
                     filterChip(
-                        title: categories.first { $0.id == model.query.categoryId }?.name ?? String(localized: "listing.category"),
+                        title: model.categories.first { $0.id == model.query.categoryId }?.name ?? String(localized: "listing.category"),
                         systemImage: "tag"
                     )
                 }
@@ -264,24 +262,7 @@ struct ListingListView: View {
         .padding(.top, 6)
     }
     private func refresh() { Task { await model.reload() } }
-    private func loadCategories() async {
-        let type = model.query.type
-        let locale = model.query.locale
-        do {
-            let values = try await ProviderListingService().categories(
-                type: type,
-                locale: locale
-            )
-            guard !Task.isCancelled, type == model.query.type,
-                locale == model.query.locale
-            else { return }
-            categories = values
-            catalogError = nil
-        } catch {
-            guard !Task.isCancelled else { return }
-            catalogError = error.localizedDescription
-        }
-    }
+
 }
 
 private struct ProviderListingRowView: View {

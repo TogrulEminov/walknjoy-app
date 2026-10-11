@@ -169,11 +169,9 @@ extension ForgotPasswordView {
             spacing: 10
         ) {
 
-            InputFieldRepresentable(
+            AppTextField(
                 text: $email,
-                placeholder: String(
-                    localized: "input.email"
-                ),
+                placeholder: "input.email",
                 icon: "envelope",
                 keyboardType: .emailAddress,
                 textContentType: .emailAddress,

@@ -99,7 +99,7 @@ struct SecurityView: View {
     @ViewBuilder private var fields: some View {
         switch model.step {
         case .currentPassword:
-            PasswordFieldRepresentable(text: $model.currentPassword, placeHolder: String(localized: "security.current"))
+            AppPasswordField(text: $model.currentPassword, placeholder: String(localized: "security.current"))
                 .frame(height: 56)
                 .fieldValidation(model.form[.currentPassword])
         case .code:
@@ -110,10 +110,10 @@ struct SecurityView: View {
                 .frame(height: 56)
                 .fieldValidation(model.form[.code])
         case .newPassword:
-            PasswordFieldRepresentable(text: $model.newPassword, placeHolder: String(localized: "security.new"))
+            AppPasswordField(text: $model.newPassword, placeholder: String(localized: "security.new"))
                 .frame(height: 56)
                 .fieldValidation(model.form[.password])
-            PasswordFieldRepresentable(text: $model.confirmation, placeHolder: String(localized: "security.confirm"))
+            AppPasswordField(text: $model.confirmation, placeholder: String(localized: "security.confirm"))
                 .frame(height: 56)
                 .fieldValidation(model.form[.confirmation])
             PasswordRequirementsView(password: model.newPassword)

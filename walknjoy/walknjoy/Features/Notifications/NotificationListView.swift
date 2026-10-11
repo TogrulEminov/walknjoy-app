@@ -4,10 +4,6 @@ struct NotificationListView: View {
     @Environment(NotificationViewModel.self) private var model
     @State private var selected: AppNotification?
 
-    private var visibleNotifications: [AppNotification] {
-        model.notifications.filter { !model.unreadOnly || $0.isRead }
-    }
-
     var body: some View {
         List {
             Section {
@@ -37,7 +33,7 @@ struct NotificationListView: View {
             }
             if model.isLoading && model.notifications.isEmpty {
                 ProgressView().frame(maxWidth: .infinity)
-            } else if visibleNotifications.isEmpty {
+            } else if model.visibleNotifications.isEmpty {
                 ContentUnavailableView(
                     "notifications.empty",
                     systemImage: "bell",
@@ -45,7 +41,7 @@ struct NotificationListView: View {
                 )
                 .listRowBackground(Color.clear)
             }
-            ForEach(visibleNotifications) { notification in
+            ForEach(model.visibleNotifications) { notification in
                 Button {
                     Task {
                         if await model.markRead(notification) {
@@ -140,12 +136,11 @@ private struct NotificationContentView: View {
 private struct NotificationListingDestination: View {
     let slug: String
     @Environment(\.locale) private var locale
-    @State private var listing: Listing?
-    @State private var error: String?
+    @State private var model = NotificationListingViewModel()
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                if let listing {
+                if let listing = model.listing {
                     Text(listing.title ?? String(localized: "listing.untitled"))
                         .font(.title2.bold())
                     if let description = listing.description {
@@ -158,9 +153,9 @@ private struct NotificationListingDestination: View {
                     if let details = listing.details {
                         ListingDetailsSummary(details: details)
                     }
-                } else if let error {
+                } else if let error = model.error {
                     Text(error).foregroundStyle(Color.errorC)
-                    Button("common.retry") { Task { await load() } }
+                    Button("common.retry") { Task { await model.load(slug: slug, locale: locale.language.languageCode?.identifier ?? "az") } }
                 } else {
                     ProgressView()
                 }
@@ -168,19 +163,9 @@ private struct NotificationListingDestination: View {
         }
         .background(Color.appBg)
         .navigationTitle("listing.title")
-        .task { await load() }
+        .task { await model.load(slug: slug, locale: locale.language.languageCode?.identifier ?? "az") }
     }
-    private func load() async {
-        do {
-            listing = try await ListingServices().getListing(
-                slug: slug,
-                locale: locale.language.languageCode?.identifier ?? "az"
-            )
-            error = nil
-        } catch {
-            self.error = String(localized: "notifications.destinationError")
-        }
-    }
+
 }
 
 extension AppNotification {

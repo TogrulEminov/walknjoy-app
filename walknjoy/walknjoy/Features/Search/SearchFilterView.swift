@@ -2,9 +2,7 @@ import SwiftUI
 
 struct SearchFilterView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var draft: ListingSearchCriteria
-    @State private var minPrice: String
-    @State private var maxPrice: String
+    @State private var model: SearchFilterViewModel
     let categories: [CategoryModel]
     let amenities: [AmenityModel]
     let onApply: (ListingSearchCriteria) -> Void
@@ -15,32 +13,23 @@ struct SearchFilterView: View {
         amenities: [AmenityModel],
         onApply: @escaping (ListingSearchCriteria) -> Void
     ) {
-        _draft = State(initialValue: criteria)
-        _minPrice = State(
-            initialValue: criteria.minPrice.map {
-                NSDecimalNumber(decimal: $0).stringValue
-            } ?? ""
-        )
-        _maxPrice = State(
-            initialValue: criteria.maxPrice.map {
-                NSDecimalNumber(decimal: $0).stringValue
-            } ?? ""
-        )
+        _model = State(initialValue: SearchFilterViewModel(criteria: criteria))
         self.categories = categories
         self.amenities = amenities
         self.onApply = onApply
     }
 
     var body: some View {
+        @Bindable var model = model
         NavigationStack {
             Form {
                 Section("search.filter.price") {
-                    TextField("search.filter.minPrice", text: $minPrice)
+                    TextField("search.filter.minPrice", text: $model.minPrice)
                         .keyboardType(.decimalPad)
-                    TextField("search.filter.maxPrice", text: $maxPrice)
+                    TextField("search.filter.maxPrice", text: $model.maxPrice)
                         .keyboardType(.decimalPad)
-                    if let validationError {
-                        Text(validationError).foregroundStyle(Color.errorC)
+                    if let key = model.validationErrorKey {
+                        Text(LocalizedStringKey(key)).foregroundStyle(Color.errorC)
                     }
                 }
                 .listRowBackground(Color.surfaceBackground)
@@ -49,68 +38,68 @@ struct SearchFilterView: View {
                     optionLink(
                         "search.filter.rating",
                         options: ratingOptions,
-                        selection: $draft.minRating
+                        selection: $model.draft.minRating
                     )
                     optionLink(
                         "search.filter.category",
                         options: categoryOptions,
-                        selection: $draft.categoryId
+                        selection: $model.draft.categoryId
                     )
                     optionLink(
                         "search.sort",
                         options: sortOptions,
-                        selection: $draft.sort
+                        selection: $model.draft.sort
                     )
                 }
                 .listRowBackground(Color.surfaceBackground)
 
-                if draft.type == .stay {
+                if model.draft.type == .stay {
                     Section("listing.type.stay") {
                         optionLink(
                             "search.filter.propertyType",
                             options: propertyTypeOptions,
-                            selection: $draft.propertyType
+                            selection: $model.draft.propertyType
                         )
                         FilterDateRange(
-                            start: $draft.checkIn,
-                            end: $draft.checkOut
+                            start: $model.draft.checkIn,
+                            end: $model.draft.checkOut
                         )
-                        Stepper(value: $draft.adults, in: 1...99) {
+                        Stepper(value: $model.draft.adults, in: 1...99) {
                             Text(
                                 String(
                                     format: String(
                                         localized: "home.search.adultsFormat"
                                     ),
-                                    draft.adults
+                                    model.draft.adults
                                 )
                             )
                         }
-                        Stepper(value: $draft.children, in: 0...99) {
+                        Stepper(value: $model.draft.children, in: 0...99) {
                             Text(
                                 String(
                                     format: String(
                                         localized: "home.search.childrenFormat"
                                     ),
-                                    draft.children
+                                    model.draft.children
                                 )
                             )
                         }
                     }
                     .listRowBackground(Color.surfaceBackground)
-                } else if draft.type != nil {
+                } else if model.draft.type != nil {
                     Section("search.filter.schedule") {
                         FilterDateRange(
-                            start: $draft.dateFrom,
-                            end: $draft.dateTo
+                            start: $model.draft.dateFrom,
+                            end: $model.draft.dateTo
                         )
-                        Stepper(value: $draft.participants, in: 1...99) {
+                        Stepper(value: $model.draft.participants, in: 1...99) {
                             Text(
                                 String(
                                     format: String(
                                         localized:
                                             "home.search.participantsFormat"
                                     ),
-                                    draft.participants
+                                    model.draft.participants
                                 )
                             )
                         }
@@ -143,12 +132,12 @@ struct SearchFilterView: View {
                     Button("common.cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("common.apply") { apply() }
-                        .disabled(validationError != nil)
+                    Button("common.apply") { onApply(model.criteriaForSubmission()); dismiss() }
+                        .disabled(model.validationErrorKey != nil)
                 }
             }
             .safeAreaInset(edge: .bottom) {
-                Button("common.reset", role: .destructive) { reset() }
+                Button("common.reset", role: .destructive) { model.reset() }
                     .frame(maxWidth: .infinity, minHeight: 44)
                     .padding(.horizontal, 20)
                     .padding(.vertical, 8)
@@ -205,44 +194,11 @@ struct SearchFilterView: View {
 
     // MARK: - Logic
 
-    private var validationError: LocalizedStringKey? {
-        if let min = Decimal(string: minPrice),
-            let max = Decimal(string: maxPrice), min > max
-        {
-            return "search.validation.price"
-        }
-        if let start = draft.checkIn, let end = draft.checkOut, start >= end {
-            return "search.validation.stayDates"
-        }
-        if let start = draft.dateFrom, let end = draft.dateTo, start >= end {
-            return "search.validation.dates"
-        }
-        return nil
-    }
-
-    private func apply() {
-        draft.minPrice = Decimal(string: minPrice)
-        draft.maxPrice = Decimal(string: maxPrice)
-        draft.page = 1
-        onApply(draft)
-        dismiss()
-    }
-
-    private func reset() {
-        draft.resetFilters()
-        minPrice = ""
-        maxPrice = ""
-    }
-
     private func amenityBinding(_ id: String) -> Binding<Bool> {
         Binding(
-            get: { draft.amenityIds.contains(id) },
+            get: { model.draft.amenityIds.contains(id) },
             set: { selected in
-                if selected {
-                    draft.amenityIds.insert(id)
-                } else {
-                    draft.amenityIds.remove(id)
-                }
+                model.setAmenity(id, selected: selected)
             }
         )
     }
