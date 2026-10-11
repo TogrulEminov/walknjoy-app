@@ -17,16 +17,6 @@
         }
       }
     },
-    "%@: %lld" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@: %2$lld"
-          }
-        }
-      }
-    },
     "%lld" : {
       "localizations" : {
         "az" : {
@@ -2159,6 +2149,7 @@
       }
     },
     "listing.detail.viewMyBookings" : {
+      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {
@@ -3431,6 +3422,7 @@
       }
     },
     "notifications.unreadCountFormat" : {
+      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {

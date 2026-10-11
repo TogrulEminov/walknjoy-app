@@ -118,14 +118,13 @@ enum ListingDetailFormatting {
             )
             .trimmingCharacters(in: CharacterSet(charactersIn: " .-_"))
             .lowercased()
-        return switch normalized {
-        case "villa": String(localized: "listing.detail.property.villa")
-        case "apartment": String(localized: "listing.detail.property.apartment")
-        case "house": String(localized: "listing.detail.property.house")
-        case "hotel": String(localized: "listing.detail.property.hotel")
-        case "cabin": String(localized: "listing.detail.property.cabin")
-        default: value
+        if let propertyType = PropertyType(rawValue: normalized) {
+            return propertyType.title
         }
+        if normalized == "cabin" {
+            return String(localized: "listing.detail.property.cabin")
+        }
+        return value
     }
 
     static func difficulty(_ value: String) -> String {

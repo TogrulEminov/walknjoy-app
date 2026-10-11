@@ -378,7 +378,7 @@ struct ListingDetailsSummary: View {
         switch details {
         case .stay(let value):
             Text(
-                String(format: String(localized: "listing.stay.summaryFormat"), value.propertyType, value.maxGuests)
+                String(format: String(localized: "listing.stay.summaryFormat"), ListingDetailFormatting.property(value.propertyType), value.maxGuests)
             )
             if let nights = value.minimumNights {
                 Text(String(format: String(localized: "listing.nights.minimumFormat"), nights))
