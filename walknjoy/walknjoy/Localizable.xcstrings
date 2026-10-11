@@ -2148,17 +2148,6 @@
         }
       }
     },
-    "listing.detail.viewMyBookings" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sifarişlərimə bax"
-          }
-        }
-      }
-    },
     "listing.details.duration" : {
       "localizations" : {
         "az" : {
