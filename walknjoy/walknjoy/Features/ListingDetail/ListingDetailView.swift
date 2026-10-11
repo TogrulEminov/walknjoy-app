@@ -11,6 +11,7 @@ struct ListingDetailView: View {
     @State private var createdBookingID: String?
     @State private var pendingBookingID: String?
     @State private var favoriteError: String?
+    @State private var showConversation = false
 
     private var listing: Listing? { previewListing ?? model.listing }
     private let rating: Rating?
@@ -114,25 +115,26 @@ struct ListingDetailView: View {
             if listing != nil {
                 ToolbarItem(placement: .topBarLeading) {
                     Button { dismiss() } label: {
-                        Image(systemName: "chevron.left")
-                            .font(.system(size: 18, weight: .semibold))
-                            .foregroundStyle(.white)
-                            .frame(width: 44, height: 44)
-                            .background(.black.opacity(0.4), in: Circle())
+                        ListingHeaderActionLabel(symbol: "chevron.left")
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(Text("common.back"))
                 }
+                .sharedBackgroundVisibility(.hidden)
             }
             if appState.canUseFavorites {
                 ToolbarItem(placement: .topBarTrailing) {
                     favoriteButton
                 }
+                .sharedBackgroundVisibility(.hidden)
             }
         }
         .toolbarBackground(.hidden, for: .navigationBar)
         .task(id: appState.reviews.revision) { await load() }
         .onChange(of: appState.language) { _, _ in dismiss() }
+        .navigationDestination(isPresented: $showConversation) {
+            ConversationStartView(context: .listing(listingID))
+        }
         .sheet(item: $bookingModel, onDismiss: {
             createdBookingID = pendingBookingID
             pendingBookingID = nil
@@ -162,23 +164,15 @@ struct ListingDetailView: View {
 
     private var favoriteButton: some View {
         Button(action: toggleFavorite) {
-            Group {
-                if isUpdatingFavorite {
-                    ProgressView()
-                } else {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
-                        .font(.system(size: 17, weight: .semibold))
-                        .foregroundStyle(
-                            isFavorite ? Color.red : Color.white
-                        )
-                        .contentTransition(.symbolEffect(.replace))
-                }
-            }
-            .frame(width: 44, height: 44)
-            .background(.black.opacity(0.4), in: Circle())
+            ListingHeaderActionLabel(
+                symbol: isFavorite ? "heart.fill" : "heart",
+                tint: isFavorite ? Color.errorC : Color.titleText,
+                isLoading: isUpdatingFavorite
+            )
         }
         .buttonStyle(.plain)
         .disabled(isUpdatingFavorite)
+        .accessibilityLabel(isFavorite ? "favorites.remove" : "favorites.add")
         .animation(.spring(duration: 0.25), value: isFavorite)
     }
 
@@ -265,6 +259,13 @@ struct ListingDetailView: View {
                         detailPanel { locationSection(location) }
                     }
 
+                    if appState.currentUserRole == .customer {
+                        Button { showConversation = true } label: {
+                            Label("messages.contactProvider", systemImage: "bubble.left.and.bubble.right")
+                                .font(.headline).frame(maxWidth: .infinity, minHeight: 48)
+                                .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 14))
+                        }.buttonStyle(.plain)
+                    }
                     detailPanel { reviewsSection }
                 }
                 .padding(.horizontal, 16)

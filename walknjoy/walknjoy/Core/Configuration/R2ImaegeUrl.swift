@@ -15,7 +15,7 @@ enum ImageURL {
         }
 
         if let url = URL(string: path),
-           url.scheme != nil
+            url.scheme != nil
         {
             return url
         }

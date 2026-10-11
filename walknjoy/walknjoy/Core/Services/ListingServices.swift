@@ -15,19 +15,13 @@ protocol ListingServicesProtocol {
         async throws -> Listing
 }
 
-/// Narrow interface for features that only open a listing by its server ID.
-@MainActor
-protocol ListingLookupServiceProtocol {
-    func getListing(id: String, locale: String) async throws -> Listing
-}
-
 struct ListingsPage {
     let listings: [PublicListing]
     let meta: PaginationMeta
 }
 
 @MainActor
-final class ListingServices: ListingServicesProtocol, ListingLookupServiceProtocol {
+final class ListingServices: ListingServicesProtocol {
     private let networkServices: NetworkingService
 
     init(
@@ -56,8 +50,13 @@ final class ListingServices: ListingServicesProtocol, ListingLookupServiceProtoc
     }
 
     func getListing(id: String, locale: String) async throws -> Listing {
-        let response = try await networkServices.request(enpoint: ListingEndpoint.getListingByID(id: id, locale: locale), responseType: ApiResponse<Listing>.self)
-        guard response.success, let data = response.data else { throw NetworkError.invalidResponse }
+        let response = try await networkServices.request(
+            enpoint: ListingEndpoint.getListingByID(id: id, locale: locale),
+            responseType: ApiResponse<Listing>.self
+        )
+        guard response.success, let data = response.data else {
+            throw NetworkError.invalidResponse
+        }
         return data
     }
 

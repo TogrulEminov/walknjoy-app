@@ -9,9 +9,7 @@ struct ListingSearchCriteria: Hashable {
     var destinationName: String?
     var city: String?
     var countryCode: String?
-    /// Inclusive lower price bound (`basePrice >= minPrice`).
-    var minPrice: Decimal?
-    /// Inclusive upper price bound (`basePrice <= maxPrice`).
+    var minPrice: Decimal? 
     var maxPrice: Decimal?
     var minRating: Int?
     var propertyType: String?

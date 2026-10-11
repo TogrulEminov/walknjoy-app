@@ -165,14 +165,6 @@ extension HomeView {
                         )
                     }
 
-                    if appState.hasLoadedCurrentUserRole,
-                        appState.currentUserRole == .customer
-                    {
-                        TravelPlannerBannerView {
-                            handleTravelPlannerTap()
-                        }
-                    }
-
                     listingSection(
                         title: "home.stays.title",
                         type: .stay,
@@ -308,10 +300,6 @@ extension HomeView {
         criteria.page = 1
         searchCriteria = criteria
         selectedTab = .search
-    }
-
-    private func handleTravelPlannerTap() {
-        selectedTab = .ai
     }
 
     private func handleSeeAll(_ type: ListingType) {

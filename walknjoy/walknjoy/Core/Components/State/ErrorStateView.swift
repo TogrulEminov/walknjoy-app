@@ -10,7 +10,8 @@ struct ErrorStateView: View {
         VStack(spacing: 24) {
             StateIconView(
                 icon: "exclamationmark.triangle",
-                tint: .errorColor, background: .errorColor
+                tint: .errorColor,
+                background: .errorColor
             )
 
             VStack(spacing: 10) {

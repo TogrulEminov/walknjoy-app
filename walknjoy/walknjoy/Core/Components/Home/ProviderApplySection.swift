@@ -36,9 +36,9 @@ struct ProviderApplySection: View {
             NavigationStack {
                 ProviderApplicationView()
             }
-                .presentationDetents([.large])
-                .presentationDragIndicator(.visible)
-                .presentationBackground(Color.appBackground)
+            .presentationDetents([.large])
+            .presentationDragIndicator(.visible)
+            .presentationBackground(Color.appBackground)
         }
     }
 }
@@ -75,8 +75,8 @@ extension ProviderApplySection {
 
             applyButton
         }
-        .padding(.vertical,10)
-        .padding(.horizontal,15)
+        .padding(.vertical, 10)
+        .padding(.horizontal, 15)
         .frame(
             maxWidth: 245,
             alignment: .leading

@@ -20,7 +20,8 @@ struct AppTextField: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: icon).foregroundStyle(Color.iconColor).accessibilityHidden(true)
+            Image(systemName: icon).foregroundStyle(Color.iconColor)
+                .accessibilityHidden(true)
             TextField(LocalizedStringKey(placeholder), text: $text)
                 .keyboardType(keyboardType)
                 .textContentType(textContentType)
@@ -31,7 +32,14 @@ struct AppTextField: View {
         .foregroundStyle(Color.titleText)
         .padding(.horizontal, 16)
         .frame(minHeight: 56)
-        .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 14))
-        .overlay { RoundedRectangle(cornerRadius: 14).stroke(hasValidationError ? Color.errorColor : Color.borderColor) }
+        .background(
+            Color.surfaceBackground,
+            in: RoundedRectangle(cornerRadius: 14)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 14).stroke(
+                hasValidationError ? Color.errorColor : Color.borderColor
+            )
+        }
     }
 }

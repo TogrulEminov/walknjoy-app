@@ -6,6 +6,7 @@ struct BookingDetailView: View {
     let role: RoleEnum
     @State private var model: BookingDetailViewModel
     @State private var showTicket = false
+    @State private var showConversation = false
     @State private var confirmCancel = false
     @State private var confirmDelete = false
     @State private var editor: ReviewEditorContext?
@@ -119,10 +120,13 @@ struct BookingDetailView: View {
                         if let note = ReviewValidation.text(booking.customerNote) {
                             BookingDetailSection(title: "listing.detail.note") { Text(note) }.padding(.horizontal)
                         }
-                        ForEach(Array([( "booking.confirmedAt", booking.confirmedAt), ("booking.cancelledAt", booking.cancelledAt), ("booking.completedAt", booking.completedAt)].enumerated()), id: \.offset) { _, entry in
-                            if let date = entry.1 {
-                                BookingDetailRow(title: LocalizedStringKey(entry.0), value: BookingsModel.timestamp(date)).padding(.horizontal)
-                            }
+                        bookingDateRows(booking)
+                        if role == .customer || role == .provider {
+                            Button { showConversation = true } label: {
+                                Label("messages.write", systemImage: "bubble.left.and.bubble.right")
+                                    .font(.headline).frame(maxWidth: .infinity, minHeight: 48)
+                                    .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 14))
+                            }.padding(.horizontal)
                         }
                         if role == .customer, booking.canCancel {
                             Button("booking.cancel", role: .destructive) { confirmCancel = true }
@@ -182,6 +186,9 @@ struct BookingDetailView: View {
                 }
             }
         }
+        .navigationDestination(isPresented: $showConversation) {
+            ConversationStartView(context: role == .provider ? .providerBooking(bookingID) : .booking(bookingID))
+        }
         .sheet(isPresented: $showTicket) {
             if let pdfData = model.ticketData {
                 NavigationStack { BookingTicketView(pdfData: pdfData) }
@@ -207,6 +214,24 @@ struct BookingDetailView: View {
         .alert("error.title", isPresented: Binding(get: { model.error != nil }, set: { if !$0 { model.error = nil } })) {
             Button("common.ok", role: .cancel) {}
         } message: { Text(model.error ?? "") }
+    }
+
+    @ViewBuilder
+    private func bookingDateRows(_ booking: BookingsModel) -> some View {
+        let bookingDates: [(title: LocalizedStringKey, date: String?)] = [
+            ("booking.confirmedAt", booking.confirmedAt),
+            ("booking.cancelledAt", booking.cancelledAt),
+            ("booking.completedAt", booking.completedAt),
+        ]
+        ForEach(Array(bookingDates.enumerated()), id: \.offset) { _, entry in
+            if let date = entry.date {
+                BookingDetailRow(
+                    title: entry.title,
+                    value: BookingsModel.timestamp(date)
+                )
+                .padding(.horizontal)
+            }
+        }
     }
 
     @ViewBuilder private func ownReviewSection(_ booking: BookingsModel) -> some View {

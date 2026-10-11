@@ -62,11 +62,14 @@ extension BookingEndpoint: Endpoint {
 
     var method: HttpMethod {
         switch self {
-        case .listingAvailability, .checkAvailability, .getBooking, .getBookingTicket,
-            .customerListBookings, .customerPage, .providerListBookings, .providerGetBooking,
+        case .listingAvailability, .checkAvailability, .getBooking,
+            .getBookingTicket,
+            .customerListBookings, .customerPage, .providerListBookings,
+            .providerGetBooking,
             .adminListBookings, .adminGetBooking:
             .get
-        case .createBooking, .customerCancel, .providerConfirmBooking, .providerCancelBooking,
+        case .createBooking, .customerCancel, .providerConfirmBooking,
+            .providerCancelBooking,
             .providerCompleteBooking:
             .post
         }
@@ -86,12 +89,20 @@ extension BookingEndpoint: Endpoint {
                 URLQueryItem(name: "checkIn", value: request.checkIn),
                 URLQueryItem(name: "checkOut", value: request.checkOut),
                 URLQueryItem(name: "sessionId", value: request.sessionId),
-                URLQueryItem(name: "participants", value: request.participants.map(String.init)),
+                URLQueryItem(
+                    name: "participants",
+                    value: request.participants.map(String.init)
+                ),
             ].filter { $0.value != nil }
         case .customerPage(let page, let limit, let status):
-            return [URLQueryItem(name: "page", value: String(page)), URLQueryItem(name: "limit", value: String(min(100, max(1, limit)))), URLQueryItem(name: "status", value: status)].filter { $0.value != nil }
-        case .adminListBookings:
-            // Admin list might take filters, but since we don't have a request object yet, we leave it empty or handle it via a different case.
+            return [
+                URLQueryItem(name: "page", value: String(page)),
+                URLQueryItem(
+                    name: "limit",
+                    value: String(min(100, max(1, limit)))
+                ), URLQueryItem(name: "status", value: status),
+            ].filter { $0.value != nil }
+        case .adminListBookings: 
             return nil
         default:
             return nil

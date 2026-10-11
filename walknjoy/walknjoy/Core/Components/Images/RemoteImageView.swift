@@ -15,7 +15,7 @@ struct RemoteImageView<Placeholder: View>: View {
         self.url = url
         self.contentMode = contentMode
         self.placeholder = placeholder()
-         
+
     }
 
     init(

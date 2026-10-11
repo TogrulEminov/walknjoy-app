@@ -39,7 +39,10 @@ jobs:
 
       - name: Prepare non-secret build configuration
         run: |
-          sh scripts/prepare-config.sh
+          mkdir -p walknjoy/walknjoy/Core/Config
+          if [ ! -f walknjoy/walknjoy/Core/Config/APIConfig.swift ]; then
+            cp config/APIConfig.swift.example walknjoy/walknjoy/Core/Config/APIConfig.swift
+          fi
           xcodebuild -version
 
       - name: Resolve locked Swift packages

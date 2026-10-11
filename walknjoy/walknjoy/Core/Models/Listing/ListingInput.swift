@@ -3,7 +3,7 @@ import Foundation
 enum ListingLocale: String, Codable, CaseIterable, Identifiable {
     case az, en, ru
     var id: String { rawValue }
- 
+
     static var available: [ListingLocale] {
         AppLanguage.allCases.compactMap { ListingLocale(rawValue: $0.rawValue) }
     }
@@ -28,7 +28,9 @@ struct ListingLocationInput: Encodable {
     var district: String?
     var addressLine: String?
 
-    private enum CodingKeys: String, CodingKey { case cityId, latitude, longitude, locale, district, addressLine }
+    private enum CodingKeys: String, CodingKey {
+        case cityId, latitude, longitude, locale, district, addressLine
+    }
     func encode(to encoder: Encoder) throws {
         var c = encoder.container(keyedBy: CodingKeys.self)
         try c.encode(cityId, forKey: .cityId)
@@ -36,7 +38,10 @@ struct ListingLocationInput: Encodable {
         try c.encode(longitude, forKey: .longitude)
         try c.encode(locale, forKey: .locale)
         try c.encodeIfPresent(district?.listingNonBlank, forKey: .district)
-        try c.encodeIfPresent(addressLine?.listingNonBlank, forKey: .addressLine)
+        try c.encodeIfPresent(
+            addressLine?.listingNonBlank,
+            forKey: .addressLine
+        )
     }
 }
 
@@ -53,13 +58,18 @@ struct CreateListingInput: Encodable {
     var location: ListingLocationInput
 
     private enum CodingKeys: String, CodingKey {
-        case type, categoryId, basePrice, currency, locale, title, description, slug, shortDescription, location
+        case type, categoryId, basePrice, currency, locale, title, description,
+            slug, shortDescription, location
     }
     func encode(to encoder: Encoder) throws {
         guard title.listingNonBlank != nil, description.listingNonBlank != nil,
-              categoryId.listingNonBlank != nil, location.cityId.listingNonBlank != nil,
-              basePrice >= 0, currency.listingNonBlank != nil, location.locale == locale,
-              (-90...90).contains(location.latitude), (-180...180).contains(location.longitude) else {
+            categoryId.listingNonBlank != nil,
+            location.cityId.listingNonBlank != nil,
+            basePrice >= 0, currency.listingNonBlank != nil,
+            location.locale == locale,
+            (-90...90).contains(location.latitude),
+            (-180...180).contains(location.longitude)
+        else {
             throw ListingInputError.invalidRequiredFields
         }
         var c = encoder.container(keyedBy: CodingKeys.self)
@@ -71,36 +81,11 @@ struct CreateListingInput: Encodable {
         try c.encode(title, forKey: .title)
         try c.encode(description, forKey: .description)
         try c.encodeIfPresent(slug?.listingNonBlank, forKey: .slug)
-        try c.encodeIfPresent(shortDescription?.listingNonBlank, forKey: .shortDescription)
+        try c.encodeIfPresent(
+            shortDescription?.listingNonBlank,
+            forKey: .shortDescription
+        )
         try c.encode(location, forKey: .location)
-    }
-}
-
-struct UpdateListingInput: Encodable {
-    var locale: ListingLocale
-    var title: String? = nil
-    var description: String? = nil
-    var slug: String? = nil
-    var shortDescription: String? = nil
-    var categoryId: String? = nil
-    var basePrice: Decimal? = nil
-    var currency: String? = nil
-    var location: ListingLocationInput? = nil
-
-    private enum CodingKeys: String, CodingKey {
-        case locale, title, description, slug, shortDescription, categoryId, basePrice, currency, location
-    }
-    func encode(to encoder: Encoder) throws {
-        var c = encoder.container(keyedBy: CodingKeys.self)
-        try c.encode(locale, forKey: .locale)
-        try c.encodeIfPresent(title?.listingNonBlank, forKey: .title)
-        try c.encodeIfPresent(description?.listingNonBlank, forKey: .description)
-        try c.encodeIfPresent(slug?.listingNonBlank, forKey: .slug)
-        try c.encodeIfPresent(shortDescription?.listingNonBlank, forKey: .shortDescription)
-        try c.encodeIfPresent(categoryId?.listingNonBlank, forKey: .categoryId)
-        try c.encodeIfPresent(basePrice, forKey: .basePrice)
-        try c.encodeIfPresent(currency?.listingNonBlank, forKey: .currency)
-        try c.encodeIfPresent(location, forKey: .location)
     }
 }
 
@@ -132,5 +117,7 @@ struct ListingDetailsInput: Encodable {
 
 enum ListingInputError: LocalizedError {
     case invalidRequiredFields
-    var errorDescription: String? { String(localized: "listing.validation.required") }
+    var errorDescription: String? {
+        String(localized: "listing.validation.required")
+    }
 }

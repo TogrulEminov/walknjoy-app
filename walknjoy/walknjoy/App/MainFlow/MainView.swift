@@ -10,7 +10,7 @@ import SwiftUI
 enum MainTab: Hashable {
     case home
     case search
-    case ai
+    case messages
     case profile
 }
 
@@ -24,28 +24,22 @@ struct MainView: View {
                 .tag(MainTab.home)
             searchView
                 .tag(MainTab.search)
-            if appState.hasLoadedCurrentUserRole,
-                appState.currentUserRole == .customer
-            {
-                aiView
-                    .tag(MainTab.ai)
+            if appState.currentUserRole == .customer || appState.currentUserRole == .provider {
+                NavigationStack { ConversationListView() }
+                    .tabItem { Label("messages.title", systemImage: "bubble.left.and.bubble.right") }
+                    .tag(MainTab.messages)
             }
             profileView
                 .tag(MainTab.profile)
         }
         .task { await appState.loadFavoriteAccess() }
+        .onChange(of: appState.currentUserRole) { _, role in
+            if selectedTab == .messages && role != .customer && role != .provider { selectedTab = .home }
+        }
+
     }
 }
 extension MainView {
-    private var aiView: some View {
-        NavigationStack {
-            TravelPlannerView()
-        }
-        .tabItem {
-            Label("ai.assistant.title", systemImage: "ellipsis.bubble")
-        }
-    }
-
     private var searchView: some View {
         NavigationStack {
             SearchResultsView(criteria: searchCriteria)
@@ -83,8 +77,8 @@ extension MainView {
             selectedTab: $selectedTab,
             searchCriteria: $searchCriteria
         )
-            .tabItem {
-                Label("home.main", systemImage: "house")
-            }
+        .tabItem {
+            Label("home.main", systemImage: "house")
+        }
     }
 }

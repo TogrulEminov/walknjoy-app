@@ -61,7 +61,10 @@ final class ReviewService: ReviewServiceProtocol {
     func create(bookingID: String, request: CreateReviewRequest) async throws
         -> CreatedReview
     {
-        try await value(ReviewEndpoint.create(bookingID: bookingID, request: request), as: CreatedReview.self)
+        try await value(
+            ReviewEndpoint.create(bookingID: bookingID, request: request),
+            as: CreatedReview.self
+        )
     }
     func update(id: String, request: UpdateReviewRequest) async throws
         -> MyReview
@@ -117,8 +120,12 @@ enum ReviewErrorMessage {
         return false
     }
     static func text(_ error: Error) -> String {
-        if isDuplicate(error) { return String(localized: "reviews.bookingAlreadyReviewed") }
-        if let failure = error as? APIRequestFailure, failure.error.code == "REVIEW_BOOKING_NOT_COMPLETED" {
+        if isDuplicate(error) {
+            return String(localized: "reviews.bookingAlreadyReviewed")
+        }
+        if let failure = error as? APIRequestFailure,
+            failure.error.code == "REVIEW_BOOKING_NOT_COMPLETED"
+        {
             return String(localized: "reviews.bookingNotCompleted")
         }
         return error.localizedDescription

@@ -29,7 +29,6 @@ struct SubmitButton: View {
         self.action = action
     }
 
-    /// Form validity and loading are supplied by the shared form state.
     init<Field: Hashable>(
         title: LocalizedStringKey,
         icon: String? = "arrow.right",
@@ -53,7 +52,10 @@ struct SubmitButton: View {
                 HStack(spacing: 12) {
                     if isLoading {
                         ProgressView()
-                            .tint(isDisabled ? Color.descriptionText : Color.buttonText)
+                            .tint(
+                                isDisabled
+                                    ? Color.descriptionText : Color.buttonText
+                            )
                     } else {
                         Text(title)
 
@@ -63,11 +65,14 @@ struct SubmitButton: View {
                     }
                 }
                 .font(.system(size: 16, weight: .semibold))
-                .foregroundStyle(isDisabled ? Color.descriptionText : Color.buttonText)
+                .foregroundStyle(
+                    isDisabled ? Color.descriptionText : Color.buttonText
+                )
                 .frame(maxWidth: .infinity)
                 .frame(height: 56)
                 .background(
-                    isDisabled ? Color.disabledBackground : Color.buttonBackground
+                    isDisabled
+                        ? Color.disabledBackground : Color.buttonBackground
                 )
                 .clipShape(
                     RoundedRectangle(cornerRadius: 16)

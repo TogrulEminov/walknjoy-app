@@ -15,6 +15,8 @@ final class AppState {
             }
         }
     }
+    let realtime: RealtimeClient
+    let conversations: ConversationService
     let notifications: NotificationViewModel
     let reviews = ReviewStore()
     private var isAppActive = true
@@ -88,10 +90,13 @@ final class AppState {
     ) {
         self.preferences = preferences
         self.authService = authService ?? AuthService()
-        self.notifications = NotificationViewModel(auth: self.authService)
+        self.realtime = RealtimeClient()
+        self.conversations = ConversationService(auth: self.authService)
+        self.notifications = NotificationViewModel(socket: self.realtime, auth: self.authService)
 
         self.mode = preferences.selectedMode
         self.language = preferences.selectedLanguage
+        self.conversations.onSessionExpired = { [weak self] in self?.finishLogout() }
         self.notifications.onSessionExpired = { [weak self] in
             self?.finishLogout()
         }
@@ -114,6 +119,7 @@ final class AppState {
         preferences.selectedLanguage = language
     }
     func finishLogout() {
+        realtime.clearChatSubscriptions()
         favoriteSession = UUID()
         canUseFavorites = false
         currentUserRole = nil

@@ -125,14 +125,16 @@ final class DefaultNetworkService: NetworkingService {
                 throw NetworkError.listingNotFound
             }
 
-            if enpoint is TravelPlannerEndpoint, httpResponse.statusCode == 401 { throw NetworkError.unauthorized }
+            if enpoint is ConversationEndpoint, httpResponse.statusCode == 401 {
+                throw NetworkError.unauthorized
+            }
             if let apiError = try? decoder.decode(
                 ApiErrorResponse.self,
                 from: data
             ) {
                 if enpoint.path.hasPrefix("/provider/listings")
+                    || enpoint is ConversationEndpoint
                     || enpoint is ReviewEndpoint
-                    || enpoint is TravelPlannerEndpoint
                 {
                     throw APIRequestFailure(error: apiError.error)
                 }

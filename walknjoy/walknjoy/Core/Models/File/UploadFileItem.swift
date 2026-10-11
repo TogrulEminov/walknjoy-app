@@ -6,7 +6,6 @@
 //
 
 import Foundation
- 
 
 struct UploadFileItem: Identifiable, Equatable {
 

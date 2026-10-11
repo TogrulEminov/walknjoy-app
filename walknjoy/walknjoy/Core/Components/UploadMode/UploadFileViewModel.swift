@@ -114,7 +114,7 @@ final class UploadFileViewModel {
     func remove(
         _ item: UploadFileItem,
         files: Binding<[UploadFileItem]>
-    )  async {
+    ) async {
 
         if let uploadedFile = item.uploadedFile {
             do {
@@ -122,8 +122,7 @@ final class UploadFileViewModel {
                     id: uploadedFile.id
                 )
             } catch {
-                
-               
+
                 return
             }
         }

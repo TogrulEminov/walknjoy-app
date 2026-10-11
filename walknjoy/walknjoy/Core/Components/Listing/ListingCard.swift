@@ -2,7 +2,9 @@ import SwiftUI
 
 struct ListingCard: View {
     @Environment(AppState.self) private var appState
-    private var currentRating: Rating? { appState.reviews.rating(for: listing.id, fallback: listing.rating) }
+    private var currentRating: Rating? {
+        appState.reviews.rating(for: listing.id, fallback: listing.rating)
+    }
     let listing: PublicListing
     var isFavorite: Bool
     var isUpdatingFavorite = false
@@ -41,6 +43,10 @@ struct ListingCard: View {
                             }
                         }
 
+                        if currentRating?.average == nil {
+                            Text("listing.card.new").font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                         Text(listing.title)
                             .font(.headline)
                             .lineLimit(2, reservesSpace: true)
@@ -73,8 +79,14 @@ struct ListingCard: View {
                         .foregroundStyle(Color.description)
 
                         HStack(alignment: .firstTextBaseline, spacing: 4) {
-                            Text(formattedPrice).font(.headline)
-                            Text(listing.currency).font(.subheadline)
+                            if listing.hasPrice {
+                                Text(formattedPrice).font(.headline)
+                                Text(listing.currency).font(.subheadline)
+                            } else {
+                                Text("listing.card.priceUnavailable").font(
+                                    .caption
+                                )
+                            }
                             Spacer()
                             if let rating = currentRating, rating.count > 0 {
                                 Text(verbatim: "(\(rating.count))")

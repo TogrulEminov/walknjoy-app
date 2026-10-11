@@ -14,4 +14,3 @@ struct UploadedFile: Decodable, Identifiable, Equatable {
     let mimeType: String
     let sizeBytes: Int
 }
-

@@ -6,14 +6,6 @@ struct ListingMedia: Decodable, Identifiable, Equatable {
     let url: String
     let isCover: Bool
     let order: Int
-
-    init(id: String, type: String, url: String, isCover: Bool, order: Int) {
-        self.id = id
-        self.type = type
-        self.url = url
-        self.isCover = isCover
-        self.order = order
-    }
 }
 
 struct Listing: Decodable, Identifiable, Equatable {
@@ -34,48 +26,14 @@ struct Listing: Decodable, Identifiable, Equatable {
     let rating: Rating?
     let isFavorite: Bool
 
-    init(
-        id: String,
-        type: ListingType,
-        category: CategoryModel?,
-        location: ListingLocation?,
-        basePrice: Decimal,
-        currency: String,
-        status: ListingStatus?,
-        title: String?,
-        slug: String?,
-        shortDescription: String?,
-        description: String?,
-        media: [ListingMedia],
-        amenities: [AmenityModel],
-        details: ListingDetails?,
-        rating: Rating?,
-        isFavorite: Bool = false
-    ) {
-        self.id = id
-        self.type = type
-        self.category = category
-        self.location = location
-        self.basePrice = basePrice
-        self.currency = currency
-        self.status = status
-        self.title = title
-        self.slug = slug
-        self.shortDescription = shortDescription
-        self.description = description
-        self.media = media
-        self.amenities = amenities
-        self.details = details
-        self.rating = rating
-        self.isFavorite = isFavorite
-    }
-
     private enum CodingKeys: String, CodingKey {
         case id, type, category, location, basePrice, currency, status
         case title, slug, shortDescription, description, media, amenities,
             details, rating, isFavorite
     }
+}
 
+extension Listing {
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         id = try c.decode(String.self, forKey: .id)
@@ -117,7 +75,6 @@ struct Listing: Decodable, Identifiable, Equatable {
                 from: c.superDecoder(forKey: .details)
             )
     }
-
 }
 
 extension KeyedDecodingContainer {

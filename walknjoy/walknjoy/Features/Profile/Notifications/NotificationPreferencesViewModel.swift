@@ -4,7 +4,7 @@ import Observation
 @MainActor
 @Observable
 final class NotificationPreferencesViewModel {
-    enum Field { case bookingUpdates, messages, aiUpdates, marketing }
+    enum Field { case bookingUpdates, messages, marketing }
 
     private let service: ProfileServiceProtocol
     private(set) var state: LoadState<Notification> = .idle
@@ -12,7 +12,6 @@ final class NotificationPreferencesViewModel {
 
     var bookingUpdates = false
     var messages = false
-    var aiUpdates = false
     var marketing = false
 
     init(service: ProfileServiceProtocol? = nil) {
@@ -30,10 +29,6 @@ final class NotificationPreferencesViewModel {
                     originalValue: original.bookingUpdates
                 ),
                 .messages: .toggle(messages, originalValue: original.messages),
-                .aiUpdates: .toggle(
-                    aiUpdates,
-                    originalValue: original.aiUpdates
-                ),
                 .marketing: .toggle(
                     marketing,
                     originalValue: original.marketing
@@ -63,7 +58,6 @@ final class NotificationPreferencesViewModel {
         let input = Notification(
             bookingUpdates: bookingUpdates,
             messages: messages,
-            aiUpdates: aiUpdates,
             marketing: marketing
         )
         do {
@@ -77,7 +71,6 @@ final class NotificationPreferencesViewModel {
     private func apply(_ preferences: Notification) {
         bookingUpdates = preferences.bookingUpdates
         messages = preferences.messages
-        aiUpdates = preferences.aiUpdates
         marketing = preferences.marketing
         state = .loaded(preferences)
     }

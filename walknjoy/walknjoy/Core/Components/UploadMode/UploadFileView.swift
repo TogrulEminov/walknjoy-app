@@ -36,7 +36,7 @@ struct UploadFileView<PickerLabel: View>: View {
             if showsPreviews && !files.isEmpty {
                 previews
             }
- 
+
             if mode == .single || files.count < mode.maxCount {
                 PhotosPicker(
                     selection: $selectedItems,

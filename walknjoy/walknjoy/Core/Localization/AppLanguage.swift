@@ -9,8 +9,6 @@ import SwiftUI
 
 enum AppLanguage: String, CaseIterable, Identifiable {
     case az
-//    case en
-//    case ru
 
     var id: String {
         rawValue
@@ -23,9 +21,6 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         case .az:
             return "Azərbaycan dili"
 
-//        case .en: return "English"
-//        case .ru: return "Русский"
-
         }
     }
     var shortTitle: String {
@@ -36,9 +31,6 @@ enum AppLanguage: String, CaseIterable, Identifiable {
         switch self {
         case .az:
             return "🇦🇿"
-
-//        case .en: return "🇬🇧"
-//        case .ru: return "🇷🇺"
 
         }
     }

@@ -3,16 +3,26 @@ import SwiftUI
 struct AppPasswordField: View {
     @Environment(\.fieldHasValidationError) private var hasValidationError
     @Binding var text: String
-    let placeholder: String
+    let placeholder: LocalizedStringKey
     @State private var isVisible = false
     @FocusState private var focusedField: Bool?
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: "lock").foregroundStyle(Color.iconColor).accessibilityHidden(true)
+            Image(systemName: "lock").foregroundStyle(Color.iconColor)
+                .accessibilityHidden(true)
             Group {
-                if isVisible { TextField(LocalizedStringKey(placeholder), text: $text).focused($focusedField, equals: true) }
-                else { SecureField(LocalizedStringKey(placeholder), text: $text).focused($focusedField, equals: false) }
+                if isVisible {
+                    TextField(placeholder, text: $text).focused(
+                        $focusedField,
+                        equals: true
+                    )
+                } else {
+                    SecureField(placeholder, text: $text).focused(
+                        $focusedField,
+                        equals: false
+                    )
+                }
             }
             .textContentType(.password)
             .textInputAutocapitalization(.never)
@@ -27,14 +37,27 @@ struct AppPasswordField: View {
                     .frame(width: 44, height: 44)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(Text(isVisible ? LocalizedStringKey("common.hidePassword") : LocalizedStringKey("common.showPassword")))
+            .accessibilityLabel(
+                Text(
+                    isVisible
+                        ? LocalizedStringKey("common.hidePassword")
+                        : LocalizedStringKey("common.showPassword")
+                )
+            )
         }
         .font(.body)
         .foregroundStyle(Color.titleText)
         .padding(.leading, 16)
         .padding(.trailing, 6)
         .frame(minHeight: 56)
-        .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 14))
-        .overlay { RoundedRectangle(cornerRadius: 14).stroke(hasValidationError ? Color.errorColor : Color.borderColor) }
+        .background(
+            Color.surfaceBackground,
+            in: RoundedRectangle(cornerRadius: 14)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 14).stroke(
+                hasValidationError ? Color.errorColor : Color.borderColor
+            )
+        }
     }
 }

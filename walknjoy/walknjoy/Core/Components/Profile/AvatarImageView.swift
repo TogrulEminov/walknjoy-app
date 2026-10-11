@@ -7,7 +7,9 @@ struct AvatarImageView: View {
     @State private var model = AvatarImageViewModel()
     @State private var retry = 0
 
-    private var identity: String { "\(file?.id ?? "")|\(file?.url ?? "")|\(retry)" }
+    private var identity: String {
+        "\(file?.id ?? "")|\(file?.url ?? "")|\(retry)"
+    }
 
     var body: some View {
         ZStack {

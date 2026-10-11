@@ -15,7 +15,6 @@ final class BookingViewModel: Identifiable {
     var checkIn = Date()
     var checkOut = Calendar.current.date(byAdding: .day, value: 1, to: Date()) ?? Date()
     var selectedSessionId: String?
-    var preferredSessionId: String?
     var adults = 1
     var children = 0
     var customerNote = ""
@@ -103,8 +102,6 @@ final class BookingViewModel: Identifiable {
             availability = result
             sessions = (result.sessions ?? []).sorted { $0.startsAt < $1.startsAt }
             sessionsState = .loaded(())
-            if let preferredSessionId, sessions.contains(where: { $0.id == preferredSessionId && canSelect($0) }) { selectedSessionId = preferredSessionId }
-            preferredSessionId = nil
         } catch is CancellationError {
             if generation == sessionsGeneration { sessionsState = .idle }
         } catch {
@@ -118,7 +115,6 @@ final class BookingViewModel: Identifiable {
         state = .checkingAvailability
         error = nil
         fieldErrors = [:]
-        // Capture one payload for both requests; UI changes cannot alter the booking midflight.
         let request = BookingRequest(
             listingId: listingID,
             checkIn: isStay ? formatDate(checkIn) : nil,

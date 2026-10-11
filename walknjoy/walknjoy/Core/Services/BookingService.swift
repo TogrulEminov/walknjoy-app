@@ -1,10 +1,13 @@
 import Foundation
 
 protocol BookingServiceProtocol {
-    func getListingAvailability(slug: String, locale: String) async throws -> ListingAvailabilityResponse
-    func customerPage(page: Int, limit: Int, status: String?) async throws -> PaginationPage<BookingsModel>
+    func getListingAvailability(slug: String, locale: String) async throws
+        -> ListingAvailabilityResponse
+    func customerPage(page: Int, limit: Int, status: String?) async throws
+        -> PaginationPage<BookingsModel>
     func cancelCustomerBooking(id: String) async throws -> BookingsModel
-    func getSessions(slug: String, locale: String) async throws -> [BookingSession]
+    func getSessions(slug: String, locale: String) async throws
+        -> [BookingSession]
     func checkAvailability(request: AvailabilityRequest) async throws
         -> AvailabilityResponse
     func createBooking(request: BookingRequest, idempotencyKey: String)
@@ -46,8 +49,13 @@ final class BookingService: BookingServiceProtocol {
         return data
     }
 
-    func getSessions(slug: String, locale: String) async throws -> [BookingSession] {
-        try await value(BookingEndpoint.listingAvailability(slug: slug, locale: locale), as: ListingAvailabilityResponse.self).sessions ?? []
+    func getSessions(slug: String, locale: String) async throws
+        -> [BookingSession]
+    {
+        try await value(
+            BookingEndpoint.listingAvailability(slug: slug, locale: locale),
+            as: ListingAvailabilityResponse.self
+        ).sessions ?? []
     }
 
     func checkAvailability(request: AvailabilityRequest) async throws
@@ -93,13 +101,29 @@ final class BookingService: BookingServiceProtocol {
         )
     }
 
-    func getListingAvailability(slug: String, locale: String) async throws -> ListingAvailabilityResponse {
-        try await value(BookingEndpoint.listingAvailability(slug: slug, locale: locale), as: ListingAvailabilityResponse.self)
+    func getListingAvailability(slug: String, locale: String) async throws
+        -> ListingAvailabilityResponse
+    {
+        try await value(
+            BookingEndpoint.listingAvailability(slug: slug, locale: locale),
+            as: ListingAvailabilityResponse.self
+        )
     }
 
-    func customerPage(page: Int, limit: Int, status: String?) async throws -> PaginationPage<BookingsModel> {
-        let response = try await network.request(enpoint: BookingEndpoint.customerPage(page: page, limit: limit, status: status), responseType: ApiResponse<[BookingsModel]>.self)
-        guard response.success, let data = response.data, let meta = response.meta else { throw NetworkError.invalidResponse }
+    func customerPage(page: Int, limit: Int, status: String?) async throws
+        -> PaginationPage<BookingsModel>
+    {
+        let response = try await network.request(
+            enpoint: BookingEndpoint.customerPage(
+                page: page,
+                limit: limit,
+                status: status
+            ),
+            responseType: ApiResponse<[BookingsModel]>.self
+        )
+        guard response.success, let data = response.data,
+            let meta = response.meta
+        else { throw NetworkError.invalidResponse }
         return PaginationPage(items: data, meta: meta)
     }
 
@@ -108,15 +132,26 @@ final class BookingService: BookingServiceProtocol {
         var page = 1
         while true {
             try Task.checkCancellation()
-            let result = try await customerPage(page: page, limit: 100, status: nil)
+            let result = try await customerPage(
+                page: page,
+                limit: 100,
+                status: nil
+            )
             items.append(contentsOf: result.items)
-            if !result.hasNextPage(currentPage: page, limit: 100) || result.items.isEmpty { return items }
+            if !result.hasNextPage(currentPage: page, limit: 100)
+                || result.items.isEmpty
+            {
+                return items
+            }
             page += 1
         }
     }
 
     func cancelCustomerBooking(id: String) async throws -> BookingsModel {
-        try await value(BookingEndpoint.customerCancel(id: id), as: BookingsModel.self)
+        try await value(
+            BookingEndpoint.customerCancel(id: id),
+            as: BookingsModel.self
+        )
     }
 
     func getBookingTicket(id: String) async throws -> Data {

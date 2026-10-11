@@ -1,11 +1,11 @@
 import Foundation
 import Observation
 
-/// Session-scoped invalidation shared by details, review lists and listing cards.
 @MainActor @Observable
 final class ReviewStore {
     private(set) var revision = 0
     private(set) var ownReviews: [String: MyReview] = [:]
+    private(set) var ratingStates: [String: LoadState<Rating>] = [:]
     private var ratings: [String: Rating] = [:]
     private var invalidatedRatings: Set<String> = []
     private(set) var sessionID = UUID()
@@ -15,31 +15,59 @@ final class ReviewStore {
         if let rating = ratings[listingID] { return rating }
         return invalidatedRatings.contains(listingID) ? nil : fallback
     }
+    func ratingState(for listingID: String) -> LoadState<Rating> {
+        ratingStates[listingID] ?? .idle
+    }
     func remember(_ reviews: [MyReview]) {
         for review in reviews { ownReviews[review.listingId] = review }
     }
     func changed(listingID: String, review: MyReview?) {
         ownReviews[listingID] = review
         ratings[listingID] = nil
+        ratingStates[listingID] = .idle
         invalidatedRatings.insert(listingID)
         ratingGenerations[listingID] = UUID()
         revision += 1
     }
-    func refreshRating(listingID: String, slug: String, locale: String, service: any ReviewServiceProtocol) async {
+    func refreshRating(
+        listingID: String,
+        slug: String,
+        locale: String,
+        service: any ReviewServiceProtocol
+    ) async {
         let session = sessionID
-        let generation = ratingGenerations[listingID]
+        let generation = UUID()
+        ratingGenerations[listingID] = generation
+        let previousState = ratingState(for: listingID)
+        ratingStates[listingID] = .loading
         do {
             let rating = try await service.rating(slug: slug, locale: locale)
-            guard session == sessionID, generation == ratingGenerations[listingID] else { return }
+            guard session == sessionID,
+                generation == ratingGenerations[listingID]
+            else { return }
             ratings[listingID] = rating
             invalidatedRatings.remove(listingID)
+            ratingStates[listingID] = .loaded(rating)
+        } catch is CancellationError {
+            guard session == sessionID,
+                generation == ratingGenerations[listingID]
+            else { return } 
+            if case .loading = previousState { ratingStates[listingID] = .idle }
+            else { ratingStates[listingID] = previousState }
         } catch {
-            // Keep a stale aggregate hidden. A later list/detail refresh can retry.
+            guard session == sessionID,
+                generation == ratingGenerations[listingID]
+            else { return }
+            ratingStates[listingID] = .error(ReviewErrorMessage.text(error))
         }
     }
     func reset() {
         sessionID = UUID()
-        ownReviews = [:]; ratings = [:]; invalidatedRatings = []; ratingGenerations = [:]
+        ownReviews = [:]
+        ratings = [:]
+        ratingStates = [:]
+        invalidatedRatings = []
+        ratingGenerations = [:]
         revision += 1
     }
 }

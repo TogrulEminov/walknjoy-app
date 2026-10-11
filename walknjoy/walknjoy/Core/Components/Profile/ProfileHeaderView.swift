@@ -15,8 +15,11 @@ struct ProfileHeaderView: View {
         VStack(spacing: 16) {
             avatarView
                 .overlay {
-                    Circle().stroke(Color.brandYellow.opacity(0.6), lineWidth: 2)
-                        .padding(-5)
+                    Circle().stroke(
+                        Color.brandYellow.opacity(0.6),
+                        lineWidth: 2
+                    )
+                    .padding(-5)
                 }
                 .padding(.top, 6)
 
@@ -40,19 +43,25 @@ struct ProfileHeaderView: View {
 
             if let onEdit {
                 Button(action: onEdit) {
-                    Label("profile.editProfile", systemImage: "square.and.pencil")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color.buttonText)
-                        .padding(.horizontal, 20)
-                        .frame(minHeight: 44)
-                        .background(Color.buttonBackground, in: Capsule())
+                    Label(
+                        "profile.editProfile",
+                        systemImage: "square.and.pencil"
+                    )
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.buttonText)
+                    .padding(.horizontal, 20)
+                    .frame(minHeight: 44)
+                    .background(Color.buttonBackground, in: Capsule())
                 }
                 .buttonStyle(.plain)
             }
         }
         .frame(maxWidth: .infinity)
         .padding(24)
-        .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 24))
+        .background(
+            Color.surfaceBackground,
+            in: RoundedRectangle(cornerRadius: 24)
+        )
         .overlay {
             RoundedRectangle(cornerRadius: 24)
                 .stroke(Color.borderColor.opacity(0.6), lineWidth: 1)

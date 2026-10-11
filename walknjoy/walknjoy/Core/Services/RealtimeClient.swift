@@ -14,8 +14,7 @@ enum NotificationSocketState: Equatable {
     func stop()
 }
 
-@MainActor final class NotificationWebSocketManager: NotificationSocketProtocol
-{
+@MainActor final class RealtimeClient: NotificationSocketProtocol {
     var onStateChange: ((NotificationSocketState) -> Void)?
     var onNotification: ((AppNotification) -> Void)?
     var onConnected: (() -> Void)?
@@ -23,6 +22,29 @@ enum NotificationSocketState: Equatable {
     private(set) var state: NotificationSocketState = .disconnected {
         didSet { onStateChange?(state) }
     }
+    private var chatObservers: [UUID: (Data) -> Void] = [:]
+    func subscribeChat(_ observer: @escaping (Data) -> Void) -> UUID {
+        let id = UUID()
+        chatObservers[id] = observer
+        return id
+    }
+    func unsubscribeChat(_ id: UUID) { chatObservers[id] = nil }
+    func sendChat(event: String, data: [String: String]) async throws {
+        guard state == .connected, let socket else {
+            throw URLError(.networkConnectionLost)
+        }
+        let bytes = try JSONSerialization.data(withJSONObject: [
+            "event": event, "data": data,
+        ])
+        guard let text = String(data: bytes, encoding: .utf8) else {
+            throw NetworkError.encodingError
+        }
+        try await socket.send(.string(text))
+    }
+    private func broadcastChat(_ data: Data) {
+        for callback in Array(chatObservers.values) { callback(data) }
+    }
+    func clearChatSubscriptions() { chatObservers = [:] }
     private let tokens: TokenStorageProtocol
     private let baseURL: String
     private var session: URLSession?
@@ -35,7 +57,7 @@ enum NotificationSocketState: Equatable {
     private var generation = UUID()
     private let logger = Logger(
         subsystem: "walknjoy",
-        category: "notification-socket"
+        category: "realtime-socket"
     )
 
     init(tokens: TokenStorageProtocol? = nil, baseURL: String? = nil) {
@@ -79,6 +101,9 @@ enum NotificationSocketState: Equatable {
         retryTask = nil
         closeTransport()
         state = .disconnected
+        broadcastChat(
+            Data(#"{"event":"realtime:disconnected","data":{}}"#.utf8)
+        )
     }
 
     private func open() {
@@ -100,6 +125,9 @@ enum NotificationSocketState: Equatable {
                 self.timeoutTask?.cancel()
                 self.state = .connected
                 self.onConnected?()
+                self.broadcastChat(
+                    Data(#"{"event":"realtime:connected","data":{}}"#.utf8)
+                )
                 self.ping(id: id)
             }
             delegate.didFinish = { [weak self] task in
@@ -147,6 +175,7 @@ enum NotificationSocketState: Equatable {
                         self.receive(task: task, id: id)
                         return
                     }
+                    self.broadcastChat(data)
                     do {
                         if let notification =
                             try NotificationEventDecoder.notification(
@@ -206,6 +235,9 @@ enum NotificationSocketState: Equatable {
             return
         }
         generation = UUID()
+        broadcastChat(
+            Data(#"{"event":"realtime:disconnected","data":{}}"#.utf8)
+        )
         closeTransport()
         state = attempt >= 4 ? .failed : .reconnecting
         scheduleReconnect()
@@ -213,6 +245,11 @@ enum NotificationSocketState: Equatable {
 
     private func scheduleReconnect() {
         guard running else { return }
+        guard attempt < 5 else {
+            running = false
+            state = .failed
+            return
+        }
         let delay = Self.retryDelay(attempt: attempt)
         attempt += 1
         retryTask?.cancel()

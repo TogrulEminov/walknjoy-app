@@ -37,12 +37,16 @@ struct CategoryCard: View {
                         .padding(10)
                         .frame(width: cardWidth, alignment: .leading)
                 }
-                .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+                .clipShape(
+                    RoundedRectangle(cornerRadius: radius, style: .continuous)
+                )
                 .overlay {
                     RoundedRectangle(cornerRadius: radius, style: .continuous)
                         .stroke(Color.border.opacity(0.7), lineWidth: 1)
                 }
-                .contentShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+                .contentShape(
+                    RoundedRectangle(cornerRadius: radius, style: .continuous)
+                )
         }
         .buttonStyle(.plain)
     }

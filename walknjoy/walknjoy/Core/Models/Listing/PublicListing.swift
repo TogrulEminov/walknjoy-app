@@ -14,22 +14,11 @@ struct ListingCategory: Decodable, Hashable {
     let id: String
     let name: String
     let slug: String
-
-    init(id: String, name: String, slug: String) {
-        self.id = id
-        self.name = name
-        self.slug = slug
-    }
 }
 
 struct CoverMedia: Decodable, Hashable {
     let type: MediaType
     let url: String
-
-    init(type: MediaType, url: String) {
-        self.type = type
-        self.url = url
-    }
 }
 
 enum ListingCardDetails: Hashable {
@@ -41,20 +30,14 @@ enum ListingCardDetails: Hashable {
 
 struct StayCardDetails: Decodable, Hashable {
     let maxGuests: Int
-
-    init(maxGuests: Int) { self.maxGuests = maxGuests }
 }
 
 struct TourCardDetails: Decodable, Hashable {
     let durationMinutes: Int?
-
-    init(durationMinutes: Int?) { self.durationMinutes = durationMinutes }
 }
 
 struct ActivityCardDetails: Decodable, Hashable {
     let durationMinutes: Int?
-
-    init(durationMinutes: Int?) { self.durationMinutes = durationMinutes }
 }
 
 struct PublicListing: Decodable, Identifiable, Hashable {
@@ -64,6 +47,7 @@ struct PublicListing: Decodable, Identifiable, Hashable {
     let slug: String
     let shortDescription: String?
     let basePrice: Decimal
+    let hasPrice: Bool
     let currency: String
     let isFeatured: Bool
     let category: ListingCategory?
@@ -95,6 +79,7 @@ struct PublicListing: Decodable, Identifiable, Hashable {
         self.slug = slug
         self.shortDescription = shortDescription
         self.basePrice = basePrice
+        self.hasPrice = true
         self.currency = currency
         self.isFeatured = isFeatured
         self.category = category
@@ -117,11 +102,12 @@ struct PublicListing: Decodable, Identifiable, Hashable {
         title = try container.decodeIfPresent(String.self, forKey: .title) ?? ""
         slug = try container.decodeIfPresent(String.self, forKey: .slug) ?? ""
         shortDescription = try container.decodeIfPresent(String.self, forKey: .shortDescription)
+        hasPrice = try container.contains(.basePrice) && !container.decodeNil(forKey: .basePrice)
         if let value = try? container.decode(String.self, forKey: .basePrice),
            let decimal = Decimal(string: value, locale: Locale(identifier: "en_US_POSIX")) {
             basePrice = decimal
         } else {
-            basePrice = try container.decode(Decimal.self, forKey: .basePrice)
+            basePrice = try container.decodeIfPresent(Decimal.self, forKey: .basePrice) ?? 0
         }
         currency = try container.decode(String.self, forKey: .currency)
         isFeatured = try container.decodeIfPresent(Bool.self, forKey: .isFeatured) ?? false

@@ -39,7 +39,7 @@ final class NotificationViewModel {
         tokens: TokenStorageProtocol? = nil
     ) {
         self.service = service ?? NotificationService()
-        self.socket = socket ?? NotificationWebSocketManager()
+        self.socket = socket ?? RealtimeClient()
         self.auth = auth ?? AuthService()
         self.tokens = tokens ?? TokenStorage()
         self.socket.onStateChange = { [weak self] state in

@@ -1,51 +1,10 @@
 {
   "sourceLanguage" : "az",
   "strings" : {
-    "common.showPassword" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şifrəni göstər"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show password"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Показать пароль"
-          }
-        }
-      }
-    },
-    "common.hidePassword" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Şifrəni gizlət"
-          }
-        },
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hide password"
-          }
-        },
-        "ru" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Скрыть пароль"
-          }
-        }
-      }
-    },
     "" : {
+
+    },
+    " %lld" : {
 
     },
     "%@ %@" : {
@@ -54,36 +13,6 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ %2$@"
-          }
-        }
-      }
-    },
-    "%@ → %@" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ → %2$@"
-          }
-        }
-      }
-    },
-    "%@ × %lld %@" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ × %2$lld %3$@"
-          }
-        }
-      }
-    },
-    "%@: %@" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@: %2$@"
           }
         }
       }
@@ -108,115 +37,6 @@
         }
       }
     },
-    "ai.assistant.title" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Səyahət planlayıcısı"
-          }
-        }
-      }
-    },
-    "ai.conversation.untitled" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yeni söhbət"
-          }
-        }
-      }
-    },
-    "ai.conversations.title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Söhbətlər"
-          }
-        }
-      }
-    },
-    "ai.error.title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AI sorğusu alınmadı"
-          }
-        }
-      }
-    },
-    "ai.message.placeholder" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Səyahət barədə sualını yaz..."
-          }
-        }
-      }
-    },
-    "ai.newConversation" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yeni söhbət"
-          }
-        }
-      }
-    },
-    "ai.suggestions.title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Başlamaq üçün ideyalar"
-          }
-        }
-      }
-    },
-    "ai.thinking" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cavab hazırlanır..."
-          }
-        }
-      }
-    },
-    "ai.welcome.description" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hara getmək istədiyini yaz və sənə uyğun yerləri kəşf et."
-          }
-        }
-      }
-    },
-    "ai.welcome.title" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Səyahətini birlikdə planlayaq"
-          }
-        }
-      }
-    },
     "auth.mobileAccessDenied" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -227,9 +47,6 @@
           }
         }
       }
-    },
-    "AZN" : {
-
     },
     "booking.allStatuses" : {
       "localizations" : {
@@ -282,7 +99,6 @@
       }
     },
     "booking.cancelledAt" : {
-      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {
@@ -293,7 +109,6 @@
       }
     },
     "booking.completedAt" : {
-      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {
@@ -304,7 +119,6 @@
       }
     },
     "booking.confirmedAt" : {
-      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {
@@ -320,72 +134,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Minimum %d gecə"
-          }
-        }
-      }
-    },
-    "booking.reason.CAPACITY_EXCEEDED" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçim uyğun deyil. Tarix, seans və qonaq sayını yoxla."
-          }
-        }
-      }
-    },
-    "booking.reason.MAX_GUESTS_EXCEEDED" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçim uyğun deyil. Tarix, seans və qonaq sayını yoxla."
-          }
-        }
-      }
-    },
-    "booking.reason.MINIMUM_NIGHTS_NOT_MET" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçim uyğun deyil. Tarix, seans və qonaq sayını yoxla."
-          }
-        }
-      }
-    },
-    "booking.reason.SESSION_CAPACITY_EXCEEDED" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçim uyğun deyil. Tarix, seans və qonaq sayını yoxla."
-          }
-        }
-      }
-    },
-    "booking.reason.SESSION_NOT_AVAILABLE" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçim uyğun deyil. Tarix, seans və qonaq sayını yoxla."
-          }
-        }
-      }
-    },
-    "booking.reason.STAY_DATE_UNAVAILABLE" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçim uyğun deyil. Tarix, seans və qonaq sayını yoxla."
           }
         }
       }
@@ -441,61 +189,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Seans seçimi"
-          }
-        }
-      }
-    },
-    "booking.status.CANCELLED" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ləğv edilib"
-          }
-        }
-      }
-    },
-    "booking.status.COMPLETED" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tamamlanıb"
-          }
-        }
-      }
-    },
-    "booking.status.CONFIRMED" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Təsdiqlənib"
-          }
-        }
-      }
-    },
-    "booking.status.EXPIRED" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Müddəti bitib"
-          }
-        }
-      }
-    },
-    "booking.status.PENDING" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Təsdiq gözləyir"
           }
         }
       }
@@ -573,17 +266,6 @@
         }
       }
     },
-    "common.delete" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sil"
-          }
-        }
-      }
-    },
     "common.edit" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -591,6 +273,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Redaktə et"
+          }
+        }
+      }
+    },
+    "common.hidePassword" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrəni gizlət"
           }
         }
       }
@@ -689,6 +381,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Paylaş"
+          }
+        }
+      }
+    },
+    "common.showPassword" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Şifrəni göstər"
           }
         }
       }
@@ -1130,47 +832,6 @@
         }
       }
     },
-    "home.ai.brand" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Səyahət planlayıcısı"
-          }
-        }
-      }
-    },
-    "home.ai.button" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Səyahəti planla"
-          }
-        }
-      }
-    },
-    "home.ai.description" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçimlərinizi edin, uyğun səyahət variantlarını tapın."
-          }
-        }
-      }
-    },
-    "home.ai.new" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yeni yazışma"
-          }
-        }
-      }
-    },
     "home.categories.title" : {
       "extractionState" : "manual",
       "localizations" : {
@@ -1601,6 +1262,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Bu kateqoriya üçün imkan yoxdur."
+          }
+        }
+      }
+    },
+    "listing.card.new" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni"
+          }
+        }
+      }
+    },
+    "listing.card.priceUnavailable" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qiymət göstərilməyib"
           }
         }
       }
@@ -2263,28 +1944,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "İştirakçı sayı"
-          }
-        }
-      }
-    },
-    "listing.detail.perNight" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "gecəlik"
-          }
-        }
-      }
-    },
-    "listing.detail.perPerson" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "nəfər üçün"
           }
         }
       }
@@ -3401,32 +3060,202 @@
         }
       }
     },
+    "messages.bookingContext" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezervasiya söhbəti"
+          }
+        }
+      }
+    },
+    "messages.contactProvider" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Provider-ə yaz"
+          }
+        }
+      }
+    },
+    "messages.contextUnavailable" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Söhbət konteksti əlçatan deyil"
+          }
+        }
+      }
+    },
+    "messages.empty" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hələ söhbət yoxdur"
+          }
+        }
+      }
+    },
+    "messages.failed" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Göndərilmədi"
+          }
+        }
+      }
+    },
+    "messages.newMessage" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Yeni mesaj"
+          }
+        }
+      }
+    },
+    "messages.noMessages" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hələ mesaj yoxdur"
+          }
+        }
+      }
+    },
+    "messages.older" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Əvvəlki mesajlar"
+          }
+        }
+      }
+    },
+    "messages.pending" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Göndərilir"
+          }
+        }
+      }
+    },
+    "messages.placeholder" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mesaj yaz…"
+          }
+        }
+      }
+    },
+    "messages.read" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oxunub"
+          }
+        }
+      }
+    },
+    "messages.restFallback" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Canlı bağlantı gözlənilir. Mesajları yenə göndərə bilərsən."
+          }
+        }
+      }
+    },
+    "messages.send" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Göndər"
+          }
+        }
+      }
+    },
+    "messages.sent" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Göndərildi"
+          }
+        }
+      }
+    },
+    "messages.title" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mesajlar"
+          }
+        }
+      }
+    },
+    "messages.tooLong" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mesaj 4000 simvoldan çox olmamalıdır."
+          }
+        }
+      }
+    },
+    "messages.typing" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qarşı tərəf yazır…"
+          }
+        }
+      }
+    },
+    "messages.unread" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Oxunmamış mesajlar"
+          }
+        }
+      }
+    },
+    "messages.write" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mesaj yaz"
+          }
+        }
+      }
+    },
     "notifications.activity" : {
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Hesab və sifarişlər"
-          }
-        }
-      }
-    },
-    "notifications.ai" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AI yenilikləri"
-          }
-        }
-      }
-    },
-    "notifications.ai.description" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Süni intellekt funksiyaları ilə bağlı yeniliklər."
           }
         }
       }
@@ -3915,360 +3744,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Böyük və kiçik hərf ehtiva etsin"
-          }
-        }
-      }
-    },
-    "planner.adults" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Böyüklər"
-          }
-        }
-      }
-    },
-    "planner.amount" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Büdcə"
-          }
-        }
-      }
-    },
-    "planner.any" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Fərqi yoxdur"
-          }
-        }
-      }
-    },
-    "planner.back" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Geri"
-          }
-        }
-      }
-    },
-    "planner.book" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sifariş et"
-          }
-        }
-      }
-    },
-    "planner.changeAnswers" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçimləri dəyiş"
-          }
-        }
-      }
-    },
-    "planner.changeSuggestions" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nəticələri yaxşılaşdırmaq üçün tarix, büdcə, istiqamət və ya maraqları geri qayıdaraq dəyişin."
-          }
-        }
-      }
-    },
-    "planner.checkIn" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gediş"
-          }
-        }
-      }
-    },
-    "planner.checking" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Variantlar yoxlanılır…"
-          }
-        }
-      }
-    },
-    "planner.checkOut" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Dönüş"
-          }
-        }
-      }
-    },
-    "planner.children" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uşaqlar"
-          }
-        }
-      }
-    },
-    "planner.continue" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Davam et"
-          }
-        }
-      }
-    },
-    "planner.customerOnly" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Planlayıcı yalnız müştəri hesabları üçün əlçatandır."
-          }
-        }
-      }
-    },
-    "planner.details" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Detallara bax"
-          }
-        }
-      }
-    },
-    "planner.edit.budget" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Büdcəni dəyiş"
-          }
-        }
-      }
-    },
-    "planner.edit.dates" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tarixləri dəyiş"
-          }
-        }
-      }
-    },
-    "planner.edit.destination" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "İstiqaməti dəyiş"
-          }
-        }
-      }
-    },
-    "planner.edit.interests" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Maraqları dəyiş"
-          }
-        }
-      }
-    },
-    "planner.empty" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Heç bir variant yoxdur. Seçimlərinizi dəyişə bilərsiniz."
-          }
-        }
-      }
-    },
-    "planner.exceeded" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Büdcədən artıq:"
-          }
-        }
-      }
-    },
-    "planner.individualServices" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Hər variant ayrıca xidmətdir. Nəqliyyat və digər xidmətlər daxil deyil; gündəlik cədvəl təsdiqlənməyib."
-          }
-        }
-      }
-    },
-    "planner.invalidAmount" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "0-dan böyük, maksimum 99999999.99 və ən çox 2 onluq rəqəm daxil edin."
-          }
-        }
-      }
-    },
-    "planner.invalidDates" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Gediş keçmişdə ola bilməz. Dönüş daha sonra olmalıdır; maksimum 30 gecə."
-          }
-        }
-      }
-    },
-    "planner.invalidGuests" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Qonaq sayını icazə verilən həddə uyğun seçin."
-          }
-        }
-      }
-    },
-    "planner.loading" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yüklənir…"
-          }
-        }
-      }
-    },
-    "planner.login" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Davam etmək üçün hesabınıza daxil olun."
-          }
-        }
-      }
-    },
-    "planner.more" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Daha çox variantı yoxla"
-          }
-        }
-      }
-    },
-    "planner.overBudget" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Büdcədən artıq alternativlər"
-          }
-        }
-      }
-    },
-    "planner.resetConfirm" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Seçimlər sıfırlansın?"
-          }
-        }
-      }
-    },
-    "planner.restart" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yenidən başla"
-          }
-        }
-      }
-    },
-    "planner.showOptions" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Variantları göstər"
-          }
-        }
-      }
-    },
-    "planner.start" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Yeni sessiya başlat"
-          }
-        }
-      }
-    },
-    "planner.step" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Addım"
-          }
-        }
-      }
-    },
-    "planner.title" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Səyahət planlayıcısı"
-          }
-        }
-      }
-    },
-    "planner.withinBudget" : {
-      "localizations" : {
-        "az" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Büdcəyə uyğun"
           }
         }
       }
@@ -4899,7 +4374,7 @@
       }
     },
     "provider.profile.loadMissing" : {
-      "extractionState" : "stale",
+      "extractionState" : "manual",
       "localizations" : {
         "az" : {
           "stringUnit" : {

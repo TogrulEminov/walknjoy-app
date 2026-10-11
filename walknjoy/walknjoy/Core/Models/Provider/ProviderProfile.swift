@@ -43,7 +43,8 @@ struct UpdateProviderProfileInput: Encodable {
     let taxId: String??
 
     enum CodingKeys: String, CodingKey {
-        case businessName, legalName, description, phone, email, website, logoUrl, taxId
+        case businessName, legalName, description, phone, email, website,
+            logoUrl, taxId
     }
 
     func encode(to encoder: Encoder) throws {
@@ -64,7 +65,10 @@ struct UpdateProviderProfileInput: Encodable {
         into container: inout KeyedEncodingContainer<CodingKeys>
     ) throws {
         guard let value else { return }
-        if let value { try container.encode(value, forKey: key) }
-        else { try container.encodeNil(forKey: key) }
+        if let value {
+            try container.encode(value, forKey: key)
+        } else {
+            try container.encodeNil(forKey: key)
+        }
     }
 }

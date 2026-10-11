@@ -45,10 +45,6 @@ struct NotificationPreferencesView: View {
 
             Section {
                 preference(
-                    "notifications.ai", description: "notifications.ai.description",
-                    symbol: "sparkles", isOn: $model.aiUpdates
-                )
-                preference(
                     "notifications.marketing", description: "notifications.marketing.description",
                     symbol: "megaphone", isOn: $model.marketing
                 )

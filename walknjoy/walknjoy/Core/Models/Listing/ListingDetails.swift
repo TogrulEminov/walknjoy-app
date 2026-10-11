@@ -6,44 +6,15 @@
 //
 import Foundation
 
-enum ListingDetails: Codable, Equatable {
-    private enum CodingKeys: String, CodingKey { case type, details }
-
-    init(from decoder: Decoder) throws {
-        let c = try decoder.container(keyedBy: CodingKeys.self)
-        self = try Self.decode(type: c.decode(ListingType.self, forKey: .type), from: c.superDecoder(forKey: .details))
-    }
-
-    static func decode(type: ListingType, from decoder: Decoder) throws -> Self {
+enum ListingDetails: Equatable {
+    static func decode(type: ListingType, from decoder: Decoder) throws -> Self
+    {
         switch type {
         case .stay: return .stay(try StayDetails(from: decoder))
         case .tour: return .tour(try TourDetails(from: decoder))
         case .activity: return .activity(try ActivityDetails(from: decoder))
-        case .experience: return .experience(try ExperienceDetails(from: decoder))
-        }
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var c = encoder.container(keyedBy: CodingKeys.self)
-        try c.encode(type, forKey: .type)
-        try encodeBody(to: c.superEncoder(forKey: .details))
-    }
-
-    var type: ListingType {
-        switch self {
-        case .stay: .stay
-        case .tour: .tour
-        case .activity: .activity
-        case .experience: .experience
-        }
-    }
-
-    func encodeBody(to encoder: Encoder) throws {
-        switch self {
-        case .stay(let value): try value.encode(to: encoder)
-        case .tour(let value): try value.encode(to: encoder)
-        case .activity(let value): try value.encode(to: encoder)
-        case .experience(let value): try value.encode(to: encoder)
+        case .experience:
+            return .experience(try ExperienceDetails(from: decoder))
         }
     }
 

@@ -17,7 +17,7 @@ struct ListingReviewsSection: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(alignment: .top, spacing: 12) {
-                ListingReviewsView(rating: rating)
+                ListingReviewsView(rating: appState.reviews.rating(for: listingID, fallback: rating))
                 Button { showAll = true } label: {
                     HStack(spacing: 4) {
                         Text("reviews.all")
@@ -25,6 +25,7 @@ struct ListingReviewsSection: View {
                     }.font(.subheadline.weight(.semibold)).frame(minHeight: 44)
                 }.tint(Color.titleText)
             }
+            ratingRefreshState
             ListingReviewsContent(model: model, listingID: listingID, compact: true)
         }
         .task(id: appState.reviews.revision) {
@@ -36,6 +37,7 @@ struct ListingReviewsSection: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 16) {
                         ListingReviewsView(rating: appState.reviews.rating(for: listingID, fallback: rating))
+                        ratingRefreshState
                         ListingReviewsContent(model: allModel, listingID: listingID, compact: false)
                     }.padding(20)
                 }
@@ -47,6 +49,30 @@ struct ListingReviewsSection: View {
             }
         }
     }
+
+    @ViewBuilder
+    private var ratingRefreshState: some View {
+        switch appState.reviews.ratingState(for: listingID) {
+        case .loading:
+            ProgressView().frame(maxWidth: .infinity, alignment: .leading)
+        case .error(let message):
+            VStack(alignment: .leading, spacing: 8) {
+                Text(message).font(.subheadline).foregroundStyle(Color.errorColor)
+                Button("common.retry") {
+                    Task {
+                        await appState.reviews.refreshRating(
+                            listingID: listingID, slug: slug,
+                            locale: model.locale, service: model.service
+                        )
+                    }
+                }
+                .frame(minHeight: 44)
+            }
+        case .idle, .loaded:
+            EmptyView()
+        }
+    }
+
 }
 
 struct ListingReviewsContent: View {
