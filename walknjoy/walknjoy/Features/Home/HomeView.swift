@@ -168,8 +168,8 @@ extension HomeView {
                     if appState.hasLoadedCurrentUserRole,
                         appState.currentUserRole == .customer
                     {
-                        AITravelBannerView {
-                            handleAITravelTap()
+                        TravelPlannerBannerView {
+                            handleTravelPlannerTap()
                         }
                     }
 
@@ -310,7 +310,7 @@ extension HomeView {
         selectedTab = .search
     }
 
-    private func handleAITravelTap() {
+    private func handleTravelPlannerTap() {
         selectedTab = .ai
     }
 

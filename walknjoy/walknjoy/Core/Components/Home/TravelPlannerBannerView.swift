@@ -1,5 +1,5 @@
 //
-//  AITravelBannerView.swift
+//  TravelPlannerBannerView.swift
 //  walknjoy
 //
 //  Created by Eminov Togrul Punhan on 28.09.26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct AITravelBannerView: View {
+struct TravelPlannerBannerView: View {
 
     let onTap: () -> Void
 
@@ -37,7 +37,7 @@ struct AITravelBannerView: View {
 
 // MARK: - Background
 
-extension AITravelBannerView {
+extension TravelPlannerBannerView {
 
     fileprivate var background: some View {
         GeometryReader { geometry in
@@ -59,7 +59,7 @@ extension AITravelBannerView {
 
 // MARK: - Content
 
-extension AITravelBannerView {
+extension TravelPlannerBannerView {
 
     fileprivate var content: some View {
         HStack(spacing: 0) {

@@ -15,13 +15,19 @@ protocol ListingServicesProtocol {
         async throws -> Listing
 }
 
+/// Narrow interface for features that only open a listing by its server ID.
+@MainActor
+protocol ListingLookupServiceProtocol {
+    func getListing(id: String, locale: String) async throws -> Listing
+}
+
 struct ListingsPage {
     let listings: [PublicListing]
     let meta: PaginationMeta
 }
 
 @MainActor
-final class ListingServices: ListingServicesProtocol {
+final class ListingServices: ListingServicesProtocol, ListingLookupServiceProtocol {
     private let networkServices: NetworkingService
 
     init(

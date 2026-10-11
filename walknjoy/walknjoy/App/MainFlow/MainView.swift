@@ -39,7 +39,7 @@ struct MainView: View {
 extension MainView {
     private var aiView: some View {
         NavigationStack {
-            AITravelAssistantView()
+            TravelPlannerView()
         }
         .tabItem {
             Label("ai.assistant.title", systemImage: "ellipsis.bubble")
