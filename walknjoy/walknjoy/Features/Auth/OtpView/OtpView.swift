@@ -22,16 +22,9 @@ struct OtpView: View {
 
     // MARK: - State
 
-    @State private var otpVM = OtpViewModel()
+    @State private var otpVM: OtpViewModel
 
     @State private var code = ""
-
-    @State private var otpRemainingSeconds: Int
-    @State private var resendRemainingSeconds: Int
-
-    // Timer-ləri resend-dən sonra restart etmək üçün
-    @State private var otpTimerID = UUID()
-    @State private var resendTimerID = UUID()
 
     // MARK: - Init
 
@@ -44,13 +37,7 @@ struct OtpView: View {
         self.expireTime = expireTime
         self.resendAvailableTime = resendAvailableTime
 
-        _otpRemainingSeconds = State(
-            initialValue: expireTime
-        )
-
-        _resendRemainingSeconds = State(
-            initialValue: resendAvailableTime
-        )
+        _otpVM = State(initialValue: OtpViewModel(expireTime: expireTime, resendAvailableTime: resendAvailableTime))
     }
 
     // MARK: - Computed Properties
@@ -58,7 +45,7 @@ struct OtpView: View {
 
 
     private var isOtpExpired: Bool {
-        otpRemainingSeconds <= 0
+        otpVM.isOtpExpired
     }
 
     private var isLoading: Bool {
@@ -70,11 +57,11 @@ struct OtpView: View {
     }
 
     private var formattedExpireTime: String {
-        formatTime(otpRemainingSeconds)
+        otpVM.formattedExpireTime
     }
 
     private var formattedResendTime: String {
-        formatTime(resendRemainingSeconds)
+        otpVM.formattedResendTime
     }
 
     private var form: FormState<AuthField> {
@@ -92,11 +79,11 @@ struct OtpView: View {
 
             contentView
         }
-        .task(id: otpTimerID) {
-            await startOtpTimer()
+        .task(id: otpVM.otpTimerID) {
+            await otpVM.startOtpTimer()
         }
-        .task(id: resendTimerID) {
-            await startResendTimer()
+        .task(id: otpVM.resendTimerID) {
+            await otpVM.startResendTimer()
         }
         .onChange(of: otpVM.state) { _, newState in
             handleStateChange(newState)
@@ -305,19 +292,19 @@ extension OtpView {
                     Text("otp.resend")
                         .fontWeight(.semibold)
                         .foregroundStyle(
-                            resendRemainingSeconds == 0
+                            otpVM.resendRemainingSeconds == 0
                                 ? Color.titleText
                                 : Color.titleText.opacity(0.35)
                         )
                 }
                 .disabled(
-                    resendRemainingSeconds > 0 || isLoading
+                    otpVM.resendRemainingSeconds > 0 || isLoading
                 )
                 Spacer()
 
             }
 
-            if resendRemainingSeconds > 0 {
+            if otpVM.resendRemainingSeconds > 0 {
                 HStack(spacing: 5) {
 
                     Text("otp.resendAvailableIn")
@@ -382,7 +369,7 @@ extension OtpView {
 
     private func resendCode() {
         guard
-            resendRemainingSeconds == 0,
+            otpVM.resendRemainingSeconds == 0,
             !isLoading
         else {
             return
@@ -435,15 +422,7 @@ extension OtpView {
     ) {
         code = ""
 
-        otpRemainingSeconds =
-            expiresInSeconds
 
-        resendRemainingSeconds =
-            resendAvailableInSeconds
-
-        // .task(id:) yenidən işə düşəcək
-        otpTimerID = UUID()
-        resendTimerID = UUID()
     }
 
     private func goToResetPassword(
@@ -457,70 +436,9 @@ extension OtpView {
     }
 }
 
-// MARK: - Timers
-
-extension OtpView {
-
-    private func startOtpTimer() async {
-        while otpRemainingSeconds > 0 {
-
-            do {
-                try await Task.sleep(
-                    for: .seconds(1)
-                )
-            } catch {
-                return
-            }
-
-            guard !Task.isCancelled else {
-                return
-            }
-
-            guard otpRemainingSeconds > 0 else {
-                return
-            }
-
-            otpRemainingSeconds -= 1
-        }
-    }
-
-    private func startResendTimer() async {
-        while resendRemainingSeconds > 0 {
-
-            do {
-                try await Task.sleep(
-                    for: .seconds(1)
-                )
-            } catch {
-                return
-            }
-
-            guard !Task.isCancelled else {
-                return
-            }
-
-            guard resendRemainingSeconds > 0 else {
-                return
-            }
-
-            resendRemainingSeconds -= 1
-        }
-    }
-}
-
 // MARK: - Helpers
 
 extension OtpView {
-
-    private func formatTime(
-        _ seconds: Int
-    ) -> String {
-        String(
-            format: "%02d:%02d",
-            seconds / 60,
-            seconds % 60
-        )
-    }
 
     private func dismissKeyboard() {
         UIApplication.shared.sendAction(

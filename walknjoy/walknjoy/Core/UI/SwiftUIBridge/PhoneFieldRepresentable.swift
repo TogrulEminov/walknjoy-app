@@ -5,7 +5,6 @@ struct PhoneFieldRepresentable: UIViewRepresentable {
 
     let country: PhoneCountry
 
-    // Burada yalnız ölkə kodundan sonrakı rəqəmlər saxlanır.
     @Binding var phone: String
     @Binding var isComplete: Bool
 
@@ -56,9 +55,6 @@ struct PhoneFieldRepresentable: UIViewRepresentable {
         if textField.text != formatted {
             textField.text = formatted
         }
-
-        // Burada phone və isComplete binding-lərinə yazmırıq.
-        // updateUIView SwiftUI render zamanı çağırılır.
     }
 
     private func normalizedDigits(_ value: String) -> String {
@@ -90,7 +86,6 @@ struct PhoneFieldRepresentable: UIViewRepresentable {
             let currentText = textField.text ?? ""
             let prefix = country.dialCode + " "
 
-            // Ölkə kodunun dəyişdirilməsinə/silinməsinə icazə vermirik.
             if range.location < (prefix as NSString).length {
                 return false
             }
@@ -111,7 +106,6 @@ struct PhoneFieldRepresentable: UIViewRepresentable {
                 digits.removeFirst(countryDigits.count)
             }
 
-            // Sondakı boşluğu siləndə əvvəlki rəqəmi də sil.
             if string.isEmpty,
                range.length == 1,
                range.location == (currentText as NSString).length - 1,
@@ -131,8 +125,6 @@ struct PhoneFieldRepresentable: UIViewRepresentable {
             isComplete.wrappedValue =
                 digits.count == country.digitCount
 
-            // Mətni özümüz yenilədiyimiz üçün UIKit-in
-            // eyni dəyişikliyi ikinci dəfə etməsinə imkan vermirik.
             return false
         }
 

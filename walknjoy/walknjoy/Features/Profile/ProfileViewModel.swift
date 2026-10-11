@@ -13,20 +13,30 @@ import Observation
 
 final class ProfileViewModel {
     private let profileService: ProfileServiceProtocol
+    private let providerService: ProviderServiceProtocol
     private(set) var state: LoadState<ProfileModel> = .idle
     private let authService: AuthServiceProtocol
+    private(set) var isApprovedProvider = false
     init(
         profileService: ProfileServiceProtocol? = nil,
-        authService: AuthServiceProtocol? = nil
+        authService: AuthServiceProtocol? = nil,
+        providerService: ProviderServiceProtocol? = nil
     ) {
         self.profileService = profileService ?? ProfileService()
         self.authService = authService ?? AuthService()
+        self.providerService = providerService ?? ProviderService()
     }
 
     func loadProfile() async {
         state = .loading
         do {
             let profile = try await profileService.getProfile()
+            try MobileAccountAccess.validate(role: profile.roleRawValue)
+            if profile.role == .provider {
+                isApprovedProvider = (try? await providerService.getProfile().status) == .approved
+            } else {
+                isApprovedProvider = false
+            }
             state = .loaded(profile)
         } catch {
             state = .error(error.localizedDescription)
@@ -34,7 +44,13 @@ final class ProfileViewModel {
     }
 
     func setProfile(_ profile: ProfileModel) {
-        state = .loaded(profile)
+        do {
+            try MobileAccountAccess.validate(role: profile.roleRawValue)
+            state = .loaded(profile)
+            if profile.role != .provider { isApprovedProvider = false }
+        } catch {
+            state = .error(error.localizedDescription)
+        }
     }
     func logout() async throws {
         try await authService.logout()
@@ -63,6 +79,15 @@ extension ProfileViewModel {
 
     // MARK: - Account
 
+    var canViewFavorites: Bool { profile?.role == .customer }
+    var canViewBookings: Bool {
+        switch profile?.role {
+        case .customer, .admin: true
+        case .provider: isApprovedProvider
+        case nil: false
+        }
+    }
+
     var accountItems: [ProfileMenuItem] {
         [
             ProfileMenuItem(
@@ -88,7 +113,13 @@ extension ProfileViewModel {
                 icon: "star",
                 destination: .reviews
             ),
-        ]
+        ].filter { item in
+            switch item.destination {
+            case .bookings: canViewBookings
+            case .favorites, .reviews: canViewFavorites
+            default: true
+            }
+        }
     }
 
     // MARK: - Settings
@@ -125,27 +156,24 @@ extension ProfileViewModel {
         }
 
         switch profile.role {
-
-        case .customer:
+        case nil: return []
+        case .admin?, .customer?:
             return []
 
-        case .provider:
+        case .provider?:
             return [
+                ProfileMenuItem(
+                    title: "profile.businessProfile",
+                    icon: "building.2",
+                    destination: .businessProfile
+                ),
                 ProfileMenuItem(
                     title: "profile.businessDashboard",
                     icon: "briefcase",
                     destination: .businessDashboard
                 )
             ]
-
-        case .admin:
-            return [
-                ProfileMenuItem(
-                    title: "profile.adminDashboard",
-                    icon: "shield",
-                    destination: .adminDashboard
-                )
-            ]
         }
+
     }
 }

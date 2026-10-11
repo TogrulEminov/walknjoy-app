@@ -1,7 +1,8 @@
 import Foundation
 
-// Copy to walknjoy/walknjoy/Core/Config/APIConfig.swift and set local values.
-// Keep this template free of real credentials and private endpoints.
+/// Copy this template to Core/Config/APIConfig.swift and set your local URLs.
+/// Client configuration contains public URLs only; never put server credentials here.
 enum APIConfig {
-    static let imageUrl = "https://example.invalid"
+    static let baseURL = "http://localhost:8000/api/v1"
+    static let imageUrl = "https://example.com/media"
 }

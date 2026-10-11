@@ -1,6 +1,6 @@
 import Foundation
 import Observation
-
+import SwiftUI
 @MainActor
 @Observable
 final class SecurityViewModel {
@@ -22,7 +22,10 @@ final class SecurityViewModel {
     var confirmation = ""
     private(set) var now: Date
 
-    init(service: ChangePasswordServiceProtocol? = nil, clock: @escaping () -> Date = { Date() }) {
+    init(
+        service: ChangePasswordServiceProtocol? = nil,
+        clock: @escaping () -> Date = { Date() }
+    ) {
         self.service = service ?? AuthService()
         self.clock = clock
         self.now = clock()
@@ -31,7 +34,9 @@ final class SecurityViewModel {
     var isLoading: Bool { state == .loading }
     var codeSeconds: Int { remaining(codeDeadline) }
     var resendSeconds: Int { remaining(resendDeadline) }
-    var tokenExpired: Bool { step == .newPassword && remaining(tokenDeadline) == 0 }
+    var tokenExpired: Bool {
+        step == .newPassword && remaining(tokenDeadline) == 0
+    }
     var canResend: Bool { step == .code && resendSeconds == 0 && !isLoading }
 
     var form: FormState<Field> {
@@ -39,24 +44,48 @@ final class SecurityViewModel {
         var blocked = false
         switch step {
         case .currentPassword:
-            fields = [.currentPassword: ValidatedField(value: currentPassword, rules: [.required("security.current.required")])]
+            fields = [
+                .currentPassword: ValidatedField(
+                    value: currentPassword,
+                    rules: [.required("security.current.required")]
+                )
+            ]
         case .code:
-            fields = [.code: ValidatedField(value: code, rules: [.digits(6, message: "otp.validation.code")])]
+            fields = [
+                .code: ValidatedField(
+                    value: code,
+                    rules: [.digits(6, message: "otp.validation.code")]
+                )
+            ]
             blocked = codeSeconds == 0
         case .newPassword:
+            let currentNewPassword = newPassword
             fields = [
-                .password: ValidatedField(value: newPassword, rules: [.password("reset.validation.passwordInvalid")]),
-                .confirmation: ValidatedField(value: confirmation, rules: [
-                    .required("security.confirm.required"),
-                    ValidationRule(message: "security.confirm.mismatch", validate: { $0 == self.newPassword })
-                ])
+                .password: ValidatedField(
+                    value: newPassword,
+                    rules: [.password("reset.validation.passwordInvalid")]
+                ),
+                .confirmation: ValidatedField(
+                    value: confirmation,
+                    rules: [
+                        .required("security.confirm.required"),
+                        ValidationRule(
+                            message: "security.confirm.mismatch",
+                            validate: { $0 == currentNewPassword }
+                        ),
+                    ]
+                ),
             ]
             blocked = tokenExpired || token == nil
         case .complete:
             fields = [:]
             blocked = true
         }
-        return FormState(fields: fields, isSubmitting: isLoading, isBlocked: blocked)
+        return FormState(
+            fields: fields,
+            isSubmitting: isLoading,
+            isBlocked: blocked
+        )
     }
 
     func refreshTime() { now = clock() }
@@ -100,10 +129,16 @@ final class SecurityViewModel {
     private func requestCode() async {
         state = .loading
         do {
-            let result = try await service.requestPasswordChange(currentPassword: currentPassword)
+            let result = try await service.requestPasswordChange(
+                currentPassword: currentPassword
+            )
             refreshTime()
-            codeDeadline = now.addingTimeInterval(TimeInterval(max(0, result.expiresInSeconds)))
-            resendDeadline = now.addingTimeInterval(TimeInterval(max(0, result.resendAvailableInSeconds)))
+            codeDeadline = now.addingTimeInterval(
+                TimeInterval(max(0, result.expiresInSeconds))
+            )
+            resendDeadline = now.addingTimeInterval(
+                TimeInterval(max(0, result.resendAvailableInSeconds))
+            )
             code = ""
             step = .code
             state = .idle
@@ -116,7 +151,9 @@ final class SecurityViewModel {
         state = .loading
         do {
             let result = try await service.verifyPasswordChange(code: code)
-            guard !result.changePasswordToken.isEmpty else { throw NetworkError.invalidResponse }
+            guard !result.changePasswordToken.isEmpty else {
+                throw NetworkError.invalidResponse
+            }
             refreshTime()
             token = result.changePasswordToken
             tokenDeadline = now.addingTimeInterval(600)
@@ -133,7 +170,10 @@ final class SecurityViewModel {
         guard let token else { return }
         state = .loading
         do {
-            try await service.changePassword(token: token, newPassword: newPassword)
+            try await service.changePassword(
+                token: token,
+                newPassword: newPassword
+            )
             self.token = nil
             newPassword = ""
             confirmation = ""

@@ -5,7 +5,7 @@ enum NetworkError: LocalizedError {
     case invalidURL
     case invalidResponse
     case serverError(statusCode: Int)
-    case decodingError
+    case decodingError(details: String)
     case encodingError
     case noInternet
     case unknown(Error)
@@ -118,12 +118,8 @@ enum NetworkError: LocalizedError {
     case clientMessageIdReused
     case invalidCursor
 
-    // Bildirişlər və AI
+    // Bildirişlər
     case notificationNotFound
-    case aiUnavailable
-    case aiTimeout
-    case aiResponseInvalid
-    case aiConversationNotFound
 
     // Backend-dən gələn naməlum kod
     case apiError(
@@ -143,8 +139,8 @@ extension NetworkError {
             return "Serverdən düzgün cavab alınmadı."
         case .serverError(let statusCode):
             return "Server xətası baş verdi. Kod: \(statusCode)"
-        case .decodingError:
-            return "Serverdən gələn məlumat oxuna bilmədi."
+        case .decodingError(let details):
+            return "Serverdən gələn məlumat oxuna bilmədi. (details)"
         case .encodingError:
             return "Göndərilən məlumat hazırlanmadı."
         case .noInternet:
@@ -345,17 +341,9 @@ extension NetworkError {
         case .invalidCursor:
             return "Səhifələmə məlumatı etibarsızdır."
 
-        // Bildirişlər və AI
+        // Bildirişlər
         case .notificationNotFound:
             return "Bildiriş tapılmadı."
-        case .aiUnavailable:
-            return "AI xidməti hazırda əlçatan deyil."
-        case .aiTimeout:
-            return "AI xidməti vaxtında cavab vermədi."
-        case .aiResponseInvalid:
-            return "AI xidmətindən düzgün cavab alınmadı."
-        case .aiConversationNotFound:
-            return "AI söhbəti tapılmadı."
 
         case .apiError(_, let message, _):
             return message
@@ -459,13 +447,7 @@ extension NetworkError {
         case "MINIMUM_NIGHTS_NOT_MET": return .minimumNightsNotMet
         case "IDEMPOTENCY_KEY_REQUIRED": return .idempotencyKeyRequired
         case "IDEMPOTENCY_KEY_REUSED": return .idempotencyKeyReused
-
-        // Ödənişlər
-        case "PAYMENT_NOT_FOUND": return .paymentNotFound
-        case "BOOKING_NOT_PAYABLE": return .bookingNotPayable
-        case "PAYMENT_ALREADY_COMPLETED": return .paymentAlreadyCompleted
-        case "INVALID_WEBHOOK_SIGNATURE": return .invalidWebhookSignature
-        case "INVOICE_NOT_FOUND": return .invoiceNotFound
+ 
 
         // Seçilmişlər və rəylər
         case "LISTING_NOT_FAVORITABLE": return .listingNotFavoritable
@@ -484,12 +466,8 @@ extension NetworkError {
         case "CLIENT_MESSAGE_ID_REUSED": return .clientMessageIdReused
         case "INVALID_CURSOR": return .invalidCursor
 
-        // Bildirişlər və AI
+        // Bildirişlər
         case "NOTIFICATION_NOT_FOUND": return .notificationNotFound
-        case "AI_UNAVAILABLE": return .aiUnavailable
-        case "AI_TIMEOUT": return .aiTimeout
-        case "AI_RESPONSE_INVALID": return .aiResponseInvalid
-        case "AI_CONVERSATION_NOT_FOUND": return .aiConversationNotFound
 
         default:
             return .apiError(

@@ -20,7 +20,10 @@ struct ProfileStatsView: View {
         }
         .padding(.vertical, 18)
         .padding(.horizontal, 8)
-        .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 20))
+        .background(
+            Color.surfaceBackground,
+            in: RoundedRectangle(cornerRadius: 20)
+        )
         .overlay {
             RoundedRectangle(cornerRadius: 20)
                 .stroke(Color.borderColor.opacity(0.6), lineWidth: 1)
@@ -33,7 +36,7 @@ extension ProfileStatsView {
         title: LocalizedStringKey
     ) -> some View {
         VStack(spacing: 6) {
-            Text("\(value)")
+            Text(verbatim: "\(value)")
                 .font(.title2.weight(.bold))
                 .monospacedDigit()
                 .foregroundStyle(Color.titleText)

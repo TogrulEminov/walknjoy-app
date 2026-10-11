@@ -15,7 +15,10 @@ struct ProfileRowView: View {
                 .font(.system(size: 18))
                 .foregroundStyle(Color.iconColor)
                 .frame(width: 34, height: 34)
-                .background(Color.appBackground, in: RoundedRectangle(cornerRadius: 10))
+                .background(
+                    Color.appBackground,
+                    in: RoundedRectangle(cornerRadius: 10)
+                )
             Text(LocalizedStringKey(item.title))
                 .font(.body.weight(.medium))
                 .foregroundStyle(Color.titleText)

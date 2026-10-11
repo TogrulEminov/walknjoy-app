@@ -6,9 +6,10 @@
 //
 
 import SwiftUI
+
 struct ProfileMenuItem: Identifiable {
     let id = UUID()
     let title: String
-    let icon:String
-    let destination:ProfileDestination
+    let icon: String
+    let destination: ProfileDestination
 }

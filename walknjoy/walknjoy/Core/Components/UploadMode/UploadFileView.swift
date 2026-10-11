@@ -36,7 +36,7 @@ struct UploadFileView<PickerLabel: View>: View {
             if showsPreviews && !files.isEmpty {
                 previews
             }
- 
+
             if mode == .single || files.count < mode.maxCount {
                 PhotosPicker(
                     selection: $selectedItems,
@@ -263,7 +263,7 @@ extension UploadFileView {
                     )
                     .font(.system(size: 28))
 
-                    Text("retry")
+                    Text("common.retry")
                         .font(
                             .caption.weight(.semibold)
                         )

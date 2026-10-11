@@ -51,16 +51,16 @@ enum PhoneCountry: String, CaseIterable, Identifiable {
     var groups: [Int] {
         switch self {
         case .azerbaijan:
-            [2, 3, 2, 2] // 50 123 45 67
+            [2, 3, 2, 2]  // 50 123 45 67
 
         case .turkey:
-            [3, 3, 2, 2] // 5xx xxx xx xx
+            [3, 3, 2, 2]  // 5xx xxx xx xx
 
         case .georgia:
-            [3, 2, 2, 2] // 5xx xx xx xx
+            [3, 2, 2, 2]  // 5xx xx xx xx
 
         case .russia:
-            [3, 3, 2, 2] // 9xx xxx xx xx
+            [3, 3, 2, 2]  // 9xx xxx xx xx
         }
     }
 
@@ -78,11 +78,13 @@ extension PhoneCountry {
     ) -> PhoneCountry {
 
         guard let phone,
-              !phone.isEmpty else {
+            !phone.isEmpty
+        else {
             return .azerbaijan
         }
 
-        let normalized = phone
+        let normalized =
+            phone
             .replacingOccurrences(
                 of: " ",
                 with: ""
@@ -100,7 +102,8 @@ extension PhoneCountry {
     ) -> String {
 
         guard let phone,
-              !phone.isEmpty else {
+            !phone.isEmpty
+        else {
             return ""
         }
 

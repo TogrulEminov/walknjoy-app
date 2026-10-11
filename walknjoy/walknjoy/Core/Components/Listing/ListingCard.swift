@@ -1,78 +1,186 @@
 import SwiftUI
 
 struct ListingCard: View {
-    let listing: ListingResponse
+    @Environment(AppState.self) private var appState
+    private var currentRating: Rating? {
+        appState.reviews.rating(for: listing.id, fallback: listing.rating)
+    }
+    let listing: PublicListing
     var isFavorite: Bool
     var isUpdatingFavorite = false
+    var canFavorite = false
     let onFavoriteTap: () -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            AsyncImage(url: URL(string: listing.media.url)) { image in
-                image.resizable().scaledToFill()
-            } placeholder: {
-                Rectangle().fill(Color.borderColor)
-                    .overlay { Image(systemName: "photo").foregroundStyle(Color.descriptionText) }
-            }
-            .frame(height: 190)
-            .frame(maxWidth: .infinity)
-            .clipped()
-            .overlay(alignment: .topTrailing) {
-                Button(action: onFavoriteTap) {
-                    Group {
-                        if isUpdatingFavorite {
-                            ProgressView()
-                        } else {
-                            Image(systemName: isFavorite ? "heart.fill" : "heart")
-                                .foregroundStyle(isFavorite ? Color.red : Color.titleText)
+        ZStack(alignment: .topTrailing) {
+            NavigationLink(value: AppRoute.listingDetails(listing)) {
+                VStack(alignment: .leading, spacing: 0) {
+                    RemoteImageView(url: imageURL) { placeholder }
+                        .frame(height: 168)
+                        .frame(maxWidth: .infinity)
+                        .clipped()
+
+                    VStack(alignment: .leading, spacing: 7) {
+                        HStack {
+                            Text(listing.type.title)
+                                .font(.caption.weight(.semibold))
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 4)
+                                .background(
+                                    Color.brandY.opacity(0.28),
+                                    in: Capsule()
+                                )
+                            Spacer()
+                            if let average = currentRating?.average {
+                                Label(
+                                    average.formatted(
+                                        .number.precision(.fractionLength(1))
+                                    ),
+                                    systemImage: "star.fill"
+                                )
+                                .font(.caption)
+                                .foregroundStyle(Color.description)
+                            }
+                        }
+
+                        if currentRating?.average == nil {
+                            Text("listing.card.new").font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        Text(listing.title)
+                            .font(.headline)
+                            .lineLimit(2, reservesSpace: true)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+
+                        if let location = listing.location {
+                            Label {
+                                Text(
+                                    verbatim:
+                                        "\(location.city ?? ""), \(location.countryCode)"
+                                )
+                            } icon: {
+                                Image(systemName: "mappin.and.ellipse")
+                            }
+                            .font(.subheadline).foregroundStyle(
+                                Color.description
+                            ).lineLimit(1)
+                        }
+
+                        HStack {
+                            if let category = listing.category {
+                                Text(category.name).lineLimit(1)
+                            }
+                            if let detailText {
+                                Spacer()
+                                Text(detailText)
+                            }
+                        }
+                        .font(.caption)
+                        .foregroundStyle(Color.description)
+
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            if listing.hasPrice {
+                                Text(formattedPrice).font(.headline)
+                                Text(listing.currency).font(.subheadline)
+                            } else {
+                                Text("listing.card.priceUnavailable").font(
+                                    .caption
+                                )
+                            }
+                            Spacer()
+                            if let rating = currentRating, rating.count > 0 {
+                                Text(verbatim: "(\(rating.count))")
+                                    .font(.caption).foregroundStyle(
+                                        Color.description
+                                    )
+                            }
                         }
                     }
-                    .frame(width: 40, height: 40)
-                    .background(Color.surfaceBackground, in: Circle())
+                    .padding(14)
                 }
-                .buttonStyle(.plain)
-                .disabled(isUpdatingFavorite)
-                .accessibilityLabel(isFavorite ? "favorites.remove" : "favorites.add")
-                .padding(12)
             }
+            .buttonStyle(.plain)
 
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text(typeTitle).font(.caption.weight(.semibold))
-                        .padding(.horizontal, 9).padding(.vertical, 5)
-                        .background(Color.brandYellow.opacity(0.25), in: Capsule())
-                    Spacer()
-                    if let average = listing.rating.average {
-                        Label("\(average) (\(listing.rating.count))", systemImage: "star.fill")
-                            .font(.caption).foregroundStyle(Color.descriptionText)
-                    }
-                }
-                Text(listing.title).font(.headline).lineLimit(2)
-                if let location = listing.location, !location.isEmpty {
-                    Label(location, systemImage: "mappin.and.ellipse")
-                        .font(.subheadline).foregroundStyle(Color.descriptionText).lineLimit(1)
-                }
-                if let description = listing.shortDescription, !description.isEmpty {
-                    Text(description).font(.subheadline)
-                        .foregroundStyle(Color.descriptionText).lineLimit(2)
-                }
-                Text("\(listing.basePrice) \(listing.currency)")
-                    .font(.headline).padding(.top, 4)
+            if canFavorite {
+                favoriteButton
+                    .padding(10)
+                    .zIndex(1)
             }
-            .padding(16)
         }
-        .foregroundStyle(Color.titleText)
-        .background(Color.surfaceBackground)
-        .clipShape(RoundedRectangle(cornerRadius: 20))
-        .overlay { RoundedRectangle(cornerRadius: 20).stroke(Color.borderColor, lineWidth: 1) }
+        .foregroundStyle(Color.title)
+        .background(Color.surfaceBg)
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+        .overlay {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Color.border, lineWidth: 1)
+        }
+        .accessibilityElement(children: .contain)
     }
 
-    private var typeTitle: LocalizedStringKey {
-        switch listing.type {
-        case .stay: "listing.type.stay"
-        case .tour: "listing.type.tour"
-        case .activity: "listing.type.activity"
-        case .experience: "listing.type.experience"
+    private var favoriteButton: some View {
+        Button(action: onFavoriteTap) {
+            Group {
+                if isUpdatingFavorite {
+                    ProgressView()
+                } else {
+                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                }
+            }
+            .foregroundStyle(isFavorite ? Color.errorC : Color.title)
+            .frame(width: 44, height: 44)
+            .background(Color.surfaceBg.opacity(0.92), in: Circle())
         }
+        .buttonStyle(.plain)
+        .disabled(isUpdatingFavorite)
+        .accessibilityLabel(isFavorite ? "favorites.remove" : "favorites.add")
+    }
+
+    private var placeholder: some View {
+        Color.border.overlay {
+            Image(systemName: "photo").foregroundStyle(Color.description)
+        }
+    }
+
+    private var imageURL: URL? {
+        guard listing.coverMedia?.type == .image,
+            let value = listing.coverMedia?.url
+        else { return nil }
+        return URL(string: value)
+    }
+
+    private var formattedPrice: String {
+        return listing.basePrice.formatted(
+            .number.precision(.fractionLength(0...2))
+        )
+    }
+
+    private var detailText: String? {
+        switch listing.details {
+        case .stay(let details):
+            return details.map {
+                String(
+                    format: String(localized: "listing.guests.summaryFormat"),
+                    $0.maxGuests
+                )
+            }
+        case .tour(let details): return details?.durationMinutes.map(duration)
+        case .activity(let details):
+            return details?.durationMinutes.map(duration)
+        case .experience: return nil
+        }
+    }
+
+    private func duration(_ minutes: Int) -> String {
+        minutes >= 60
+            ? String(
+                format: String(localized: "listing.duration.hoursFormat"),
+                minutes / 60
+            )
+            : String(
+                format: String(
+                    localized: "listing.duration.shortMinutesFormat"
+                ),
+                minutes
+            )
     }
 }

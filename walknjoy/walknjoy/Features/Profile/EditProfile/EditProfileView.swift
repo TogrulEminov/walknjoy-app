@@ -25,7 +25,7 @@ struct EditProfileView: View {
                 if let item = singleFiles.first, case .failed(let message) = item.state {
                     VStack(alignment: .leading, spacing: 8) {
                         errorText(message)
-                        Button("retry") {
+                        Button("common.retry") {
                             Task { await UploadFileViewModel().retry(item, files: $singleFiles, onUploaded: attachAvatar) }
                         }
                         .disabled(isAvatarLoading)
@@ -34,7 +34,7 @@ struct EditProfileView: View {
                 }
                 if viewModel.avatarErrorMessage != nil,
                    let item = singleFiles.first, case .uploaded = item.state {
-                    Button("retry") {
+                    Button("common.retry") {
                         if let file = item.uploadedFile {
                             Task { await attachAvatar(file) }
                         }
@@ -100,8 +100,10 @@ extension EditProfileView {
                     .foregroundStyle(Color.descriptionText)
                     .lineLimit(1)
 
-                ProfileRoleBadge(role: viewModel.profile.role)
-                    .padding(.top, 3)
+                if let role = viewModel.profile.role {
+                    ProfileRoleBadge(role: role)
+                        .padding(.top, 3)
+                }
             }
             .frame(
                 maxWidth: .infinity,
@@ -282,7 +284,7 @@ extension EditProfileView {
             formField(
                 title: "profile.firstName"
             ) {
-                InputFieldRepresentable(
+                AppTextField(
                     text: $viewModel.firstName,
                     placeholder: String(
                         localized:
@@ -299,7 +301,7 @@ extension EditProfileView {
             formField(
                 title: "profile.lastName"
             ) {
-                InputFieldRepresentable(
+                AppTextField(
                     text: $viewModel.lastName,
                     placeholder: String(
                         localized:
@@ -544,21 +546,13 @@ extension EditProfileView {
 
     private func attachAvatar(_ file: UploadedFile) async {
         let previewData = singleFiles.first(where: { $0.uploadedFile?.id == file.id })?.previewData
-        let previousID = viewModel.profile.avatarFile?.id
-        let updated = await viewModel.updateAvatar(fileId: file.id)
+        let updated = await viewModel.updateAvatar(fileId: file.id, previewData: previewData)
         guard updated else { return }
-        if let previewData, let image = UIImage(data: previewData) {
-            AvatarImageCache.shared.store(image, for: file.id)
-        }
-        if let previousID, previousID != file.id {
-            AvatarImageCache.shared.remove(previousID)
-        }
         onProfileUpdated(viewModel.profile)
         singleFiles = []
     }
 
     private func deleteAvatar() async {
-        let previousID = viewModel.profile.avatarFile?.id
         let deleted =
             await viewModel.deleteAvatar()
 
@@ -566,7 +560,6 @@ extension EditProfileView {
             return
         }
 
-        if let previousID { AvatarImageCache.shared.remove(previousID) }
         singleFiles = []
 
         onProfileUpdated(

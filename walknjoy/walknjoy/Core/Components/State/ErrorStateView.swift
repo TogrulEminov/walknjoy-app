@@ -3,14 +3,15 @@ import SwiftUI
 struct ErrorStateView: View {
     let title: LocalizedStringKey
     let message: String
-    var retryTitle: LocalizedStringKey?
-    var onRetry: (() -> Void)?
+    var retryTitle: LocalizedStringKey = "retry"
+    let onRetry: () -> Void
 
     var body: some View {
         VStack(spacing: 24) {
             StateIconView(
                 icon: "exclamationmark.triangle",
-                tint: .errorColor, background: .errorColor
+                tint: .errorColor,
+                background: .errorColor
             )
 
             VStack(spacing: 10) {
@@ -25,9 +26,11 @@ struct ErrorStateView: View {
             .multilineTextAlignment(.center)
             .fixedSize(horizontal: false, vertical: true)
 
-            if let retryTitle, let onRetry {
-                SubmitButton(title: retryTitle, icon: "arrow.clockwise", action: onRetry)
-            }
+            SubmitButton(
+                title: retryTitle,
+                icon: "arrow.clockwise",
+                action: onRetry
+            )
         }
         .frame(maxWidth: 360)
         .padding(24)

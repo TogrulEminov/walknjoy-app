@@ -31,7 +31,10 @@ struct ProfileSectionView: View {
                     }
                 }
             }
-            .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 20))
+            .background(
+                Color.surfaceBackground,
+                in: RoundedRectangle(cornerRadius: 20)
+            )
             .overlay {
                 RoundedRectangle(cornerRadius: 20)
                     .stroke(Color.borderColor.opacity(0.6), lineWidth: 1)

@@ -10,6 +10,5 @@ import Foundation
 struct Notification:Codable {
     let bookingUpdates: Bool
     let messages: Bool
-    let aiUpdates: Bool
     let marketing: Bool
 }

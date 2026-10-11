@@ -44,7 +44,7 @@ struct SecurityView: View {
 
                     if model.step == .code {
                         if model.codeSeconds > 0 {
-                            Text("security.code.remaining \(model.codeSeconds)")
+                            Text(String(format: String(localized: "security.code.remainingFormat"), model.codeSeconds))
                                 .font(.caption.monospacedDigit())
                                 .foregroundStyle(Color.descriptionText)
                         } else {
@@ -54,7 +54,7 @@ struct SecurityView: View {
                             Task { await model.resend() }
                         } label: {
                             if model.resendSeconds > 0 {
-                                Text("security.resend.remaining \(model.resendSeconds)")
+                                Text(String(format: String(localized: "security.resend.remainingFormat"), model.resendSeconds))
                             } else {
                                 Text("security.resend")
                             }
@@ -99,7 +99,7 @@ struct SecurityView: View {
     @ViewBuilder private var fields: some View {
         switch model.step {
         case .currentPassword:
-            PasswordFieldRepresentable(text: $model.currentPassword, placeHolder: String(localized: "security.current"))
+            AppPasswordField(text: $model.currentPassword, placeholder: "security.current")
                 .frame(height: 56)
                 .fieldValidation(model.form[.currentPassword])
         case .code:
@@ -110,10 +110,10 @@ struct SecurityView: View {
                 .frame(height: 56)
                 .fieldValidation(model.form[.code])
         case .newPassword:
-            PasswordFieldRepresentable(text: $model.newPassword, placeHolder: String(localized: "security.new"))
+            AppPasswordField(text: $model.newPassword, placeholder:"security.new")
                 .frame(height: 56)
                 .fieldValidation(model.form[.password])
-            PasswordFieldRepresentable(text: $model.confirmation, placeHolder: String(localized: "security.confirm"))
+            AppPasswordField(text: $model.confirmation, placeholder: "security.confirm")
                 .frame(height: 56)
                 .fieldValidation(model.form[.confirmation])
             PasswordRequirementsView(password: model.newPassword)

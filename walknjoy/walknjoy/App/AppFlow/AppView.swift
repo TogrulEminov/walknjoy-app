@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct AppView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(AppState.self) private var appState
 
     var body: some View {
@@ -21,7 +22,12 @@ struct AppView: View {
                 LanguageSelectionView()
             }
         }
+        .environment(appState.notifications)
         .preferredColorScheme(appState.mode.colorScheme)
+        .onChange(of: scenePhase, initial: true) { _, phase in
+            if phase == .active { appState.setAppActive(true) }
+            else if phase == .background { appState.setAppActive(false) }
+        }
 
         .task {
             if appState.flow == .splash {

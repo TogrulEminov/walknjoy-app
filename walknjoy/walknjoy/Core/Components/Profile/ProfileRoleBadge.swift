@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// Shared role presentation for the profile and edit profile screens.
 struct ProfileRoleBadge: View {
     let role: RoleEnum
 

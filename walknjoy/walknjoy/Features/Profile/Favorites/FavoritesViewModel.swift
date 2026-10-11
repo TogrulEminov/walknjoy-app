@@ -33,7 +33,7 @@ final class FavoritesViewModel {
             let result = try await service.getFavorites(limit: limit, page: page, locale: locale)
             return PaginationPage(
                 items: result.listings,
-                hasMore: result.meta.map { page < $0.totalPages }
+                hasMore: result.meta?.hasNextPage
             )
         }
     }
@@ -49,14 +49,12 @@ final class FavoritesViewModel {
         do {
             let response = try await service.deleteFavorites(FavoriteRequest(listingId: listing.id))
             guard !response.isFavorite else { throw NetworkError.invalidResponse }
-            // Preserve a concurrent removal failure until it is dismissed.
             if removingIDs.count == 1 {
                 switch removalState {
                 case .error: break
                 default: removalState = .loaded(())
                 }
             }
-            // Restart pagination because deletion shifts the server's page boundaries.
             if let locale { await refresh(locale: locale) }
         } catch {
             removalState = error is CancellationError ? .idle : .error(error.localizedDescription)

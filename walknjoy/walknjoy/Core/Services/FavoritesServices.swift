@@ -3,8 +3,10 @@ import Foundation
 @MainActor
 protocol FavoritesServicesProtocol {
     func addFavorites(_ input: FavoriteRequest) async throws -> FavoriteResponse
-    func deleteFavorites(_ input: FavoriteRequest) async throws -> FavoriteResponse
-    func getFavorites(limit: Int, page: Int, locale: String) async throws -> FavoritesPage
+    func deleteFavorites(_ input: FavoriteRequest) async throws
+        -> FavoriteResponse
+    func getFavorites(limit: Int, page: Int, locale: String) async throws
+        -> FavoritesPage
 }
 
 @MainActor
@@ -15,17 +17,23 @@ final class FavoritesServices: FavoritesServicesProtocol {
         self.networkService = networkService ?? DefaultNetworkService()
     }
 
-    func addFavorites(_ input: FavoriteRequest) async throws -> FavoriteResponse {
+    func addFavorites(_ input: FavoriteRequest) async throws -> FavoriteResponse
+    {
         try await update(.addFavorites(input.listingId))
     }
 
-    func deleteFavorites(_ input: FavoriteRequest) async throws -> FavoriteResponse {
+    func deleteFavorites(_ input: FavoriteRequest) async throws
+        -> FavoriteResponse
+    {
         try await update(.deleteFavorites(input.listingId))
     }
 
-    private func update(_ endpoint: FavoritesEndpoint) async throws -> FavoriteResponse {
+    private func update(_ endpoint: FavoritesEndpoint) async throws
+        -> FavoriteResponse
+    {
         let response = try await networkService.request(
-            enpoint: endpoint, responseType: ApiResponse<FavoriteResponse>.self
+            enpoint: endpoint,
+            responseType: ApiResponse<FavoriteResponse>.self
         )
         guard response.success, let data = response.data else {
             throw NetworkError.invalidResponse
@@ -33,9 +41,15 @@ final class FavoritesServices: FavoritesServicesProtocol {
         return data
     }
 
-    func getFavorites(limit: Int, page: Int, locale: String) async throws -> FavoritesPage {
+    func getFavorites(limit: Int, page: Int, locale: String) async throws
+        -> FavoritesPage
+    {
         let response = try await networkService.request(
-            enpoint: FavoritesEndpoint.getFavorites(limit: limit, page: page, locale: locale),
+            enpoint: FavoritesEndpoint.getFavorites(
+                limit: limit,
+                page: page,
+                locale: locale
+            ),
             responseType: ApiResponse<[ListingResponse]>.self
         )
         guard response.success, let data = response.data else {

@@ -4,7 +4,7 @@ import Observation
 @MainActor
 @Observable
 final class NotificationPreferencesViewModel {
-    enum Field { case bookingUpdates, messages, aiUpdates, marketing }
+    enum Field { case bookingUpdates, messages, marketing }
 
     private let service: ProfileServiceProtocol
     private(set) var state: LoadState<Notification> = .idle
@@ -12,7 +12,6 @@ final class NotificationPreferencesViewModel {
 
     var bookingUpdates = false
     var messages = false
-    var aiUpdates = false
     var marketing = false
 
     init(service: ProfileServiceProtocol? = nil) {
@@ -23,12 +22,21 @@ final class NotificationPreferencesViewModel {
         guard case .loaded(let original) = state else {
             return FormState(fields: [:], isBlocked: true)
         }
-        return FormState(fields: [
-            .bookingUpdates: .toggle(bookingUpdates, originalValue: original.bookingUpdates),
-            .messages: .toggle(messages, originalValue: original.messages),
-            .aiUpdates: .toggle(aiUpdates, originalValue: original.aiUpdates),
-            .marketing: .toggle(marketing, originalValue: original.marketing)
-        ], isSubmitting: saveState == .loading, requiresChanges: true)
+        return FormState(
+            fields: [
+                .bookingUpdates: .toggle(
+                    bookingUpdates,
+                    originalValue: original.bookingUpdates
+                ),
+                .messages: .toggle(messages, originalValue: original.messages),
+                .marketing: .toggle(
+                    marketing,
+                    originalValue: original.marketing
+                ),
+            ],
+            isSubmitting: saveState == .loading,
+            requiresChanges: true
+        )
     }
 
     func load() async {
@@ -48,14 +56,14 @@ final class NotificationPreferencesViewModel {
         guard form.canSubmit else { return }
         saveState = .loading
         let input = Notification(
-            bookingUpdates: bookingUpdates, messages: messages,
-            aiUpdates: aiUpdates, marketing: marketing
+            bookingUpdates: bookingUpdates,
+            messages: messages,
+            marketing: marketing
         )
         do {
             apply(try await service.updateNotification(input))
             saveState = .success
         } catch {
-            // Preserve the user's selections so a failed save can be retried.
             saveState = .error(error.localizedDescription)
         }
     }
@@ -63,7 +71,6 @@ final class NotificationPreferencesViewModel {
     private func apply(_ preferences: Notification) {
         bookingUpdates = preferences.bookingUpdates
         messages = preferences.messages
-        aiUpdates = preferences.aiUpdates
         marketing = preferences.marketing
         state = .loaded(preferences)
     }

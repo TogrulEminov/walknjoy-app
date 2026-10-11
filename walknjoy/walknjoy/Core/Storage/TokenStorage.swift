@@ -12,6 +12,7 @@ protocol TokenStorageProtocol {
     var refreshToken: String? { get }
 
     func save(accessToken: String, refreshToken: String) throws
+    func updateAccessToken(_ accessToken: String) throws
     func clear() throws
 }
 
@@ -43,6 +44,13 @@ final class TokenStorage: TokenStorageProtocol {
 
         try keychain.save(accessData, for: Keys.accessToken)
         try keychain.save(refreshData, for: Keys.refreshToken)
+    }
+
+    func updateAccessToken(_ accessToken: String) throws {
+        guard let data = accessToken.data(using: .utf8) else {
+            throw KeychainServiceError.invalidData
+        }
+        try keychain.save(data, for: Keys.accessToken)
     }
     func clear() throws {
         try keychain.delete(for: Keys.accessToken)

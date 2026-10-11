@@ -30,11 +30,15 @@ struct MultipartFormData {
             Content-Disposition: form-data; name="\(fieldName)"; filename="\(fileName)"\r\n
             """
         )
+
         body.appendString(
             "\(HttpHeader.contentType): \(mimeType)\r\n\r\n"
         )
+
         body.append(fileData)
+
         body.appendString("\r\n")
+
         body.appendString("--\(boundary)--\r\n")
 
         return body
