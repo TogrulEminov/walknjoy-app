@@ -12,45 +12,124 @@ struct BookingFormView: View {
                     VStack(alignment: .leading, spacing: 24) {
                         if let listing = viewModel.listing {
                             VStack(alignment: .leading, spacing: 8) {
-                                if let image = listing.media.first(where: { $0.isCover && $0.type == "image" }) ?? listing.media.first(where: { $0.type == "image" }) {
-                                    RemoteImageView(path: image.url) { Color.surfaceBackground }
-                                        .frame(height: 130).clipped().clipShape(RoundedRectangle(cornerRadius: 12))
+                                if let image = listing.media.first(where: {
+                                    $0.isCover && $0.type == "image"
+                                })
+                                    ?? listing.media.first(where: {
+                                        $0.type == "image"
+                                    })
+                                {
+                                    RemoteImageView(path: image.url) {
+                                        Color.surfaceBackground
+                                    }
+                                    .frame(height: 130).clipped().clipShape(
+                                        RoundedRectangle(cornerRadius: 12)
+                                    )
                                 }
                                 Text(listing.title ?? "").font(.headline)
                                 if case .stay(let details) = listing.details {
-                                    Text(String(format: String(localized: "booking.minimumNights"), viewModel.minimumNights))
-                                    if let time = details.checkInFrom { Text(String(localized: "listing.detail.checkIn") + ": " + time) }
-                                    if let time = details.checkOutUntil { Text(String(localized: "listing.detail.checkOut") + ": " + time) }
+                                    Text(
+                                        String(
+                                            format: String(
+                                                localized:
+                                                    "booking.minimumNights"
+                                            ),
+                                            viewModel.minimumNights
+                                        )
+                                    )
+                                    if let time = details.checkInFrom {
+                                        Text(
+                                            String(
+                                                localized:
+                                                    "listing.detail.checkIn"
+                                            ) + ": " + time
+                                        )
+                                    }
+                                    if let time = details.checkOutUntil {
+                                        Text(
+                                            String(
+                                                localized:
+                                                    "listing.detail.checkOut"
+                                            ) + ": " + time
+                                        )
+                                    }
                                 }
                             }.font(.subheadline).padding(16)
                                 .frame(maxWidth: .infinity, alignment: .leading)
-                                .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 16))
+                                .background(
+                                    Color.surfaceBackground,
+                                    in: RoundedRectangle(cornerRadius: 16)
+                                )
                         }
                         headerSection
 
                         VStack(spacing: 20) {
                             if viewModel.isStay {
-                                bookingSection(title: "listing.detail.booking.dates") {
+                                bookingSection(
+                                    title: "listing.detail.booking.dates"
+                                ) {
                                     VStack(spacing: 16) {
-                                        dateField(label: "listing.detail.checkIn", selection: $viewModel.checkIn, in: Date()...)
+                                        dateField(
+                                            label: "listing.detail.checkIn",
+                                            selection: $viewModel.checkIn,
+                                            in: Date()...
+                                        )
                                         fieldError("checkIn")
-                                        dateField(label: "listing.detail.checkOut", selection: $viewModel.checkOut, in: minimumCheckOut...)
+                                        dateField(
+                                            label: "listing.detail.checkOut",
+                                            selection: $viewModel.checkOut,
+                                            in: minimumCheckOut...
+                                        )
                                         fieldError("checkOut")
-                                        if case .loading = viewModel.sessionsState { ProgressView() }
-                                        if case .error(let message) = viewModel.sessionsState {
-                                            Text(message).foregroundStyle(Color.errorColor)
-                                            Button("common.retry") { Task { await viewModel.loadSessions() } }
+                                        if case .loading = viewModel
+                                            .sessionsState
+                                        {
+                                            ProgressView()
                                         }
-                                        if viewModel.availability != nil, !viewModel.datesAvailable {
-                                            Text("listing.detail.unavailable").foregroundStyle(Color.errorColor)
+                                        if case .error(let message) = viewModel
+                                            .sessionsState
+                                        {
+                                            Text(message).foregroundStyle(
+                                                Color.errorColor
+                                            )
+                                            Button("common.retry") {
+                                                Task {
+                                                    await viewModel.loadSessions()
+                                                }
+                                            }
                                         }
-                                        ForEach(Array((viewModel.availability?.blockedPeriods ?? []).enumerated()), id: \.offset) { _, period in
-                                            Text(String(localized: "booking.blockedDates") + ": " + period.startDate + " – " + period.endDate).font(.caption)
+                                        if viewModel.availability != nil,
+                                            !viewModel.datesAvailable
+                                        {
+                                            Text("listing.detail.unavailable")
+                                                .foregroundStyle(
+                                                    Color.errorColor
+                                                )
+                                        }
+                                        ForEach(
+                                            Array(
+                                                (viewModel.availability?
+                                                    .blockedPeriods ?? [])
+                                                    .enumerated()
+                                            ),
+                                            id: \.offset
+                                        ) { _, period in
+                                            Text(
+                                                String(
+                                                    localized:
+                                                        "booking.blockedDates"
+                                                ) + ": " + period.startDate
+                                                    + " – " + period.endDate
+                                            ).font(.caption)
                                         }
                                     }
                                 }
                             } else {
-                                bookingSection(title: "booking.sessions.title") { sessionsSection; fieldError("sessionId") }
+                                bookingSection(title: "booking.sessions.title")
+                                {
+                                    sessionsSection
+                                    fieldError("sessionId")
+                                }
                             }
 
                             bookingSection(title: "listing.detail.guests") {
@@ -58,16 +137,38 @@ struct BookingFormView: View {
                                     stepperField(
                                         label: "listing.detail.adults",
                                         value: $viewModel.adults,
-                                        range: 1...max(1, viewModel.guestLimit - viewModel.children),
+                                        range:
+                                            1...max(
+                                                1,
+                                                viewModel.guestLimit
+                                                    - viewModel.children
+                                            ),
                                         onIncrement: { viewModel.adults += 1 },
-                                        onDecrement: { viewModel.adults = max(1, viewModel.adults - 1) }
+                                        onDecrement: {
+                                            viewModel.adults = max(
+                                                1,
+                                                viewModel.adults - 1
+                                            )
+                                        }
                                     )
                                     stepperField(
                                         label: "listing.detail.children",
                                         value: $viewModel.children,
-                                        range: 0...max(0, viewModel.guestLimit - viewModel.adults),
-                                        onIncrement: { viewModel.children += 1 },
-                                        onDecrement: { viewModel.children = max(0, viewModel.children - 1) }
+                                        range:
+                                            0...max(
+                                                0,
+                                                viewModel.guestLimit
+                                                    - viewModel.adults
+                                            ),
+                                        onIncrement: {
+                                            viewModel.children += 1
+                                        },
+                                        onDecrement: {
+                                            viewModel.children = max(
+                                                0,
+                                                viewModel.children - 1
+                                            )
+                                        }
                                     )
                                 }
                             }
@@ -105,7 +206,9 @@ struct BookingFormView: View {
                 .background(Color.appBackground)
 
             }
-            .safeAreaInset(edge: .bottom, spacing: 0) { footerButton.background(Color.appBackground) }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                footerButton.background(Color.appBackground)
+            }
             .disabled(viewModel.isBusy)
             .navigationTitle("listing.detail.bookingTitle")
             .navigationBarTitleDisplayMode(.inline)
@@ -152,10 +255,15 @@ struct BookingFormView: View {
             }
         }
         .task { await viewModel.loadSessions() }
-        .onChange(of: viewModel.adults) { _, _ in viewModel.validateSelection() }
-        .onChange(of: viewModel.children) { _, _ in viewModel.validateSelection() }
+        .onChange(of: viewModel.adults) { _, _ in viewModel.validateSelection()
+        }
+        .onChange(of: viewModel.children) { _, _ in
+            viewModel.validateSelection()
+        }
         .onChange(of: viewModel.checkIn) { _, _ in
-            if Calendar.current.startOfDay(for: viewModel.checkOut) <= Calendar.current.startOfDay(for: viewModel.checkIn) {
+            if Calendar.current.startOfDay(for: viewModel.checkOut)
+                <= Calendar.current.startOfDay(for: viewModel.checkIn)
+            {
                 viewModel.checkOut = minimumCheckOut
             }
         }
@@ -163,11 +271,17 @@ struct BookingFormView: View {
     }
 
     @ViewBuilder private func fieldError(_ key: String) -> some View {
-        if let message = viewModel.fieldErrors[key] { Text(message).font(.caption).foregroundStyle(Color.errorColor) }
+        if let message = viewModel.fieldErrors[key] {
+            Text(message).font(.caption).foregroundStyle(Color.errorColor)
+        }
     }
 
     private var minimumCheckOut: Date {
-        Calendar.current.date(byAdding: .day, value: viewModel.minimumNights, to: Calendar.current.startOfDay(for: viewModel.checkIn)) ?? viewModel.checkIn
+        Calendar.current.date(
+            byAdding: .day,
+            value: viewModel.minimumNights,
+            to: Calendar.current.startOfDay(for: viewModel.checkIn)
+        ) ?? viewModel.checkIn
     }
 
     @ViewBuilder private var sessionsSection: some View {
@@ -176,12 +290,19 @@ struct BookingFormView: View {
             ProgressView("booking.sessions.loading").frame(maxWidth: .infinity)
         case .error(let message):
             VStack(spacing: 12) {
-                Text(message).font(.subheadline).foregroundStyle(Color.errorColor)
-                Button("common.retry") { Task { await viewModel.loadSessions() } }
+                Text(message).font(.subheadline).foregroundStyle(
+                    Color.errorColor
+                )
+                Button("common.retry") {
+                    Task { await viewModel.loadSessions() }
+                }
             }
         case .loaded:
             if viewModel.sessions.isEmpty {
-                ContentUnavailableView("booking.sessions.empty", systemImage: "calendar.badge.exclamationmark")
+                ContentUnavailableView(
+                    "booking.sessions.empty",
+                    systemImage: "calendar.badge.exclamationmark"
+                )
             } else {
                 VStack(spacing: 12) {
                     ForEach(viewModel.sessions) { session in
@@ -189,29 +310,62 @@ struct BookingFormView: View {
                             viewModel.selectedSessionId = session.id
                         } label: {
                             HStack(spacing: 12) {
-                                Image(systemName: viewModel.selectedSessionId == session.id ? "checkmark.circle.fill" : "circle")
-                                    .foregroundStyle(Color.iconColor)
+                                Image(
+                                    systemName: viewModel.selectedSessionId
+                                        == session.id
+                                        ? "checkmark.circle.fill" : "circle"
+                                )
+                                .foregroundStyle(Color.iconColor)
                                 VStack(alignment: .leading, spacing: 6) {
-                                    Text(session.startsAt, format: .dateTime.day().month(.abbreviated).year().hour().minute())
-                                        .font(.subheadline.bold())
-                                    Text(session.endsAt, format: .dateTime.day().month(.abbreviated).hour().minute())
-                                        .font(.caption)
-                                    Text(String(format: String(localized: "booking.sessions.remaining"), session.remaining))
-                                        .font(.caption)
-                                    if session.remaining < viewModel.participants {
-                                        Text("booking.sessions.insufficient").font(.caption).foregroundStyle(Color.errorColor)
+                                    Text(
+                                        session.startsAt,
+                                        format: .dateTime.day().month(
+                                            .abbreviated
+                                        ).year().hour().minute()
+                                    )
+                                    .font(.subheadline.bold())
+                                    Text(
+                                        session.endsAt,
+                                        format: .dateTime.day().month(
+                                            .abbreviated
+                                        ).hour().minute()
+                                    )
+                                    .font(.caption)
+                                    Text(
+                                        String(
+                                            format: String(
+                                                localized:
+                                                    "booking.sessions.remaining"
+                                            ),
+                                            session.remaining
+                                        )
+                                    )
+                                    .font(.caption)
+                                    if session.remaining
+                                        < viewModel.participants
+                                    {
+                                        Text("booking.sessions.insufficient")
+                                            .font(.caption).foregroundStyle(
+                                                Color.errorColor
+                                            )
                                     }
                                 }
                                 Spacer(minLength: 0)
                             }
                             .foregroundStyle(Color.titleText)
                             .padding(12)
-                            .background(Color.appBackground, in: RoundedRectangle(cornerRadius: 12))
+                            .background(
+                                Color.appBackground,
+                                in: RoundedRectangle(cornerRadius: 12)
+                            )
                         }
                         .buttonStyle(.plain)
                         .disabled(!viewModel.canSelect(session))
                         .opacity(viewModel.canSelect(session) ? 1 : 0.5)
-                        .accessibilityAddTraits(viewModel.selectedSessionId == session.id ? .isSelected : [])
+                        .accessibilityAddTraits(
+                            viewModel.selectedSessionId == session.id
+                                ? .isSelected : []
+                        )
                     }
                 }
             }
@@ -264,10 +418,15 @@ struct BookingFormView: View {
                 Color.descriptionText
             )
             Spacer()
-            DatePicker("", selection: selection, in: range, displayedComponents: .date)
-                .labelsHidden()
-                .datePickerStyle(.compact)
-                .foregroundStyle(Color.titleText)
+            DatePicker(
+                "",
+                selection: selection,
+                in: range,
+                displayedComponents: .date
+            )
+            .labelsHidden()
+            .datePickerStyle(.compact)
+            .foregroundStyle(Color.titleText)
         }
     }
 
@@ -287,7 +446,10 @@ struct BookingFormView: View {
                 Button {
                     onDecrement()
                 } label: {
-                    Image(systemName: "minus").font(.caption.bold()).frame(minWidth: 44, minHeight: 44)
+                    Image(systemName: "minus").font(.caption.bold()).frame(
+                        minWidth: 44,
+                        minHeight: 44
+                    )
                 }
                 .disabled(value.wrappedValue <= range.lowerBound)
 
@@ -297,7 +459,10 @@ struct BookingFormView: View {
                 Button {
                     onIncrement()
                 } label: {
-                    Image(systemName: "plus").font(.caption.bold()).frame(minWidth: 44, minHeight: 44)
+                    Image(systemName: "plus").font(.caption.bold()).frame(
+                        minWidth: 44,
+                        minHeight: 44
+                    )
                 }
                 .disabled(value.wrappedValue >= range.upperBound)
             }
@@ -317,7 +482,9 @@ struct BookingFormView: View {
         Button {
             Task {
                 if await viewModel.submitBooking(store: .init()) {
-                    if let result = viewModel.bookingResult { onSuccess(result) }
+                    if let result = viewModel.bookingResult {
+                        onSuccess(result)
+                    }
                     dismiss()
                 }
             }

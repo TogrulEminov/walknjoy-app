@@ -22,6 +22,19 @@ struct AppView: View {
                 LanguageSelectionView()
             }
         }
+        #if DEBUG
+        .overlay(alignment: .topTrailing) {
+            if appState.flow == .main, DemoBackend.shared.isActive {
+                Text("DEMO")
+                    .font(.caption2.bold())
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 5)
+                    .background(.thinMaterial, in: Capsule())
+                    .padding(.trailing, 12)
+                    .allowsHitTesting(false)
+            }
+        }
+        #endif
         .environment(appState.notifications)
         .preferredColorScheme(appState.mode.colorScheme)
         .onChange(of: scenePhase, initial: true) { _, phase in

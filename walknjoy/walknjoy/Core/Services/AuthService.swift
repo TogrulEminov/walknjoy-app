@@ -28,7 +28,6 @@ protocol AuthServiceProtocol {
     func restoreSession() async throws
 }
 
-// Serializes session validation and token updates across login/refresh/logout.
 @MainActor
 final class AuthService: AuthServiceProtocol {
     private let tokenStorage: TokenStorageProtocol
@@ -56,6 +55,9 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func logout() async throws {
+        #if DEBUG
+        if DemoBackend.shared.isActive { DemoBackend.shared.end(); return }
+        #endif
         guard let refreshToken = tokenStorage.refreshToken else {
             throw NetworkError.unauthorized
         }
@@ -124,6 +126,9 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func refresh() async throws {
+        #if DEBUG
+        if DemoBackend.shared.isActive { return }
+        #endif
         guard let refreshToken = tokenStorage.refreshToken else {
             throw NetworkError.unauthorized
         }
@@ -138,7 +143,6 @@ final class AuthService: AuthServiceProtocol {
         guard let data = response.data else {
             throw NetworkError.invalidResponse
         }
-        // A refresh begun by a previous session must not overwrite a newer login/logout.
         guard tokenStorage.refreshToken == refreshToken else {
             throw NetworkError.unauthorized
         }
@@ -161,6 +165,9 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func restoreSession() async throws {
+        #if DEBUG
+        if DemoBackend.shared.isActive { _ = try await me(); return }
+        #endif
         guard tokenStorage.refreshToken != nil else {
             throw NetworkError.unauthorized
         }
@@ -168,7 +175,6 @@ final class AuthService: AuthServiceProtocol {
             try await refresh()
             _ = try await me()
         } catch {
-            // A refreshed token alone is not proof of an allowed mobile account.
             try? tokenStorage.clear()
             throw error
         }

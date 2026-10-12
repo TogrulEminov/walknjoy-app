@@ -69,7 +69,9 @@ struct ListingDetailView: View {
         previewListing = nil
         rating = data.rating
         initialFavorite = isFavorite ?? data.isFavorite
-        _model = State(initialValue: ListingDetailViewModel(service: detailService))
+        _model = State(
+            initialValue: ListingDetailViewModel(service: detailService)
+        )
         self.onFavorite = onFavorite
         self.onBook = onBook
     }
@@ -114,7 +116,9 @@ struct ListingDetailView: View {
         .toolbar {
             if listing != nil {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button { dismiss() } label: {
+                    Button {
+                        dismiss()
+                    } label: {
                         ListingHeaderActionLabel(symbol: "chevron.left")
                     }
                     .buttonStyle(.plain)
@@ -135,14 +139,23 @@ struct ListingDetailView: View {
         .navigationDestination(isPresented: $showConversation) {
             ConversationStartView(context: .listing(listingID))
         }
-        .sheet(item: $bookingModel, onDismiss: {
-            createdBookingID = pendingBookingID
-            pendingBookingID = nil
-        }) { bookingModel in
-            BookingFormView(viewModel: bookingModel, onSuccess: { result in
-                pendingBookingID = result.id
-                NotificationCenter.default.post(name: .bookingsChanged, object: nil)
-            })
+        .sheet(
+            item: $bookingModel,
+            onDismiss: {
+                createdBookingID = pendingBookingID
+                pendingBookingID = nil
+            }
+        ) { bookingModel in
+            BookingFormView(
+                viewModel: bookingModel,
+                onSuccess: { result in
+                    pendingBookingID = result.id
+                    NotificationCenter.default.post(
+                        name: .bookingsChanged,
+                        object: nil
+                    )
+                }
+            )
         }
         .navigationDestination(item: $createdBookingID) { id in
             BookingDetailView(bookingID: id, role: .customer)
@@ -218,7 +231,11 @@ struct ListingDetailView: View {
     private var detailContent: some View {
         ScrollView {
             VStack(spacing: 0) {
-                ListingGalleryView(imagePaths: imagePaths, height: 300, bottomInset: 22)
+                ListingGalleryView(
+                    imagePaths: imagePaths,
+                    height: 300,
+                    bottomInset: 22
+                )
 
                 VStack(alignment: .leading, spacing: 20) {
                     ListingHeaderView(
@@ -235,12 +252,16 @@ struct ListingDetailView: View {
                             in: .whitespacesAndNewlines
                         ).isEmpty
                     {
-                        detailPanel { ListingDescriptionView(description: description) }
+                        detailPanel {
+                            ListingDescriptionView(description: description)
+                        }
                     }
 
                     if !(listing?.amenities ?? []).isEmpty {
                         detailPanel {
-                            ListingAmenitiesView(amenities: listing?.amenities ?? [])
+                            ListingAmenitiesView(
+                                amenities: listing?.amenities ?? []
+                            )
                         }
                     }
 
@@ -260,10 +281,21 @@ struct ListingDetailView: View {
                     }
 
                     if appState.currentUserRole == .customer {
-                        Button { showConversation = true } label: {
-                            Label("messages.contactProvider", systemImage: "bubble.left.and.bubble.right")
-                                .font(.headline).frame(maxWidth: .infinity, minHeight: 48)
-                                .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 14))
+                        Button {
+                            showConversation = true
+                        } label: {
+                            Label(
+                                "messages.contactProvider",
+                                systemImage: "bubble.left.and.bubble.right"
+                            )
+                            .font(.headline).frame(
+                                maxWidth: .infinity,
+                                minHeight: 48
+                            )
+                            .background(
+                                Color.surfaceBackground,
+                                in: RoundedRectangle(cornerRadius: 14)
+                            )
                         }.buttonStyle(.plain)
                     }
                     detailPanel { reviewsSection }
@@ -273,7 +305,12 @@ struct ListingDetailView: View {
                 .padding(.bottom, 24)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(Color.appBackground)
-                .clipShape(UnevenRoundedRectangle(topLeadingRadius: 26, topTrailingRadius: 26))
+                .clipShape(
+                    UnevenRoundedRectangle(
+                        topLeadingRadius: 26,
+                        topTrailingRadius: 26
+                    )
+                )
                 .padding(.top, -22)
             }
         }
@@ -302,12 +339,22 @@ struct ListingDetailView: View {
         )
     }
 
-    private func detailPanel<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+    private func detailPanel<Content: View>(@ViewBuilder content: () -> Content)
+        -> some View
+    {
         content()
             .padding(16)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 20))
-            .overlay { RoundedRectangle(cornerRadius: 20).stroke(Color.borderColor.opacity(0.45), lineWidth: 1) }
+            .background(
+                Color.surfaceBackground,
+                in: RoundedRectangle(cornerRadius: 20)
+            )
+            .overlay {
+                RoundedRectangle(cornerRadius: 20).stroke(
+                    Color.borderColor.opacity(0.45),
+                    lineWidth: 1
+                )
+            }
     }
 
     private func locationSection(_ location: ListingLocation) -> some View {
@@ -315,27 +362,28 @@ struct ListingDetailView: View {
             ListingLocationView(location: location)
 
             if location.latitude != nil, location.longitude != nil {
-            ListingMapView(
-                listings: [
-                    PublicListing(
-                        id: listingID,
-                        type: type,
-                        title: title,
-                        slug: slug,
-                        basePrice: listing?.basePrice ?? 0,
-                        currency: listing?.currency ?? "AZN",
-                        location: location,
-                        rating: currentRating ?? Rating(average: nil, count: 0)
-                    )
-                ],
-                selection: .constant(nil)
-            )
-            .frame(height: 160)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
-            .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                    .stroke(Color.border, lineWidth: 1)
-            )
+                ListingMapView(
+                    listings: [
+                        PublicListing(
+                            id: listingID,
+                            type: type,
+                            title: title,
+                            slug: slug,
+                            basePrice: listing?.basePrice ?? 0,
+                            currency: listing?.currency ?? "AZN",
+                            location: location,
+                            rating: currentRating
+                                ?? Rating(average: nil, count: 0)
+                        )
+                    ],
+                    selection: .constant(nil)
+                )
+                .frame(height: 160)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(Color.border, lineWidth: 1)
+                )
             }
         }
     }

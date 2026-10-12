@@ -55,14 +55,31 @@ struct BookingDetailView: View {
                 ScrollView {
                     VStack(spacing: 24) {
                         BookingHeaderView(booking: booking)
-                        Button { Task { await model.openListing(locale: appState.language.rawValue) } } label: {
+                        Button {
+                            Task {
+                                await model.openListing(
+                                    locale: appState.language.rawValue
+                                )
+                            }
+                        } label: {
                             VStack(alignment: .leading, spacing: 12) {
                                 if let image = booking.listing.coverImageUrl {
-                                    RemoteImageView(path: image) { Color.surfaceBackground }
-                                        .frame(height: 160).clipped().clipShape(RoundedRectangle(cornerRadius: 16))
+                                    RemoteImageView(path: image) {
+                                        Color.surfaceBackground
+                                    }
+                                    .frame(height: 160).clipped().clipShape(
+                                        RoundedRectangle(cornerRadius: 16)
+                                    )
                                 }
-                                Label(booking.listing.title, systemImage: "house")
-                                    .font(.headline).frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                                Label(
+                                    booking.listing.title,
+                                    systemImage: "house"
+                                )
+                                .font(.headline).frame(
+                                    maxWidth: .infinity,
+                                    minHeight: 44,
+                                    alignment: .leading
+                                )
                             }
                         }.padding(.horizontal)
 
@@ -83,7 +100,10 @@ struct BookingDetailView: View {
                             BookingDetailSection(title: "listing.detail.dates")
                             {
                                 if booking.session != nil {
-                                    BookingDetailRow(title: "booking.sessions.title", value: booking.schedule)
+                                    BookingDetailRow(
+                                        title: "booking.sessions.title",
+                                        value: booking.schedule
+                                    )
                                 }
                                 if let checkIn = booking.checkIn {
                                     BookingDetailRow(
@@ -106,8 +126,18 @@ struct BookingDetailView: View {
                                     title: "listing.detail.participants",
                                     value: "\(booking.participants)"
                                 )
-                                if let adults = booking.adults { BookingDetailRow(title: "listing.detail.adults", value: String(adults)) }
-                                if let children = booking.children { BookingDetailRow(title: "listing.detail.children", value: String(children)) }
+                                if let adults = booking.adults {
+                                    BookingDetailRow(
+                                        title: "listing.detail.adults",
+                                        value: String(adults)
+                                    )
+                                }
+                                if let children = booking.children {
+                                    BookingDetailRow(
+                                        title: "listing.detail.children",
+                                        value: String(children)
+                                    )
+                                }
                                 BookingDetailRow(
                                     title: "listing.detail.totalAmount",
                                     value:
@@ -117,23 +147,42 @@ struct BookingDetailView: View {
                         }
                         .padding(.horizontal)
 
-                        if let note = ReviewValidation.text(booking.customerNote) {
-                            BookingDetailSection(title: "listing.detail.note") { Text(note) }.padding(.horizontal)
+                        if let note = ReviewValidation.text(
+                            booking.customerNote
+                        ) {
+                            BookingDetailSection(title: "listing.detail.note") {
+                                Text(note)
+                            }.padding(.horizontal)
                         }
                         bookingDateRows(booking)
                         if role == .customer || role == .provider {
-                            Button { showConversation = true } label: {
-                                Label("messages.write", systemImage: "bubble.left.and.bubble.right")
-                                    .font(.headline).frame(maxWidth: .infinity, minHeight: 48)
-                                    .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 14))
+                            Button {
+                                showConversation = true
+                            } label: {
+                                Label(
+                                    "messages.write",
+                                    systemImage: "bubble.left.and.bubble.right"
+                                )
+                                .font(.headline).frame(
+                                    maxWidth: .infinity,
+                                    minHeight: 48
+                                )
+                                .background(
+                                    Color.surfaceBackground,
+                                    in: RoundedRectangle(cornerRadius: 14)
+                                )
                             }.padding(.horizontal)
                         }
                         if role == .customer, booking.canCancel {
-                            Button("booking.cancel", role: .destructive) { confirmCancel = true }
-                                .frame(minHeight: 44).disabled(model.isCancelling)
+                            Button("booking.cancel", role: .destructive) {
+                                confirmCancel = true
+                            }
+                            .frame(minHeight: 44).disabled(model.isCancelling)
                             if model.isCancelling { ProgressView() }
                         }
-                        if role == .customer, booking.status.uppercased() == "COMPLETED" {
+                        if role == .customer,
+                            booking.status.uppercased() == "COMPLETED"
+                        {
                             ownReviewSection(booking).padding(.horizontal)
                         }
                         if role == .customer {
@@ -187,7 +236,10 @@ struct BookingDetailView: View {
             }
         }
         .navigationDestination(isPresented: $showConversation) {
-            ConversationStartView(context: role == .provider ? .providerBooking(bookingID) : .booking(bookingID))
+            ConversationStartView(
+                context: role == .provider
+                    ? .providerBooking(bookingID) : .booking(bookingID)
+            )
         }
         .sheet(isPresented: $showTicket) {
             if let pdfData = model.ticketData {
@@ -198,22 +250,61 @@ struct BookingDetailView: View {
             await model.load()
             await model.loadReview(store: appState.reviews)
         }
-        .task(id: appState.reviews.revision) { await model.loadReview(store: appState.reviews) }
-        .refreshable { await model.load(); await model.loadReview(store: appState.reviews) }
-        .sheet(item: $editor) { ReviewEditorView(context: $0, onSuccess: { Task { await model.loadReview(store: appState.reviews) } }) }
-        .navigationDestination(isPresented: Binding(get: { model.listingDestination != nil }, set: { if !$0 { model.listingDestination = nil } })) {
-            if let listing = model.listingDestination { ListingDetailView(listing: listing) }
+        .task(id: appState.reviews.revision) {
+            await model.loadReview(store: appState.reviews)
         }
-        .confirmationDialog("booking.cancelConfirm", isPresented: $confirmCancel, titleVisibility: .visible) {
-            Button("booking.cancel", role: .destructive) { Task { await model.cancel() } }
+        .refreshable {
+            await model.load()
+            await model.loadReview(store: appState.reviews)
+        }
+        .sheet(item: $editor) {
+            ReviewEditorView(
+                context: $0,
+                onSuccess: {
+                    Task { await model.loadReview(store: appState.reviews) }
+                }
+            )
+        }
+        .navigationDestination(
+            isPresented: Binding(
+                get: { model.listingDestination != nil },
+                set: { if !$0 { model.listingDestination = nil } }
+            )
+        ) {
+            if let listing = model.listingDestination {
+                ListingDetailView(listing: listing)
+            }
+        }
+        .confirmationDialog(
+            "booking.cancelConfirm",
+            isPresented: $confirmCancel,
+            titleVisibility: .visible
+        ) {
+            Button("booking.cancel", role: .destructive) {
+                Task { await model.cancel() }
+            }
             Button("common.cancel", role: .cancel) {}
         }
-        .confirmationDialog("reviews.deleteConfirm", isPresented: $confirmDelete, titleVisibility: .visible) {
-            Button("reviews.delete", role: .destructive) { Task { await model.deleteReview(store: appState.reviews) } }
+        .confirmationDialog(
+            "reviews.deleteConfirm",
+            isPresented: $confirmDelete,
+            titleVisibility: .visible
+        ) {
+            Button("reviews.delete", role: .destructive) {
+                Task { await model.deleteReview(store: appState.reviews) }
+            }
         }
-        .alert("error.title", isPresented: Binding(get: { model.error != nil }, set: { if !$0 { model.error = nil } })) {
+        .alert(
+            "error.title",
+            isPresented: Binding(
+                get: { model.error != nil },
+                set: { if !$0 { model.error = nil } }
+            )
+        ) {
             Button("common.ok", role: .cancel) {}
-        } message: { Text(model.error ?? "") }
+        } message: {
+            Text(model.error ?? "")
+        }
     }
 
     @ViewBuilder
@@ -234,20 +325,37 @@ struct BookingDetailView: View {
         }
     }
 
-    @ViewBuilder private func ownReviewSection(_ booking: BookingsModel) -> some View {
+    @ViewBuilder private func ownReviewSection(_ booking: BookingsModel)
+        -> some View
+    {
         BookingDetailSection(title: "booking.yourReview") {
             switch model.reviewState {
             case .idle, .loading: ProgressView()
             case .error(let message):
                 Text(message).foregroundStyle(Color.errorColor)
-                Button("common.retry") { Task { await model.loadReview(store: appState.reviews) } }
+                Button("common.retry") {
+                    Task { await model.loadReview(store: appState.reviews) }
+                }
             case .loaded:
                 if let review = model.ownReview {
-                    ReviewCardView(name: booking.listing.title, rating: review.rating, title: review.title, comment: review.comment, date: review.createdAt, hidden: review.status == .hidden,
-                                   onEdit: { editor = ReviewEditorContext(review) }, onDelete: { confirmDelete = true }, isBusy: model.isDeletingReview)
+                    ReviewCardView(
+                        name: booking.listing.title,
+                        rating: review.rating,
+                        title: review.title,
+                        comment: review.comment,
+                        date: review.createdAt,
+                        hidden: review.status == .hidden,
+                        onEdit: { editor = ReviewEditorContext(review) },
+                        onDelete: { confirmDelete = true },
+                        isBusy: model.isDeletingReview
+                    )
                 } else {
                     Button("reviews.write") {
-                        editor = ReviewEditorContext(listingID: booking.listing.id, slug: booking.listing.slug, bookingID: booking.id)
+                        editor = ReviewEditorContext(
+                            listingID: booking.listing.id,
+                            slug: booking.listing.slug,
+                            bookingID: booking.id
+                        )
                     }.frame(minHeight: 44)
                 }
             }

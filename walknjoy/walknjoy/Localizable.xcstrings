@@ -183,6 +183,61 @@
         }
       }
     },
+    "booking.status.Cancelled" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ləğv edilib"
+          }
+        }
+      }
+    },
+    "booking.status.Completed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamamlanıb"
+          }
+        }
+      }
+    },
+    "booking.status.Confirmed" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təsdiqlənib"
+          }
+        }
+      }
+    },
+    "booking.status.Expired" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Müddəti bitib"
+          }
+        }
+      }
+    },
+    "booking.status.Pending" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Təsdiq gözləyir"
+          }
+        }
+      }
+    },
     "booking.yourReview" : {
       "localizations" : {
         "az" : {

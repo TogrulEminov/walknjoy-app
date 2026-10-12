@@ -41,17 +41,27 @@ struct PreferencesView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 
-    private func selectionRow(title: Text, symbol: String, selected: Bool, action: @escaping () -> Void) -> some View {
+    private func selectionRow(
+        title: Text,
+        symbol: String,
+        selected: Bool,
+        action: @escaping () -> Void
+    ) -> some View {
         Button(action: action) {
             HStack(spacing: 14) {
                 Image(systemName: symbol)
                     .foregroundStyle(Color.iconColor)
                     .frame(width: 32, height: 32)
-                    .background(Color.appBackground, in: RoundedRectangle(cornerRadius: 8))
+                    .background(
+                        Color.appBackground,
+                        in: RoundedRectangle(cornerRadius: 8)
+                    )
                 title.foregroundStyle(Color.titleText)
                 Spacer()
                 Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(selected ? Color.buttonBackground : Color.borderColor)
+                    .foregroundStyle(
+                        selected ? Color.buttonBackground : Color.borderColor
+                    )
             }
             .padding(.vertical, 6)
             .contentShape(Rectangle())

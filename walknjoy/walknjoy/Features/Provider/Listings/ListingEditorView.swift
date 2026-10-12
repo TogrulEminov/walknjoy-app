@@ -14,7 +14,10 @@ struct ListingTypeSelectionView: View {
                         .font(.system(size: 18, weight: .medium))
                         .foregroundStyle(Color.iconColor)
                         .frame(width: 36, height: 36)
-                        .background(Color.appBackground, in: RoundedRectangle(cornerRadius: 10))
+                        .background(
+                            Color.appBackground,
+                            in: RoundedRectangle(cornerRadius: 10)
+                        )
                     Text(type.title)
                         .font(.body.weight(.medium))
                         .foregroundStyle(Color.titleText)

@@ -43,6 +43,11 @@ nonisolated final class DefaultNetworkService: NetworkingService {
     }
 
     private func performRequest(enpoint: any Endpoint) async throws -> Data {
+        #if DEBUG
+        if DemoBackend.shared.isActive {
+            return try DemoBackend.shared.response(for: enpoint)
+        }
+        #endif
         var request = try enpoint.makeRequest()
 
         #if DEBUG

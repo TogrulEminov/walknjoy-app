@@ -1,6 +1,6 @@
 import Foundation
 import Observation
-import SwiftUI
+
 @MainActor
 @Observable
 final class EditProfileViewModel {
@@ -12,7 +12,7 @@ final class EditProfileViewModel {
 
     var firstName: String
     var lastName: String
- 
+
     var phone: String
 
     var phoneCountry: PhoneCountry
@@ -56,7 +56,7 @@ final class EditProfileViewModel {
 // MARK: - Validation
 
 extension EditProfileViewModel {
- 
+
     var fullPhoneNumber: String {
         phoneCountry.fullNumber(
             from: phone
@@ -66,35 +66,48 @@ extension EditProfileViewModel {
     enum Field { case firstName, lastName, phone }
 
     var form: FormState<Field> {
-        FormState(fields: [
-            .firstName: ValidatedField(
-                value: firstName,
-                rules: [.required("register.validation.firstName")],
-                originalValue: profile.firstName,
-                normalize: ValidatedField.trimmed
-            ),
-            .lastName: ValidatedField(
-                value: lastName,
-                rules: [.required("register.validation.lastName")],
-                originalValue: profile.lastName,
-                normalize: ValidatedField.trimmed
-            ),
-            .phone: ValidatedField(
-                value: phone,
-                rules: [.digits(phoneCountry.digitCount, optional: true, message: "profile.phone.invalid")],
-                originalValue: normalizedOriginalPhone,
-                normalize: { value in
-                    value.hasPrefix("+") ? value : self.phoneCountry.fullNumber(from: value)
-                }
-            )
-        ], isSubmitting: isSaving, isBlocked: isAvatarProcessing, requiresChanges: true)
+        FormState(
+            fields: [
+                .firstName: ValidatedField(
+                    value: firstName,
+                    rules: [.required("register.validation.firstName")],
+                    originalValue: profile.firstName,
+                    normalize: ValidatedField.trimmed
+                ),
+                .lastName: ValidatedField(
+                    value: lastName,
+                    rules: [.required("register.validation.lastName")],
+                    originalValue: profile.lastName,
+                    normalize: ValidatedField.trimmed
+                ),
+                .phone: ValidatedField(
+                    value: phone,
+                    rules: [
+                        .digits(
+                            phoneCountry.digitCount,
+                            optional: true,
+                            message: "profile.phone.invalid"
+                        )
+                    ],
+                    originalValue: normalizedOriginalPhone,
+                    normalize: { value in
+                        value.hasPrefix("+")
+                            ? value : self.phoneCountry.fullNumber(from: value)
+                    }
+                ),
+            ],
+            isSubmitting: isSaving,
+            isBlocked: isAvatarProcessing,
+            requiresChanges: true
+        )
     }
 
     private var normalizedOriginalPhone: String {
         let originalCountry = PhoneCountry.detect(from: profile.phone)
-        return originalCountry.fullNumber(from: originalCountry.localNumber(from: profile.phone))
+        return originalCountry.fullNumber(
+            from: originalCountry.localNumber(from: profile.phone)
+        )
     }
-
 
 }
 
@@ -127,8 +140,12 @@ extension EditProfileViewModel {
             )
 
             profile = profile.replacingAvatar(response.avatarFile)
-            if let previewData { avatarCache.storePreview(previewData, for: fileId) }
-            if let previousID, previousID != fileId { avatarCache.remove(previousID) }
+            if let previewData {
+                avatarCache.storePreview(previewData, for: fileId)
+            }
+            if let previousID, previousID != fileId {
+                avatarCache.remove(previousID)
+            }
 
             return true
 
@@ -211,21 +228,26 @@ extension EditProfileViewModel {
 
         let input = UpdateProfileInput(
             firstName:
-                normalizedFirstName != profile.firstName.trimmingCharacters(in: .whitespacesAndNewlines)
-                    ? normalizedFirstName
-                    : nil,
+                normalizedFirstName
+                != profile.firstName.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                )
+                ? normalizedFirstName
+                : nil,
 
             lastName:
-                normalizedLastName != profile.lastName.trimmingCharacters(in: .whitespacesAndNewlines)
-                    ? normalizedLastName
-                    : nil,
+                normalizedLastName
+                != profile.lastName.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                )
+                ? normalizedLastName
+                : nil,
 
             phone:
                 newPhone != currentPhone
-                    ? newPhone
-                    : nil
+                ? newPhone
+                : nil
         )
- 
 
         do {
             let updatedProfile =
@@ -240,7 +262,7 @@ extension EditProfileViewModel {
             return true
 
         } catch {
-            
+
             saveErrorMessage =
                 error.localizedDescription
 
@@ -251,9 +273,9 @@ extension EditProfileViewModel {
 
 // MARK: - Sync Form
 
-private extension EditProfileViewModel {
+extension EditProfileViewModel {
 
-    func syncForm() {
+    fileprivate func syncForm() {
 
         firstName =
             profile.firstName
@@ -278,7 +300,6 @@ private extension EditProfileViewModel {
             localPhone
 
         isPhoneComplete =
-            localPhone.count ==
-            country.digitCount
+            localPhone.count == country.digitCount
     }
 }

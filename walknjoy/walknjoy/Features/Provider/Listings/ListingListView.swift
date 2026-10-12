@@ -135,31 +135,66 @@ struct ListingListView: View {
             .background(Color.appBg, in: RoundedRectangle(cornerRadius: 14))
             HStack(spacing: 8) {
                 Menu {
-                    Button("provider.list.allStatuses") { model.query.status = nil }
-                    ForEach([ListingStatus.draft, .pendingReview, .published, .rejected, .archived], id: \.rawValue) { status in
-                        Button { model.query.status = status } label: { Text(status.localizedTitle) }
+                    Button("provider.list.allStatuses") {
+                        model.query.status = nil
+                    }
+                    ForEach(
+                        [
+                            ListingStatus.draft, .pendingReview, .published,
+                            .rejected, .archived,
+                        ],
+                        id: \.rawValue
+                    ) { status in
+                        Button {
+                            model.query.status = status
+                        } label: {
+                            Text(status.localizedTitle)
+                        }
                     }
                 } label: {
-                    filterChip(title: model.query.status?.localizedTitle ?? String(localized: "provider.list.allStatuses"), systemImage: "circle.lefthalf.filled")
+                    filterChip(
+                        title: model.query.status?.localizedTitle
+                            ?? String(localized: "provider.list.allStatuses"),
+                        systemImage: "circle.lefthalf.filled"
+                    )
                 }
                 .accessibilityLabel("provider.list.status")
 
                 Menu {
-                    Button("search.type.all") { model.query.type = nil; model.query.categoryId = nil }
+                    Button("search.type.all") {
+                        model.query.type = nil
+                        model.query.categoryId = nil
+                    }
                     ForEach(ListingType.allCases) { type in
-                        Button { model.query.type = type; model.query.categoryId = nil } label: { Text(type.title) }
+                        Button {
+                            model.query.type = type
+                            model.query.categoryId = nil
+                        } label: {
+                            Text(type.title)
+                        }
                     }
                 } label: {
-                    filterChip(title: model.query.type.map(listingTypeTitle) ?? String(localized: "search.type.all"), systemImage: "square.grid.2x2")
+                    filterChip(
+                        title: model.query.type.map(listingTypeTitle)
+                            ?? String(localized: "search.type.all"),
+                        systemImage: "square.grid.2x2"
+                    )
                 }
                 .accessibilityLabel("search.type")
 
                 Menu {
                     ForEach(ProviderListingSort.allCases) { sort in
-                        Button { model.query.sort = sort } label: { Text(sort.title) }
+                        Button {
+                            model.query.sort = sort
+                        } label: {
+                            Text(sort.title)
+                        }
                     }
                 } label: {
-                    filterChip(title: sortTitle(model.query.sort), systemImage: "arrow.up.arrow.down")
+                    filterChip(
+                        title: sortTitle(model.query.sort),
+                        systemImage: "arrow.up.arrow.down"
+                    )
                 }
                 .accessibilityLabel("search.sort")
             }
@@ -168,11 +203,15 @@ struct ListingListView: View {
                 Menu {
                     Button("search.filter.any") { model.query.categoryId = nil }
                     ForEach(model.categories) { category in
-                        Button(category.name) { model.query.categoryId = category.id }
+                        Button(category.name) {
+                            model.query.categoryId = category.id
+                        }
                     }
                 } label: {
                     filterChip(
-                        title: model.categories.first { $0.id == model.query.categoryId }?.name ?? String(localized: "listing.category"),
+                        title: model.categories.first {
+                            $0.id == model.query.categoryId
+                        }?.name ?? String(localized: "listing.category"),
                         systemImage: "tag"
                     )
                 }
@@ -181,10 +220,15 @@ struct ListingListView: View {
 
                 Menu {
                     ForEach(ListingLocale.available) { locale in
-                        Button(locale.rawValue.uppercased()) { model.query.locale = locale }
+                        Button(locale.rawValue.uppercased()) {
+                            model.query.locale = locale
+                        }
                     }
                 } label: {
-                    filterChip(title: model.query.locale.rawValue.uppercased(), systemImage: "globe")
+                    filterChip(
+                        title: model.query.locale.rawValue.uppercased(),
+                        systemImage: "globe"
+                    )
                 }
                 .frame(width: 88)
                 .accessibilityLabel("listing.locale")
@@ -215,8 +259,16 @@ struct ListingListView: View {
         .padding(.horizontal, 10)
         .frame(maxWidth: .infinity)
         .frame(height: 40)
-        .background(Color.appBg, in: RoundedRectangle(cornerRadius: 11, style: .continuous))
-        .overlay { RoundedRectangle(cornerRadius: 11, style: .continuous).stroke(Color.border, lineWidth: 1) }
+        .background(
+            Color.appBg,
+            in: RoundedRectangle(cornerRadius: 11, style: .continuous)
+        )
+        .overlay {
+            RoundedRectangle(cornerRadius: 11, style: .continuous).stroke(
+                Color.border,
+                lineWidth: 1
+            )
+        }
         .contentShape(RoundedRectangle(cornerRadius: 11, style: .continuous))
     }
 
@@ -244,13 +296,24 @@ struct ListingListView: View {
                 Text(String(localized: "listing.myListings"))
                     .font(.largeTitle.weight(.bold))
                     .foregroundStyle(Color.title)
-                Text(String(format: String(localized: "provider.list.heading.countFormat"), model.totalCount))
-                    .contentTransition(.numericText(value: Double(model.totalCount)))
-                    .font(.subheadline)
-                    .foregroundStyle(Color.description)
+                Text(
+                    String(
+                        format: String(
+                            localized: "provider.list.heading.countFormat"
+                        ),
+                        model.totalCount
+                    )
+                )
+                .contentTransition(
+                    .numericText(value: Double(model.totalCount))
+                )
+                .font(.subheadline)
+                .foregroundStyle(Color.description)
             }
             Spacer()
-            Button { creating = true } label: {
+            Button {
+                creating = true
+            } label: {
                 Image(systemName: "plus")
                     .font(.headline.weight(.bold))
                     .foregroundStyle(Color.appBg)
@@ -278,24 +341,36 @@ private struct ProviderListingRowView: View {
                     thumbnail
                     VStack(alignment: .leading, spacing: 5) {
                         HStack(spacing: 7) {
-                            Text(listing.title ?? String(localized: "listing.untitled"))
-                                .font(.subheadline.weight(.semibold))
-                                .lineLimit(1)
+                            Text(
+                                listing.title
+                                    ?? String(localized: "listing.untitled")
+                            )
+                            .font(.subheadline.weight(.semibold))
+                            .lineLimit(1)
                             statusBadge
                         }
                         HStack(spacing: 8) {
                             if let city = listing.location?.city {
                                 Label(city, systemImage: "mappin.and.ellipse")
                             }
-                            if let category = listing.category { Text(category.name) }
+                            if let category = listing.category {
+                                Text(category.name)
+                            }
                         }
-                        .font(.caption).foregroundStyle(Color.description).lineLimit(1)
+                        .font(.caption).foregroundStyle(Color.description)
+                        .lineLimit(1)
                         HStack {
-                            Text(verbatim: "\(listing.basePrice) \(listing.currency)").font(.subheadline.weight(.semibold))
+                            Text(
+                                verbatim:
+                                    "\(listing.basePrice) \(listing.currency)"
+                            ).font(.subheadline.weight(.semibold))
                             Spacer()
                             if let rating = listing.rating.average {
                                 Label {
-                                    Text(verbatim: "\(rating.formatted(.number.precision(.fractionLength(1)))) (\(listing.rating.count))")
+                                    Text(
+                                        verbatim:
+                                            "\(rating.formatted(.number.precision(.fractionLength(1)))) (\(listing.rating.count))"
+                                    )
                                 } icon: {
                                     Image(systemName: "star.fill")
                                 }
@@ -314,12 +389,20 @@ private struct ProviderListingRowView: View {
             .disabled(busy)
 
             Menu {
-                Button(listing.actions.canEdit ? "common.edit" : "common.view", action: onOpen)
+                Button(
+                    listing.actions.canEdit ? "common.edit" : "common.view",
+                    action: onOpen
+                )
                 if listing.actions.canSubmit {
                     Button("listing.action.submit", action: onSubmit)
                 }
                 if listing.actions.canArchive {
-                    Button("provider.archive.action", systemImage: "archivebox", role: .destructive, action: onArchive)
+                    Button(
+                        "provider.archive.action",
+                        systemImage: "archivebox",
+                        role: .destructive,
+                        action: onArchive
+                    )
                 }
             } label: {
                 Image(systemName: "ellipsis")
@@ -334,13 +417,21 @@ private struct ProviderListingRowView: View {
         .padding(10)
         .foregroundStyle(Color.title)
         .background(Color.surfaceBg)
-        .overlay(alignment: .bottom) { Rectangle().fill(Color.border).frame(height: 1) }
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(Color.border).frame(height: 1)
+        }
     }
 
     private var thumbnail: some View {
         Group {
-            if let cover = listing.coverMedia, cover.type == "image", let url = URL(string: cover.url) {
-                AsyncImage(url: url) { image in image.resizable().scaledToFill() } placeholder: { placeholder }
+            if let cover = listing.coverMedia, cover.type == "image",
+                let url = URL(string: cover.url)
+            {
+                AsyncImage(url: url) { image in
+                    image.resizable().scaledToFill()
+                } placeholder: {
+                    placeholder
+                }
             } else {
                 placeholder
             }
@@ -350,7 +441,9 @@ private struct ProviderListingRowView: View {
     }
 
     private var placeholder: some View {
-        Color.border.overlay { Image(systemName: "photo").foregroundStyle(Color.icon) }
+        Color.border.overlay {
+            Image(systemName: "photo").foregroundStyle(Color.icon)
+        }
     }
 
     private var statusBadge: some View {
@@ -378,10 +471,21 @@ struct ListingDetailsSummary: View {
         switch details {
         case .stay(let value):
             Text(
-                String(format: String(localized: "listing.stay.summaryFormat"), ListingDetailFormatting.property(value.propertyType), value.maxGuests)
+                String(
+                    format: String(localized: "listing.stay.summaryFormat"),
+                    ListingDetailFormatting.property(value.propertyType),
+                    value.maxGuests
+                )
             )
             if let nights = value.minimumNights {
-                Text(String(format: String(localized: "listing.nights.minimumFormat"), nights))
+                Text(
+                    String(
+                        format: String(
+                            localized: "listing.nights.minimumFormat"
+                        ),
+                        nights
+                    )
+                )
             }
         case .tour(let value):
             duration(value.durationMinutes, participants: value.maxParticipants)
@@ -397,9 +501,23 @@ struct ListingDetailsSummary: View {
     @ViewBuilder private func duration(_ minutes: Int?, participants: Int?)
         -> some View
     {
-        if let minutes { Text(String(format: String(localized: "listing.duration.minutesFormat"), minutes)) }
+        if let minutes {
+            Text(
+                String(
+                    format: String(localized: "listing.duration.minutesFormat"),
+                    minutes
+                )
+            )
+        }
         if let participants {
-            Text(String(format: String(localized: "listing.participants.maximumFormat"), participants))
+            Text(
+                String(
+                    format: String(
+                        localized: "listing.participants.maximumFormat"
+                    ),
+                    participants
+                )
+            )
         }
     }
 }

@@ -25,7 +25,8 @@ struct ListingLocationView: View {
                         .font(.headline)
                         .foregroundStyle(Color.titleText)
 
-                        if let address = location.addressLine, !address.isEmpty {
+                        if let address = location.addressLine, !address.isEmpty
+                        {
                             Text(address)
                                 .font(.caption)
                                 .foregroundStyle(Color.descriptionText)

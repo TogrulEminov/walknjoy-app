@@ -14,9 +14,13 @@ struct BookingListView: View {
             if viewModel.role == .customer {
                 Picker("listing.detail.status", selection: $viewModel.status) {
                     Text("booking.allStatuses").tag(nil as String?)
-                    ForEach(BookingStatus.allCases) { Text($0.title).tag(Optional($0.rawValue)) }
+                    ForEach(BookingStatus.allCases) {
+                        Text($0.title).tag(Optional($0.rawValue))
+                    }
                 }.pickerStyle(.menu).padding(.horizontal)
-                .onChange(of: viewModel.status) { _, _ in Task { await viewModel.loadBookings() } }
+                    .onChange(of: viewModel.status) { _, _ in
+                        Task { await viewModel.loadBookings() }
+                    }
             }
             Group {
                 switch viewModel.state {
@@ -29,7 +33,10 @@ struct BookingListView: View {
                 case .loaded:
                     if viewModel.bookings.isEmpty {
                         ScrollView {
-                            ContentUnavailableView("bookings.emptyTitle", systemImage: "calendar.badge.exclamationmark")
+                            ContentUnavailableView(
+                                "bookings.emptyTitle",
+                                systemImage: "calendar.badge.exclamationmark"
+                            )
                         }.refreshable { await viewModel.loadBookings() }
                     } else {
                         bookingsList
@@ -41,7 +48,8 @@ struct BookingListView: View {
         .background(Color.appBackground.ignoresSafeArea())
         .toolbarBackground(Color.appBackground, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
-        .onReceive(NotificationCenter.default.publisher(for: .bookingsChanged)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .bookingsChanged))
+        { _ in
             Task { await viewModel.loadBookings() }
         }
         .navigationTitle("bookings.title")
@@ -66,10 +74,16 @@ struct BookingListView: View {
                     .buttonStyle(.plain)
                 }
                 if viewModel.role == .customer, viewModel.pagination.hasMore {
-                    Button("reviews.loadMore") { Task { await viewModel.loadMore() } }
-                        .frame(minHeight: 44).disabled(viewModel.pagination.isLoading)
+                    Button("reviews.loadMore") {
+                        Task { await viewModel.loadMore() }
+                    }
+                    .frame(minHeight: 44).disabled(
+                        viewModel.pagination.isLoading
+                    )
                 }
-                if let error = viewModel.error { Text(error).foregroundStyle(Color.errorColor) }
+                if let error = viewModel.error {
+                    Text(error).foregroundStyle(Color.errorColor)
+                }
             }
             .padding()
         }
@@ -85,7 +99,9 @@ struct BookingListItemView: View {
         VStack(alignment: .leading, spacing: 12) {
             if let path = booking.listing.coverImageUrl {
                 RemoteImageView(path: path) { Color.appBackground }
-                    .frame(height: 140).clipped().clipShape(RoundedRectangle(cornerRadius: 12))
+                    .frame(height: 140).clipped().clipShape(
+                        RoundedRectangle(cornerRadius: 12)
+                    )
             }
             HStack {
                 Text(booking.reference)

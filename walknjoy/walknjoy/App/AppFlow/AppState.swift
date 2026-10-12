@@ -111,6 +111,14 @@ final class AppState {
         self.mode = mode
         preferences.selectedMode = mode
     }
+    #if DEBUG
+    func enterDemo() {
+        realtime.stop()
+        DemoBackend.shared.begin()
+        finishAuthentication()
+    }
+    #endif
+
     func finishAuthentication() {
         flow = .main
     }
@@ -119,6 +127,9 @@ final class AppState {
         preferences.selectedLanguage = language
     }
     func finishLogout() {
+        #if DEBUG
+        DemoBackend.shared.end()
+        #endif
         realtime.clearChatSubscriptions()
         favoriteSession = UUID()
         canUseFavorites = false

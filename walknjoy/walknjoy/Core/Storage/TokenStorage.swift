@@ -17,7 +17,6 @@ nonisolated protocol TokenStorageProtocol {
 }
 
 nonisolated final class TokenStorage: TokenStorageProtocol {
-    // Shared across instances so token pairs are read/written atomically.
     private static let lock = NSRecursiveLock()
 
     private enum Keys {

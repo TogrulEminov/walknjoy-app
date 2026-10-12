@@ -22,7 +22,9 @@ final class FavoritesViewModel {
     }
 
     func load(locale: String) async {
-        guard self.locale != locale || (listings.isEmpty && !isLoading) else { return }
+        guard self.locale != locale || (listings.isEmpty && !isLoading) else {
+            return
+        }
         await refresh(locale: locale)
     }
 
@@ -30,7 +32,11 @@ final class FavoritesViewModel {
         self.locale = locale
         let service = service
         await pagination.refresh { page, limit in
-            let result = try await service.getFavorites(limit: limit, page: page, locale: locale)
+            let result = try await service.getFavorites(
+                limit: limit,
+                page: page,
+                locale: locale
+            )
             return PaginationPage(
                 items: result.listings,
                 hasMore: result.meta?.hasNextPage
@@ -47,8 +53,12 @@ final class FavoritesViewModel {
         removalState = .loading
         defer { removingIDs.remove(listing.id) }
         do {
-            let response = try await service.deleteFavorites(FavoriteRequest(listingId: listing.id))
-            guard !response.isFavorite else { throw NetworkError.invalidResponse }
+            let response = try await service.deleteFavorites(
+                FavoriteRequest(listingId: listing.id)
+            )
+            guard !response.isFavorite else {
+                throw NetworkError.invalidResponse
+            }
             if removingIDs.count == 1 {
                 switch removalState {
                 case .error: break
@@ -57,7 +67,9 @@ final class FavoritesViewModel {
             }
             if let locale { await refresh(locale: locale) }
         } catch {
-            removalState = error is CancellationError ? .idle : .error(error.localizedDescription)
+            removalState =
+                error is CancellationError
+                ? .idle : .error(error.localizedDescription)
         }
     }
 

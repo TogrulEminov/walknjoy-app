@@ -19,10 +19,15 @@ final class BookingDetailViewModel {
     var state: LoadState<Void> = .idle
     var error: String?
 
-    init(bookingID: String, role: RoleEnum, service: BookingServiceProtocol? = nil) {
+    init(
+        bookingID: String,
+        role: RoleEnum,
+        service: BookingServiceProtocol? = nil
+    ) {
         self.bookingID = bookingID
         self.role = role
-        self.service = service ?? BookingService(network: DefaultNetworkService())
+        self.service =
+            service ?? BookingService(network: DefaultNetworkService())
     }
 
     func load() async {
@@ -30,9 +35,12 @@ final class BookingDetailViewModel {
         error = nil
         do {
             switch role {
-            case .customer: booking = try await service.getBooking(id: bookingID)
-            case .provider: booking = try await service.getProviderBooking(id: bookingID)
-            case .admin: booking = try await service.getAdminBooking(id: bookingID)
+            case .customer:
+                booking = try await service.getBooking(id: bookingID)
+            case .provider:
+                booking = try await service.getProviderBooking(id: bookingID)
+            case .admin:
+                booking = try await service.getAdminBooking(id: bookingID)
             }
             state = .loaded(())
         } catch {
@@ -43,12 +51,17 @@ final class BookingDetailViewModel {
 
     func openListing(locale: String) async {
         guard let id = booking?.listing.id else { return }
-        do { listingDestination = try await ListingServices().getListing(id: id, locale: locale) }
-        catch { self.error = error.localizedDescription }
+        do {
+            listingDestination = try await ListingServices().getListing(
+                id: id,
+                locale: locale
+            )
+        } catch { self.error = error.localizedDescription }
     }
 
     func loadReview(store: ReviewStore) async {
-        guard role == .customer, booking?.status.uppercased() == "COMPLETED" else { return }
+        guard role == .customer, booking?.status.uppercased() == "COMPLETED"
+        else { return }
         let generation = UUID()
         reviewGeneration = generation
         let session = store.sessionID
@@ -58,14 +71,21 @@ final class BookingDetailViewModel {
             while true {
                 let result = try await reviews.mine(page: page, limit: 100)
                 try Task.checkCancellation()
-                guard reviewGeneration == generation, session == store.sessionID else { return }
+                guard reviewGeneration == generation, session == store.sessionID
+                else { return }
                 store.remember(result.items)
-                if let review = result.items.first(where: { $0.bookingId == bookingID }) {
+                if let review = result.items.first(where: {
+                    $0.bookingId == bookingID
+                }) {
                     ownReview = review
                     reviewState = .loaded(())
                     return
                 }
-                if !result.hasNextPage(currentPage: page, limit: 100) || result.items.isEmpty { break }
+                if !result.hasNextPage(currentPage: page, limit: 100)
+                    || result.items.isEmpty
+                {
+                    break
+                }
                 page += 1
             }
             ownReview = nil
@@ -88,7 +108,8 @@ final class BookingDetailViewModel {
     }
 
     func cancel() async {
-        guard !isCancelling, role == .customer, booking?.canCancel == true else { return }
+        guard !isCancelling, role == .customer, booking?.canCancel == true
+        else { return }
         isCancelling = true
         defer { isCancelling = false }
         do {

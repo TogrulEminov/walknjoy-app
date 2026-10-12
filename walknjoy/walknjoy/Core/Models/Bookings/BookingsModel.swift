@@ -130,7 +130,7 @@ nonisolated struct BookingsModel: Decodable, Identifiable {
             endsAt = try container.decodeIfPresent(String.self, forKey: .endsAt)
         }
     }
- 
+
     struct ListingSummary: Decodable {
         let id: String
         let title: String

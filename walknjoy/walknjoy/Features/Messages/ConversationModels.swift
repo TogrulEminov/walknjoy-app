@@ -54,7 +54,10 @@ struct MessagePage: Decodable {
     let data: [ChatMessage]
     let meta: Meta
 }
-struct ConversationPage { let items: [ConversationRow]; let meta: PaginationMeta }
+struct ConversationPage {
+    let items: [ConversationRow]
+    let meta: PaginationMeta
+}
 struct ChatReadReceipt: Decodable {
     let conversationId: String
     let userId: String
@@ -66,7 +69,9 @@ struct ChatReadResponse: Decodable {
     let data: ChatReadReceipt?
 }
 enum ConversationStart {
-    case listing(String), booking(String), providerBooking(String)
+    case listing(String)
+    case booking(String)
+    case providerBooking(String)
 }
 struct OutgoingMessage: Identifiable {
     enum Status { case pending, failed }
@@ -78,16 +83,28 @@ struct OutgoingMessage: Identifiable {
 enum ChatFormatting {
     static func date(_ text: String) -> Date? {
         let formatter = ISO8601DateFormatter()
-        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        return formatter.date(from: text) ?? ISO8601DateFormatter().date(from: text)
+        formatter.formatOptions = [
+            .withInternetDateTime, .withFractionalSeconds,
+        ]
+        return formatter.date(from: text)
+            ?? ISO8601DateFormatter().date(from: text)
     }
-    static func merge(_ existing: [ChatMessage], _ incoming: [ChatMessage]) -> [ChatMessage] {
-        var byID = Dictionary(existing.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
+    static func merge(_ existing: [ChatMessage], _ incoming: [ChatMessage])
+        -> [ChatMessage]
+    {
+        var byID = Dictionary(
+            existing.map { ($0.id, $0) },
+            uniquingKeysWith: { _, last in last }
+        )
         for message in incoming { byID[message.id] = message }
         return byID.values.sorted {
-            let left = date($0.createdAt), right = date($1.createdAt)
-            if let left, let right { return left == right ? $0.id < $1.id : left < right }
-            return $0.createdAt == $1.createdAt ? $0.id < $1.id : $0.createdAt < $1.createdAt
+            let left = date($0.createdAt)
+            let right = date($1.createdAt)
+            if let left, let right {
+                return left == right ? $0.id < $1.id : left < right
+            }
+            return $0.createdAt == $1.createdAt
+                ? $0.id < $1.id : $0.createdAt < $1.createdAt
         }
     }
 }

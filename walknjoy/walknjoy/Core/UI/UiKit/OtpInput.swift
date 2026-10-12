@@ -1,5 +1,5 @@
-import UIKit
 import SnapKit
+import UIKit
 
 final class WNJOTPTextField: UITextField {
 
@@ -44,7 +44,8 @@ final class OtpInput: UIView, UITextFieldDelegate {
         setupStackView()
         createTextFields()
         setupConstraints()
-        registerForTraitChanges([UITraitUserInterfaceStyle.self]) { (view: Self, _) in
+        registerForTraitChanges([UITraitUserInterfaceStyle.self]) {
+            (view: Self, _) in
             view.updateBorderColors()
         }
         updateBorderColors()
@@ -60,10 +61,12 @@ final class OtpInput: UIView, UITextFieldDelegate {
     }
 
     private func updateBorderColors() {
-        let color = hasValidationError ? AppColors.errorColor : AppColors.borderColor
+        let color =
+            hasValidationError ? AppColors.errorColor : AppColors.borderColor
         for field in textFields {
             field.layer.borderWidth = 1
-            field.layer.borderColor = color.resolvedColor(with: traitCollection).cgColor
+            field.layer.borderColor =
+                color.resolvedColor(with: traitCollection).cgColor
         }
     }
 
@@ -79,8 +82,6 @@ final class OtpInput: UIView, UITextFieldDelegate {
     }
 
     private func setupConstraints() {
-        // SwiftUI owns this view's frame. Constrain only its UIKit children;
-        // a constraint on self disables the hosting view's autoresizing mask.
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
@@ -110,7 +111,10 @@ final class OtpInput: UIView, UITextFieldDelegate {
 
     private func configure(_ field: WNJOTPTextField) {
         field.setContentHuggingPriority(.defaultLow, for: .horizontal)
-        field.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        field.setContentCompressionResistancePriority(
+            .defaultLow,
+            for: .horizontal
+        )
         field.keyboardType = .numberPad
         field.textAlignment = .center
         field.font = .systemFont(ofSize: 24, weight: .semibold)

@@ -12,15 +12,23 @@ struct FavoritesView: View {
                     SearchListingRow(
                         listing: listing,
                         isFavorite: appState.isFavorite(listing),
-                        isUpdatingFavorite: appState.updatingFavoriteIDs.contains(listing.id),
+                        isUpdatingFavorite: appState.updatingFavoriteIDs
+                            .contains(listing.id),
                         canFavorite: appState.canUseFavorites,
                         usesProfileRoute: true,
                         onFavorite: {
                             Task {
                                 do {
-                                    try await appState.setFavorite(false, for: listing)
-                                    await viewModel.refresh(locale: appState.language.rawValue)
-                                } catch { favoriteError = error.localizedDescription }
+                                    try await appState.setFavorite(
+                                        false,
+                                        for: listing
+                                    )
+                                    await viewModel.refresh(
+                                        locale: appState.language.rawValue
+                                    )
+                                } catch {
+                                    favoriteError = error.localizedDescription
+                                }
                             }
                         }
                     )
@@ -32,7 +40,8 @@ struct FavoritesView: View {
                 }
                 if case .error(let error) = viewModel.state {
                     ErrorStateView(
-                        title: "favorites.error", message: error,
+                        title: "favorites.error",
+                        message: error,
                         retryTitle: "favorites.retry"
                     ) {
                         Task { await viewModel.loadNextPage() }
@@ -54,13 +63,22 @@ struct FavoritesView: View {
         .background(Color.appBackground)
         .navigationTitle("profile.favorites")
         .navigationBarTitleDisplayMode(.inline)
-        .task(id: appState.language) { await viewModel.refresh(locale: appState.language.rawValue) }
-        .refreshable { await viewModel.refresh(locale: appState.language.rawValue) }
-        .alert("favorites.error", isPresented: Binding(
-            get: { favoriteError != nil },
-            set: { if $0 { favoriteError = nil } }
-        )) {
+        .task(id: appState.language) {
+            await viewModel.refresh(locale: appState.language.rawValue)
+        }
+        .refreshable {
+            await viewModel.refresh(locale: appState.language.rawValue)
+        }
+        .alert(
+            "favorites.error",
+            isPresented: Binding(
+                get: { favoriteError != nil },
+                set: { if $0 { favoriteError = nil } }
+            )
+        ) {
             Button("favorites.ok", role: .cancel) { favoriteError = nil }
-        } message: { Text(favoriteError ?? "") }
+        } message: {
+            Text(favoriteError ?? "")
+        }
     }
 }

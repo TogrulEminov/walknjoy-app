@@ -48,7 +48,10 @@ struct ProfileView: View {
                     }
                 }
         }
-        .alert("profile.logoutConfirmTitle", isPresented: $showLogoutConfirmation) {
+        .alert(
+            "profile.logoutConfirmTitle",
+            isPresented: $showLogoutConfirmation
+        ) {
             Button("common.cancel", role: .cancel) {}
             Button("profile.logout", role: .destructive) {
                 Task { await confirmLogout() }
@@ -56,9 +59,17 @@ struct ProfileView: View {
         } message: {
             Text("profile.logoutConfirmMessage")
         }
-        .alert("error.title", isPresented: Binding(get: { logoutError != nil }, set: { if !$0 { logoutError = nil } })) {
+        .alert(
+            "error.title",
+            isPresented: Binding(
+                get: { logoutError != nil },
+                set: { if !$0 { logoutError = nil } }
+            )
+        ) {
             Button("common.ok", role: .cancel) {}
-        } message: { Text(logoutError ?? "") }
+        } message: {
+            Text(logoutError ?? "")
+        }
     }
 }
 
@@ -231,8 +242,12 @@ extension ProfileView {
     private func handleNavigation(
         _ destination: ProfileDestination
     ) {
-        guard destination != .favorites || viewModel.canViewFavorites else { return }
-        guard destination != .bookings || viewModel.canViewBookings else { return }
+        guard destination != .favorites || viewModel.canViewFavorites else {
+            return
+        }
+        guard destination != .bookings || viewModel.canViewBookings else {
+            return
+        }
         path.append(destination)
     }
 }

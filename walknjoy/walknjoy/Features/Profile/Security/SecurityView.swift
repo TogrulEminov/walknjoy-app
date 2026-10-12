@@ -20,9 +20,14 @@ struct SecurityView: View {
 
             if model.step == .complete {
                 Section {
-                    Label("security.success", systemImage: "checkmark.circle.fill")
-                        .foregroundStyle(Color.titleText)
-                    Text("security.sessions").font(.footnote).foregroundStyle(Color.descriptionText)
+                    Label(
+                        "security.success",
+                        systemImage: "checkmark.circle.fill"
+                    )
+                    .foregroundStyle(Color.titleText)
+                    Text("security.sessions").font(.footnote).foregroundStyle(
+                        Color.descriptionText
+                    )
                     Button("common.ok") { dismiss() }
                 }
                 .listRowBackground(Color.surfaceBackground)
@@ -44,17 +49,35 @@ struct SecurityView: View {
 
                     if model.step == .code {
                         if model.codeSeconds > 0 {
-                            Text(String(format: String(localized: "security.code.remainingFormat"), model.codeSeconds))
-                                .font(.caption.monospacedDigit())
-                                .foregroundStyle(Color.descriptionText)
+                            Text(
+                                String(
+                                    format: String(
+                                        localized:
+                                            "security.code.remainingFormat"
+                                    ),
+                                    model.codeSeconds
+                                )
+                            )
+                            .font(.caption.monospacedDigit())
+                            .foregroundStyle(Color.descriptionText)
                         } else {
-                            Text("security.code.expired").foregroundStyle(Color.errorColor)
+                            Text("security.code.expired").foregroundStyle(
+                                Color.errorColor
+                            )
                         }
                         Button {
                             Task { await model.resend() }
                         } label: {
                             if model.resendSeconds > 0 {
-                                Text(String(format: String(localized: "security.resend.remainingFormat"), model.resendSeconds))
+                                Text(
+                                    String(
+                                        format: String(
+                                            localized:
+                                                "security.resend.remainingFormat"
+                                        ),
+                                        model.resendSeconds
+                                    )
+                                )
                             } else {
                                 Text("security.resend")
                             }
@@ -63,7 +86,9 @@ struct SecurityView: View {
                     }
 
                     if model.tokenExpired {
-                        Text("security.token.expired").foregroundStyle(Color.errorColor)
+                        Text("security.token.expired").foregroundStyle(
+                            Color.errorColor
+                        )
                     }
 
                     SubmitButton(title: actionTitle, form: model.form) {
@@ -76,7 +101,9 @@ struct SecurityView: View {
                     }
                 }
                 .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+                .listRowInsets(
+                    EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
+                )
             }
         }
         .scrollContentBackground(.hidden)
@@ -87,8 +114,7 @@ struct SecurityView: View {
         .task {
             while !Task.isCancelled {
                 model.refreshTime()
-                do { try await Task.sleep(for: .seconds(1)) }
-                catch { break }
+                do { try await Task.sleep(for: .seconds(1)) } catch { break }
             }
         }
         .onChange(of: scenePhase) { _, phase in
@@ -99,9 +125,12 @@ struct SecurityView: View {
     @ViewBuilder private var fields: some View {
         switch model.step {
         case .currentPassword:
-            AppPasswordField(text: $model.currentPassword, placeholder: "security.current")
-                .frame(height: 56)
-                .fieldValidation(model.form[.currentPassword])
+            AppPasswordField(
+                text: $model.currentPassword,
+                placeholder: "security.current"
+            )
+            .frame(height: 56)
+            .fieldValidation(model.form[.currentPassword])
         case .code:
             Text("security.code.description")
                 .font(.subheadline).foregroundStyle(Color.descriptionText)
@@ -110,12 +139,18 @@ struct SecurityView: View {
                 .frame(height: 56)
                 .fieldValidation(model.form[.code])
         case .newPassword:
-            AppPasswordField(text: $model.newPassword, placeholder:"security.new")
-                .frame(height: 56)
-                .fieldValidation(model.form[.password])
-            AppPasswordField(text: $model.confirmation, placeholder: "security.confirm")
-                .frame(height: 56)
-                .fieldValidation(model.form[.confirmation])
+            AppPasswordField(
+                text: $model.newPassword,
+                placeholder: "security.new"
+            )
+            .frame(height: 56)
+            .fieldValidation(model.form[.password])
+            AppPasswordField(
+                text: $model.confirmation,
+                placeholder: "security.confirm"
+            )
+            .frame(height: 56)
+            .fieldValidation(model.form[.confirmation])
             PasswordRequirementsView(password: model.newPassword)
         case .complete: EmptyView()
         }

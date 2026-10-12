@@ -14,8 +14,8 @@ enum ListingDetailServiceFactory {
         ListingServices()
     }
 }
-
-@MainActor @Observable
+@Observable
+@MainActor
 final class ListingDetailViewModel {
     private let service: any ListingDetailServiceProtocol
     private var generation = UUID()

@@ -51,9 +51,12 @@ final class ReviewStore {
         } catch is CancellationError {
             guard session == sessionID,
                 generation == ratingGenerations[listingID]
-            else { return } 
-            if case .loading = previousState { ratingStates[listingID] = .idle }
-            else { ratingStates[listingID] = previousState }
+            else { return }
+            if case .loading = previousState {
+                ratingStates[listingID] = .idle
+            } else {
+                ratingStates[listingID] = previousState
+            }
         } catch {
             guard session == sessionID,
                 generation == ratingGenerations[listingID]

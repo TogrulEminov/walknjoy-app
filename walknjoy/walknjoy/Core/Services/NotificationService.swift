@@ -65,7 +65,9 @@ nonisolated final class NotificationService: NotificationServiceProtocol {
     }
 }
 
-private nonisolated struct NotificationReadAllResult: Decodable { let updatedCount: Int }
+private nonisolated struct NotificationReadAllResult: Decodable {
+    let updatedCount: Int
+}
 
 nonisolated struct NotificationUnreadCount: Decodable {
     let count: Int

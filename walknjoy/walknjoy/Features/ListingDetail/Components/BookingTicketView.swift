@@ -9,7 +9,10 @@ struct BookingTicketView: View {
         VStack {
             PDFKitRepresentable(data: pdfData)
 
-            ShareLink(item: BookingTicketDocument(data: pdfData), preview: SharePreview(Text("listing.detail.ticket"))) {
+            ShareLink(
+                item: BookingTicketDocument(data: pdfData),
+                preview: SharePreview(Text("listing.detail.ticket"))
+            ) {
                 Label("common.share", systemImage: "square.and.arrow.up")
                     .font(.subheadline.bold())
                     .foregroundStyle(Color.brandInk)

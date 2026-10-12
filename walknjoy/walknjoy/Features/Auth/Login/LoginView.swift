@@ -59,6 +59,21 @@ extension LoginView {
                 forgotPassword
                 Spacer().frame(height: 38)
                 loginButton
+                #if DEBUG
+                Button {
+                    appState.enterDemo()
+                } label: {
+                    Label("Demo ilə daxil ol", systemImage: "play.circle")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .disabled(isLoading)
+                .padding(.top, 12)
+                Text("İnternet tələb etmir. Nümunə məlumatlarla sınaq rejimi.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .padding(.top, 8)
+                #endif
                 Spacer()
                     .frame(height: 36)
                 registerSection

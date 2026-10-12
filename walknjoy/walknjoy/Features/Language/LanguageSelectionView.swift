@@ -47,7 +47,8 @@ extension LanguageSelectionView {
             VStack(spacing: 10) {
                 Text("language.title").font(.system(size: 28, weight: .bold))
                 Text("language.subtitle").font(.system(size: 15))
-                    .foregroundStyle(Color.descriptionText).multilineTextAlignment(.center)
+                    .foregroundStyle(Color.descriptionText)
+                    .multilineTextAlignment(.center)
             }
             languageList
         }
