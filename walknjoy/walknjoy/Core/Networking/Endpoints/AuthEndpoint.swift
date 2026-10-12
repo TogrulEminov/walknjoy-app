@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AuthEndpoint {
+nonisolated enum AuthEndpoint {
     case requestPasswordChange(ChangePasswordRequest)
     case verifyPasswordChange(ChangePasswordVerification)
     case changePassword(ChangePasswordInput)
@@ -21,7 +21,7 @@ enum AuthEndpoint {
 
     case verifyForgotPasswordOTP(VerifyForgotPasswordOTPRequest)
 }
-extension AuthEndpoint: Endpoint {
+nonisolated extension AuthEndpoint: Endpoint {
     var path: String {
         switch self {
         case .requestPasswordChange: return "/auth/change-password/request"

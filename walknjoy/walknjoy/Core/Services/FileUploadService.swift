@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol FileUploadServiceProtocol {
+nonisolated protocol FileUploadServiceProtocol {
     func uploadOne(_ input: UploadFileInput) async throws -> UploadedFile
     func deleteOne(
         id: String
     ) async throws
 }
 
-final class FileUploadService: FileUploadServiceProtocol {
+nonisolated final class FileUploadService: FileUploadServiceProtocol {
     private let networkService: NetworkingService
 
     init(networkService: NetworkingService? = nil) {

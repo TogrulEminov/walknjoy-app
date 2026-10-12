@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ListingSort: String, Codable, CaseIterable, Identifiable {
+nonisolated enum ListingSort: String, Codable, CaseIterable, Identifiable {
     case newest
     case priceAscending = "price_asc"
     case priceDescending = "price_desc"

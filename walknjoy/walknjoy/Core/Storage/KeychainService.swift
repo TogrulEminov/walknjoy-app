@@ -8,7 +8,7 @@
 import Foundation
 import Security
 
-enum KeychainServiceError: LocalizedError {
+nonisolated enum KeychainServiceError: LocalizedError {
     case invalidData
     case unexpectedStatus(OSStatus)
 
@@ -22,7 +22,7 @@ enum KeychainServiceError: LocalizedError {
     }
 }
 
-final class KeychainService {
+nonisolated final class KeychainService {
     private let service: String
 
     init(service: String = Bundle.main.bundleIdentifier ?? "Walknjoy") {

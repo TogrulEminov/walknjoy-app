@@ -37,7 +37,7 @@ final class BookingViewModel: Identifiable {
         self.slug = slug
         self.type = type
         self.locale = locale
-        self.service = service ?? BookingService()
+        self.service = service ?? BookingService(network: DefaultNetworkService())
     }
 
     var isStay: Bool { type == .stay }

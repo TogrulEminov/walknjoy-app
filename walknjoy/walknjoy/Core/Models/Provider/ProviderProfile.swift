@@ -1,6 +1,6 @@
 import Foundation
 
-struct ProviderProfile: Decodable, Equatable {
+nonisolated struct ProviderProfile: Decodable, Equatable {
     let id: String
     let userId: String
     let businessName: String
@@ -17,12 +17,12 @@ struct ProviderProfile: Decodable, Equatable {
     let updatedAt: Date
 }
 
-struct ProviderApplicationResponseData: Decodable {
+nonisolated struct ProviderApplicationResponseData: Decodable {
     let profile: ProviderProfile
     let accessToken: String
 }
 
-struct ProviderApplicationInput: Encodable {
+nonisolated struct ProviderApplicationInput: Encodable {
     let businessName: String
     let legalName: String?
     let description: String?
@@ -32,7 +32,7 @@ struct ProviderApplicationInput: Encodable {
     let taxId: String?
 }
 
-struct UpdateProviderProfileInput: Encodable {
+nonisolated struct UpdateProviderProfileInput: Encodable {
     let businessName: String?
     let legalName: String??
     let description: String??

@@ -22,7 +22,7 @@ final class BookingDetailViewModel {
     init(bookingID: String, role: RoleEnum, service: BookingServiceProtocol? = nil) {
         self.bookingID = bookingID
         self.role = role
-        self.service = service ?? BookingService()
+        self.service = service ?? BookingService(network: DefaultNetworkService())
     }
 
     func load() async {

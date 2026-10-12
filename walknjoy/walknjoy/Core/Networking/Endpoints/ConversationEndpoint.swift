@@ -1,6 +1,6 @@
 import Foundation
 
-enum ConversationEndpoint {
+nonisolated enum ConversationEndpoint {
     case list(page: Int, locale: String)
     case detail(String, locale: String)
     case start(ConversationStart, locale: String)
@@ -9,16 +9,16 @@ enum ConversationEndpoint {
     case read(String, messageId: String)
 }
 
-struct StartBody: Encodable {
+nonisolated struct StartBody: Encodable {
     let listingId: String?
     let bookingId: String?
 }
-struct SendBody: Encodable {
+nonisolated struct SendBody: Encodable {
     let content: String
     let clientMessageId: String
 }
 
-extension ConversationEndpoint: Endpoint {
+nonisolated extension ConversationEndpoint: Endpoint {
 
     struct ReadBody: Encodable { let messageId: String }
     var path: String {

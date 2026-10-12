@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ListingServicesProtocol {
+nonisolated protocol ListingServicesProtocol {
     func getListings(query: ListingQuery) async throws -> [ListingResponse]
     func searchListings(criteria: ListingSearchCriteria) async throws
         -> ListingsPage
@@ -15,13 +15,12 @@ protocol ListingServicesProtocol {
         async throws -> Listing
 }
 
-struct ListingsPage {
+nonisolated struct ListingsPage {
     let listings: [PublicListing]
     let meta: PaginationMeta
 }
 
-@MainActor
-final class ListingServices: ListingServicesProtocol {
+nonisolated final class ListingServices: ListingServicesProtocol {
     private let networkServices: NetworkingService
 
     init(

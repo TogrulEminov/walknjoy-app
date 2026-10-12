@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 protocol AuthServiceProtocol {
     func register(request: RegisterRequest) async throws -> RegisterResponse
     func login(request: LoginRequest) async throws -> LoginResponse
@@ -27,6 +28,8 @@ protocol AuthServiceProtocol {
     func restoreSession() async throws
 }
 
+// Serializes session validation and token updates across login/refresh/logout.
+@MainActor
 final class AuthService: AuthServiceProtocol {
     private let tokenStorage: TokenStorageProtocol
     private let networkService: NetworkingService

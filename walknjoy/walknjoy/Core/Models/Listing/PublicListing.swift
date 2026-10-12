@@ -1,46 +1,46 @@
 import Foundation
 
-enum Currency: String, Codable, CaseIterable {
+nonisolated enum Currency: String, Codable, CaseIterable {
     case AZN, USD, EUR
 }
 
-enum MediaType: String, Codable {
+nonisolated enum MediaType: String, Codable {
     case image
     case video
     case panorama360 = "panorama_360"
 }
 
-struct ListingCategory: Decodable, Hashable {
+nonisolated struct ListingCategory: Decodable, Hashable {
     let id: String
     let name: String
     let slug: String
 }
 
-struct CoverMedia: Decodable, Hashable {
+nonisolated struct CoverMedia: Decodable, Hashable {
     let type: MediaType
     let url: String
 }
 
-enum ListingCardDetails: Hashable {
+nonisolated enum ListingCardDetails: Hashable {
     case stay(StayCardDetails?)
     case tour(TourCardDetails?)
     case activity(ActivityCardDetails?)
     case experience
 }
 
-struct StayCardDetails: Decodable, Hashable {
+nonisolated struct StayCardDetails: Decodable, Hashable {
     let maxGuests: Int
 }
 
-struct TourCardDetails: Decodable, Hashable {
+nonisolated struct TourCardDetails: Decodable, Hashable {
     let durationMinutes: Int?
 }
 
-struct ActivityCardDetails: Decodable, Hashable {
+nonisolated struct ActivityCardDetails: Decodable, Hashable {
     let durationMinutes: Int?
 }
 
-struct PublicListing: Decodable, Identifiable, Hashable {
+nonisolated struct PublicListing: Decodable, Identifiable, Hashable {
     let id: String
     let type: ListingType
     let title: String
@@ -138,7 +138,7 @@ struct PublicListing: Decodable, Identifiable, Hashable {
 
 typealias ListingResponse = PublicListing
 
-private struct CardMedia: Decodable {
+private nonisolated struct CardMedia: Decodable {
     let type: MediaType
     let url: String
     let isCover: Bool

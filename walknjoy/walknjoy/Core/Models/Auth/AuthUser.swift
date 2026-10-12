@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct AuthUser: Decodable {
+nonisolated struct AuthUser: Decodable {
     let id: String
     let email: String
     let firstName: String

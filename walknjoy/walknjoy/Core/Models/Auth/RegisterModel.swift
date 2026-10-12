@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct RegisterRequest: Encodable {
+nonisolated struct RegisterRequest: Encodable {
     let firstName: String
     let lastName: String
     let email: String
     let password: String
 }
-struct RegisterResponse: Decodable {
+nonisolated struct RegisterResponse: Decodable {
     let user: AuthUser
 }

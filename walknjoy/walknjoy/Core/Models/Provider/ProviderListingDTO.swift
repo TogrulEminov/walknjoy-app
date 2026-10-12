@@ -1,12 +1,12 @@
 import Foundation
 
-struct ProviderListingActions: Codable, Equatable {
+nonisolated struct ProviderListingActions: Codable, Equatable {
     let canEdit: Bool
     let canSubmit: Bool
     let canArchive: Bool
 }
 
-struct ProviderListingCardDTO: Codable, Identifiable, Equatable {
+nonisolated struct ProviderListingCardDTO: Codable, Identifiable, Equatable {
     struct Cover: Codable, Equatable {
         let id: String
         let type: String
@@ -44,7 +44,7 @@ struct ProviderListingCardDTO: Codable, Identifiable, Equatable {
     }
 }
 
-struct ProviderListingEditorDTO: Codable, Identifiable {
+nonisolated struct ProviderListingEditorDTO: Codable, Identifiable {
     struct Translation: Codable {
         let language: ListingLocale
         let title: String
@@ -95,9 +95,9 @@ struct ProviderListingEditorDTO: Codable, Identifiable {
     var price: Decimal? { Decimal(string: basePrice, locale: Locale(identifier: "en_US_POSIX")) }
 }
 
-enum ProviderCurrency: String, Codable { case AZN, USD, EUR }
+nonisolated enum ProviderCurrency: String, Codable { case AZN, USD, EUR }
 
-extension ListingType {
+nonisolated extension ListingType {
     init(from decoder: Decoder) throws {
         let c = try decoder.singleValueContainer()
         let value = try c.decode(String.self).lowercased()
@@ -113,7 +113,7 @@ extension ListingType {
     }
 }
 
-enum ProviderListingSort: String, CaseIterable, Identifiable {
+nonisolated enum ProviderListingSort: String, CaseIterable, Identifiable {
     case newest
     case priceAscending = "price_asc"
     case priceDescending = "price_desc"
@@ -121,7 +121,7 @@ enum ProviderListingSort: String, CaseIterable, Identifiable {
     var id: Self { self }
 }
 
-struct ProviderListingsQuery: Hashable {
+nonisolated struct ProviderListingsQuery: Hashable {
     var page = 1
     var limit = 20
     var locale: ListingLocale = .az
@@ -151,7 +151,7 @@ struct ProviderListingsQuery: Hashable {
     }
 }
 
-struct ProviderListingDetailsDTO: Decodable {
+nonisolated struct ProviderListingDetailsDTO: Decodable {
     struct Amenity: Decodable { let id: String }
     let type: ListingType
     let details: ListingDetails?

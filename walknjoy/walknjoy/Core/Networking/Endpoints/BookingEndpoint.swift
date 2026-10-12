@@ -1,9 +1,9 @@
 import Foundation
 
-enum BookingEndpoint {
+nonisolated enum BookingEndpoint {
     case listingAvailability(slug: String, locale: String)
     case checkAvailability(AvailabilityRequest)
-    case createBooking(BookingRequest)
+    case createBooking(BookingRequest, idempotencyKey: String)
     case getBooking(id: String)
     case getBookingTicket(id: String)
     case customerListBookings
@@ -22,7 +22,7 @@ enum BookingEndpoint {
     case adminGetBooking(id: String)
 }
 
-extension BookingEndpoint: Endpoint {
+nonisolated extension BookingEndpoint: Endpoint {
     var baseURL: String {
         APIConfig.baseURL
     }
@@ -76,7 +76,12 @@ extension BookingEndpoint: Endpoint {
     }
 
     var headers: [String: String]? {
-        nil
+        switch self {
+        case .createBooking(_, let idempotencyKey):
+            ["Idempotency-Key": idempotencyKey]
+        default:
+            nil
+        }
     }
 
     var queryItems: [URLQueryItem]? {
@@ -111,7 +116,7 @@ extension BookingEndpoint: Endpoint {
 
     var httpBody: RequestBody {
         switch self {
-        case .createBooking(let request):
+        case .createBooking(let request, _):
             .json(request)
         default:
             .none

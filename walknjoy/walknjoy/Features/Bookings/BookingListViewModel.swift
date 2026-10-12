@@ -15,7 +15,7 @@ final class BookingListViewModel {
 
     init(role: RoleEnum, service: BookingServiceProtocol? = nil) {
         self.role = role
-        self.service = service ?? BookingService()
+        self.service = service ?? BookingService(network: DefaultNetworkService())
     }
 
     func loadMore() async {

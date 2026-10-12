@@ -7,12 +7,12 @@
 
 import Foundation
 
-protocol UserDefaultsServiceProtocol {
+nonisolated protocol UserDefaultsServiceProtocol {
     var hasSeenOnboarding: Bool { get set }
     var selectedLanguage: AppLanguage { get set }
     var selectedMode: Mode { get set }
 }
-final class UserDefaultsService: UserDefaultsServiceProtocol {
+nonisolated final class UserDefaultsService: UserDefaultsServiceProtocol {
     private enum Keys {
         static let hasSeenOnboarding = "hasSeenOnboarding"
         static let selectedLanguage = "selectedLanguage"

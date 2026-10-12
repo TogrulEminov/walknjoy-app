@@ -1,6 +1,6 @@
 import Foundation
 
-enum CategoryEndpoint: Endpoint {
+nonisolated enum CategoryEndpoint: Endpoint {
     case getCategories
     case filtered(type: ListingType?, locale: String)
 

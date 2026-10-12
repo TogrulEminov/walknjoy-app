@@ -7,6 +7,6 @@
 
 import Foundation
 
-struct LogoutRequest: Encodable {
+nonisolated struct LogoutRequest: Encodable {
     let refreshToken: String
 }

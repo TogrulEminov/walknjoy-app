@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-enum ListingType: String, Codable, CaseIterable, Hashable, Identifiable,
+nonisolated enum ListingType: String, Codable, CaseIterable, Hashable, Identifiable,
     Equatable
 {
     case stay
@@ -44,7 +44,7 @@ enum ListingType: String, Codable, CaseIterable, Hashable, Identifiable,
     }
 }
 
-enum ListingStatus: String, Codable {
+nonisolated enum ListingStatus: String, Codable {
     case draft = "DRAFT"
     case pendingReview = "PENDING_REVIEW"
     case published = "PUBLISHED"
@@ -52,7 +52,7 @@ enum ListingStatus: String, Codable {
     case archived = "ARCHIVED"
 }
 
-extension ListingStatus {
+nonisolated extension ListingStatus {
     var localizedTitle: String {
         switch self {
         case .draft: String(localized: "listing.status.draft")

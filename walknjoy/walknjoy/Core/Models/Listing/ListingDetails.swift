@@ -6,7 +6,7 @@
 //
 import Foundation
 
-enum ListingDetails: Equatable {
+nonisolated enum ListingDetails: Equatable {
     static func decode(type: ListingType, from decoder: Decoder) throws -> Self
     {
         switch type {
@@ -24,7 +24,7 @@ enum ListingDetails: Equatable {
     case experience(ExperienceDetails)
 }
 
-struct StayDetails: Codable, Equatable {
+nonisolated struct StayDetails: Codable, Equatable {
     var propertyType: String
     var maxGuests: Int
     var bedrooms: Int? = nil
@@ -37,7 +37,7 @@ struct StayDetails: Codable, Equatable {
     var minimumNights: Int? = nil
     var instantBooking: Bool? = nil
 }
-struct TourDetails: Codable, Equatable {
+nonisolated struct TourDetails: Codable, Equatable {
     var durationMinutes: Int? = nil
     var maxParticipants: Int? = nil
     var minimumAge: Int? = nil
@@ -45,7 +45,7 @@ struct TourDetails: Codable, Equatable {
     var languages: [String]
     var isPrivateTour: Bool? = nil
 }
-struct ActivityDetails: Codable, Equatable {
+nonisolated struct ActivityDetails: Codable, Equatable {
     var durationMinutes: Int? = nil
     var maxParticipants: Int? = nil
     var minimumAge: Int? = nil
@@ -53,7 +53,7 @@ struct ActivityDetails: Codable, Equatable {
     var equipmentProvided: Bool? = nil
 }
 
-struct ExperienceDetails: Codable, Equatable {
+nonisolated struct ExperienceDetails: Codable, Equatable {
     var durationMinutes: Int? = nil
     var maxParticipants: Int? = nil
     var minimumAge: Int? = nil

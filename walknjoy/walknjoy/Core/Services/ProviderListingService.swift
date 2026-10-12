@@ -1,6 +1,6 @@
 import Foundation
 
-@MainActor protocol ProviderListingsManaging {
+nonisolated protocol ProviderListingsManaging {
     func categories(type: ListingType?, locale: ListingLocale) async throws
         -> [CategoryModel]
     func list(query: ProviderListingsQuery) async throws -> ApiResponse<
@@ -10,7 +10,7 @@ import Foundation
     func submit(id: String) async throws -> ProviderListingEditorDTO
 }
 
-@MainActor final class ProviderListingService: ProviderListingsManaging {
+nonisolated final class ProviderListingService: ProviderListingsManaging {
     private let network: NetworkingService
     init(network: NetworkingService? = nil) {
         self.network = network ?? DefaultNetworkService()

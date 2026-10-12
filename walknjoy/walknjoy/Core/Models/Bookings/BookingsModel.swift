@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct BookingRequest: Encodable, Equatable {
+nonisolated struct BookingRequest: Encodable, Equatable {
     let listingId: String
     let checkIn: String?
     let checkOut: String?
@@ -17,7 +17,7 @@ struct BookingRequest: Encodable, Equatable {
     let customerNote: String?
 }
 
-struct AvailabilityRequest: Encodable {
+nonisolated struct AvailabilityRequest: Encodable {
     let listingId: String
     let checkIn: String?
     let checkOut: String?
@@ -25,7 +25,7 @@ struct AvailabilityRequest: Encodable {
     let participants: Int?
 }
 
-struct BookingSession: Decodable, Identifiable {
+nonisolated struct BookingSession: Decodable, Identifiable {
     let id: String
     let startsAt: Date
     let endsAt: Date
@@ -33,7 +33,7 @@ struct BookingSession: Decodable, Identifiable {
     let remaining: Int
 }
 
-struct ListingAvailabilityResponse: Decodable {
+nonisolated struct ListingAvailabilityResponse: Decodable {
     let sessions: [BookingSession]?
     let availableFrom: String?
     let availableUntil: String?
@@ -44,7 +44,7 @@ struct ListingAvailabilityResponse: Decodable {
     }
 }
 
-struct AvailabilityResponse: Decodable {
+nonisolated struct AvailabilityResponse: Decodable {
     let available: Bool
     let message: String?
     let reason: String?
@@ -52,7 +52,7 @@ struct AvailabilityResponse: Decodable {
     let currency: String?
 }
 
-struct BookingResponse: Decodable {
+nonisolated struct BookingResponse: Decodable {
     let id: String
     let reference: String
     let status: String
@@ -102,7 +102,7 @@ struct BookingResponse: Decodable {
     }
 }
 
-struct BookingsModel: Decodable, Identifiable {
+nonisolated struct BookingsModel: Decodable, Identifiable {
     struct SessionSummary: Decodable {
         let id: String
         let startsAt: String?
@@ -265,7 +265,7 @@ struct BookingsModel: Decodable, Identifiable {
     }
 }
 
-enum BookingStatus: String, CaseIterable, Identifiable {
+nonisolated enum BookingStatus: String, CaseIterable, Identifiable {
     case pending = "PENDING"
     case confirmed = "CONFIRMED"
     case cancelled = "CANCELLED"
@@ -288,7 +288,7 @@ enum BookingStatus: String, CaseIterable, Identifiable {
     }
 }
 
-extension BookingsModel {
+nonisolated extension BookingsModel {
     var statusTitle: String {
         BookingStatus(rawValue: status.uppercased())?.title ?? status
     }
@@ -319,7 +319,7 @@ extension BookingsModel {
     }
 }
 
-extension Foundation.Notification.Name {
+nonisolated extension Foundation.Notification.Name {
     static let bookingsChanged = Foundation.Notification.Name(
         "walknjoy.bookingsChanged"
     )

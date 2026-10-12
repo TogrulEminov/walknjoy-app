@@ -7,15 +7,15 @@
 
 import Foundation
 
-struct FavoriteRequest: Encodable {
+nonisolated struct FavoriteRequest: Encodable {
     let listingId: String
 }
-struct FavoriteResponse: Decodable, Equatable {
+nonisolated struct FavoriteResponse: Decodable, Equatable {
     let isFavorite: Bool
     let favoritedAt: String?
 }
 
-struct FavoritesPage {
+nonisolated struct FavoritesPage {
     let listings: [ListingResponse]
     let meta: PaginationMeta?
 }

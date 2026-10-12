@@ -1,18 +1,18 @@
 import Foundation
 
-struct NotificationPage {
+nonisolated struct NotificationPage {
     let items: [AppNotification]
     let meta: PaginationMeta?
 }
 
-@MainActor protocol NotificationServiceProtocol {
+nonisolated protocol NotificationServiceProtocol {
     func list(unreadOnly: Bool, page: Int) async throws -> NotificationPage
     func unreadCount() async throws -> Int
     func markRead(id: String) async throws
     func markAllRead() async throws
 }
 
-@MainActor final class NotificationService: NotificationServiceProtocol {
+nonisolated final class NotificationService: NotificationServiceProtocol {
     private let network: NetworkingService
     init(network: NetworkingService? = nil) {
         self.network = network ?? DefaultNetworkService()
@@ -65,9 +65,9 @@ struct NotificationPage {
     }
 }
 
-private struct NotificationReadAllResult: Decodable { let updatedCount: Int }
+private nonisolated struct NotificationReadAllResult: Decodable { let updatedCount: Int }
 
-struct NotificationUnreadCount: Decodable {
+nonisolated struct NotificationUnreadCount: Decodable {
     let count: Int
 }
 

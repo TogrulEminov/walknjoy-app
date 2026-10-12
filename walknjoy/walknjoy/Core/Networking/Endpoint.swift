@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol Endpoint {
+nonisolated protocol Endpoint {
     var baseURL: String { get }
     var path: String { get }
     var method: HttpMethod { get }
@@ -18,7 +18,7 @@ protocol Endpoint {
     var usesOptionalAuth: Bool { get }
 }
 
-extension Endpoint {
+nonisolated extension Endpoint {
     var usesOptionalAuth: Bool { false }
     var baseURL: String {
         APIConfig.baseURL
@@ -38,7 +38,7 @@ extension Endpoint {
     }
 }
 
-extension Endpoint {
+nonisolated extension Endpoint {
 
     func makeRequest() throws -> URLRequest {
         guard
@@ -99,7 +99,7 @@ extension Endpoint {
     }
 }
 
-extension Endpoint {
+nonisolated extension Endpoint {
     func makeQueryItems(
         _ parameters: [String: CustomStringConvertible?]
     ) -> [URLQueryItem] {

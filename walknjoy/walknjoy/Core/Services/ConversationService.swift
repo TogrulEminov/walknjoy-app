@@ -1,5 +1,6 @@
 import Foundation
 
+// Owns the shared refresh task and delivers session callbacks to UI consumers.
 @MainActor final class ConversationService: ConversationServiceProtocol {
     var onSessionExpired: (() -> Void)?
     private let tokens: TokenStorageProtocol

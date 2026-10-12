@@ -1,10 +1,10 @@
 import Foundation
 
-protocol CategoryServicesProtocol {
+nonisolated protocol CategoryServicesProtocol {
     func getCategories() async throws -> [CategoryModel]
 }
 
-final class CategoryServices: CategoryServicesProtocol {
+nonisolated final class CategoryServices: CategoryServicesProtocol {
     private let networkService: NetworkingService
 
     init(networkService: NetworkingService? = nil) {

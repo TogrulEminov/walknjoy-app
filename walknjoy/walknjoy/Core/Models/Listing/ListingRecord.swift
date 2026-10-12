@@ -1,6 +1,6 @@
 import Foundation
 
-struct ListingMedia: Decodable, Identifiable, Equatable {
+nonisolated struct ListingMedia: Decodable, Identifiable, Equatable {
     let id: String
     let type: String
     let url: String
@@ -8,7 +8,7 @@ struct ListingMedia: Decodable, Identifiable, Equatable {
     let order: Int
 }
 
-struct Listing: Decodable, Identifiable, Equatable {
+nonisolated struct Listing: Decodable, Identifiable, Equatable {
     let id: String
     let type: ListingType
     let category: CategoryModel?
@@ -33,7 +33,7 @@ struct Listing: Decodable, Identifiable, Equatable {
     }
 }
 
-extension Listing {
+nonisolated extension Listing {
     init(from decoder: Decoder) throws {
         let c = try decoder.container(keyedBy: CodingKeys.self)
         id = try c.decode(String.self, forKey: .id)
@@ -77,7 +77,7 @@ extension Listing {
     }
 }
 
-extension KeyedDecodingContainer {
+nonisolated extension KeyedDecodingContainer {
     fileprivate func decodeNilOrMissing(_ key: Key) throws -> Bool {
         try !contains(key) || decodeNil(forKey: key)
     }

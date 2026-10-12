@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UploadedFile: Decodable, Identifiable, Equatable {
+nonisolated struct UploadedFile: Decodable, Identifiable, Equatable {
     let id: String
     let url: String
     let originalName: String

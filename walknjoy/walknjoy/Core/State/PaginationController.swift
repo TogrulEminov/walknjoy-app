@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-struct PaginationPage<Item> {
+nonisolated struct PaginationPage<Item> {
     let items: [Item]
     let meta: PaginationMeta?
     let hasMore: Bool?

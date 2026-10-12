@@ -1,6 +1,6 @@
 import Foundation
 
-enum NotificationEndpoint: Endpoint {
+nonisolated enum NotificationEndpoint: Endpoint {
     case list(unreadOnly: Bool, page: Int)
     case unreadCount
     case read(id: String)

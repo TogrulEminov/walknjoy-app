@@ -1,7 +1,6 @@
 import Foundation
 
-@MainActor
-protocol ReviewServiceProtocol {
+nonisolated protocol ReviewServiceProtocol {
     func reviews(
         slug: String,
         page: Int,
@@ -19,8 +18,7 @@ protocol ReviewServiceProtocol {
     func listing(slug: String, locale: String) async throws -> PublicListing
 }
 
-@MainActor
-final class ReviewService: ReviewServiceProtocol {
+nonisolated final class ReviewService: ReviewServiceProtocol {
     private let network: NetworkingService
     init(network: NetworkingService? = nil) {
         self.network = network ?? DefaultNetworkService()
@@ -111,7 +109,7 @@ final class ReviewService: ReviewServiceProtocol {
     }
 }
 
-enum ReviewErrorMessage {
+nonisolated enum ReviewErrorMessage {
     static func isDuplicate(_ error: Error) -> Bool {
         if let failure = error as? APIRequestFailure {
             return failure.error.code == "REVIEW_ALREADY_EXISTS"

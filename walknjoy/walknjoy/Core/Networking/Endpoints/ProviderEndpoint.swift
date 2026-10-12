@@ -1,11 +1,11 @@
 import Foundation
 
-enum ProviderEndpoint {
+nonisolated enum ProviderEndpoint {
     case apply(ProviderApplicationInput)
     case getProfile
     case updateProfile(UpdateProviderProfileInput)
 }
-extension ProviderEndpoint: Endpoint {
+nonisolated extension ProviderEndpoint: Endpoint {
     var path: String {
         switch self {
         case .apply: "/providers/apply"

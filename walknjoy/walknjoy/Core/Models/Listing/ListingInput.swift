@@ -1,6 +1,6 @@
 import Foundation
 
-enum ListingLocale: String, Codable, CaseIterable, Identifiable {
+nonisolated enum ListingLocale: String, Codable, CaseIterable, Identifiable {
     case az, en, ru
     var id: String { rawValue }
 
@@ -13,14 +13,14 @@ enum ListingLocale: String, Codable, CaseIterable, Identifiable {
     }
 }
 
-extension String {
+nonisolated extension String {
     var listingNonBlank: String? {
         let value = trimmingCharacters(in: .whitespacesAndNewlines)
         return value.isEmpty ? nil : value
     }
 }
 
-struct ListingLocationInput: Encodable {
+nonisolated struct ListingLocationInput: Encodable {
     var cityId: String
     var latitude: Double
     var longitude: Double
@@ -45,7 +45,7 @@ struct ListingLocationInput: Encodable {
     }
 }
 
-struct CreateListingInput: Encodable {
+nonisolated struct CreateListingInput: Encodable {
     var type: ListingType
     var categoryId: String
     var basePrice: Decimal
@@ -89,7 +89,7 @@ struct CreateListingInput: Encodable {
     }
 }
 
-struct ListingDetailsInput: Encodable {
+nonisolated struct ListingDetailsInput: Encodable {
     let details: ListingDetails
     let amenityIds: [String]
     private enum CodingKeys: String, CodingKey { case amenityIds }
@@ -115,7 +115,7 @@ struct ListingDetailsInput: Encodable {
     }
 }
 
-enum ListingInputError: LocalizedError {
+nonisolated enum ListingInputError: LocalizedError {
     case invalidRequiredFields
     var errorDescription: String? {
         String(localized: "listing.validation.required")

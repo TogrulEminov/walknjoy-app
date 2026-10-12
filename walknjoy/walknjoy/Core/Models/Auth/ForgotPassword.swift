@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct EmptyResponse: Decodable {}
-struct ForgotPasswordRequest:Encodable {
+nonisolated struct EmptyResponse: Decodable {}
+nonisolated struct ForgotPasswordRequest:Encodable {
     let email:String
 }
-struct ForgotPasswordResponse:Decodable {
+nonisolated struct ForgotPasswordResponse:Decodable {
     let expiresInSeconds:Int
     let resendAvailableInSeconds:Int
 }

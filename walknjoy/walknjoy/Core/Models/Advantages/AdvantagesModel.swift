@@ -7,13 +7,13 @@
 
 import SwiftUI
 
-struct AdvantagesModel: Identifiable {
+nonisolated struct AdvantagesModel: Identifiable {
     let id: UUID = UUID()
     let name: LocalizedStringKey
     let description: LocalizedStringKey
     let icon: String
 }
-extension AdvantagesModel {
+nonisolated extension AdvantagesModel {
     static let advantagesInfo: [AdvantagesModel] = [
         AdvantagesModel(
             name: "home.advantages.offers.title",

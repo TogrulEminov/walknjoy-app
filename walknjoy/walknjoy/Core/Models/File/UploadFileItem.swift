@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UploadFileItem: Identifiable, Equatable {
+nonisolated struct UploadFileItem: Identifiable, Equatable {
 
     let id: UUID
     let previewData: Data

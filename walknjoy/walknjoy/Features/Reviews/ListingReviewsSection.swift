@@ -89,7 +89,7 @@ struct ListingReviewsContent: View {
     @State private var choosingBooking = false
     @State private var showSuccess = false
     @State private var didSave = false
-    private let bookingService: any BookingServiceProtocol = BookingService()
+    private let bookingService: any BookingServiceProtocol = BookingService(network: DefaultNetworkService())
 
     private var ownContext: ReviewEditorContext? {
         if let own = appState.reviews.ownReviews[listingID] { return ReviewEditorContext(own) }

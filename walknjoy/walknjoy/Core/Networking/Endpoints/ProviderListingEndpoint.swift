@@ -1,6 +1,6 @@
 import Foundation
 
-enum ProviderListingEndpoint: Endpoint {
+nonisolated enum ProviderListingEndpoint: Endpoint {
     case list(ProviderListingsQuery)
     case get(id: String)
     case create(CreateListingRequest)
@@ -55,7 +55,7 @@ enum ProviderListingEndpoint: Endpoint {
     var requiresAuth: Bool { true }
 }
 
-enum ListingTaxonomyEndpoint: Endpoint {
+nonisolated enum ListingTaxonomyEndpoint: Endpoint {
     case cities(locale: ListingLocale, countryCode: String)
     case categories(type: ListingType, locale: ListingLocale)
     case amenities(type: ListingType, locale: ListingLocale)

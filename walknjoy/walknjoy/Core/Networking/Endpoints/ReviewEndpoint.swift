@@ -1,6 +1,6 @@
 import Foundation
 
-enum ReviewEndpoint: Endpoint {
+nonisolated enum ReviewEndpoint: Endpoint {
     case listing(
         slug: String,
         page: Int,

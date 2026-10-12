@@ -9,6 +9,7 @@ protocol ProviderServiceProtocol {
         -> ProviderProfile
 }
 
+// Provider approval updates the active session token alongside auth operations.
 @MainActor
 final class ProviderService: ProviderServiceProtocol {
     private let networkService: NetworkingService

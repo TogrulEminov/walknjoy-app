@@ -1,6 +1,6 @@
 import Foundation
 
-struct ListingLocation: Codable, Hashable {
+nonisolated struct ListingLocation: Codable, Hashable {
     var id: String? = nil
     var cityId: String? = nil
     var countryCode: String
@@ -31,7 +31,7 @@ struct ListingLocation: Codable, Hashable {
     }
 }
 
-struct ListingCity: Decodable, Identifiable, Equatable {
+nonisolated struct ListingCity: Decodable, Identifiable, Equatable {
     let id: String
     let name: String
     let latitude: Double?

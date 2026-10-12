@@ -6,7 +6,7 @@
 //
 import Foundation
 
-enum ContentType {
+nonisolated enum ContentType {
     static let applicationJson = "application/json"
     static let multipartFormData = "multipart/form-data"
 }
