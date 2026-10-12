@@ -1,6 +1,6 @@
 import Foundation
 
-struct AmenityModel: Codable, Identifiable, Equatable {
+nonisolated struct AmenityModel: Codable, Identifiable, Equatable {
     let id: String
     let name: String
     let description: String?
@@ -10,7 +10,7 @@ struct AmenityModel: Codable, Identifiable, Equatable {
 
 }
 
-extension AmenityModel {
+nonisolated extension AmenityModel {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(String.self, forKey: .id)

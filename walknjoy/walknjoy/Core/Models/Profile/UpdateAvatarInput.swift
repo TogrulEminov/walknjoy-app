@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct UpdateAvatarInput: Encodable {
+nonisolated struct UpdateAvatarInput: Encodable {
     let fileId: String
     let altText: String?
     init(fileId: String, altText: String?) {

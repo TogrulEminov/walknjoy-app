@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProfileModel: Decodable, Equatable {
+nonisolated struct ProfileModel: Decodable, Equatable {
     let id: String
     let email: String
     let firstName: String
@@ -36,7 +36,7 @@ struct ProfileModel: Decodable, Equatable {
     }
 }
 
-extension ProfileModel {
+nonisolated extension ProfileModel {
     func replacingAvatar(_ avatar: UploadedFile?) -> ProfileModel {
         ProfileModel(
             id: id, email: email, firstName: firstName, lastName: lastName,

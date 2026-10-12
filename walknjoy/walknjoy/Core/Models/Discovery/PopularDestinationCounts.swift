@@ -1,6 +1,6 @@
 import Foundation
 
-struct PopularDestinationCounts: Decodable, Hashable {
+nonisolated struct PopularDestinationCounts: Decodable, Hashable {
     let stay: Int
     let tour: Int
     let activity: Int

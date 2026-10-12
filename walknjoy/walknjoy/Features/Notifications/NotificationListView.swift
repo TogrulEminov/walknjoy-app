@@ -98,9 +98,12 @@ struct NotificationListView: View {
         .refreshable { await model.refresh() }
         .task { await model.refresh() }
         .navigationDestination(item: $selected) { notification in
-            if appState.currentUserRole == .customer || appState.currentUserRole == .provider,
-                notification.type == "new_message", let id = notification.data?.conversationId,
-                NotificationData.isSafeIdentifier(id) {
+            if appState.currentUserRole == .customer
+                || appState.currentUserRole == .provider,
+                notification.type == "new_message",
+                let id = notification.data?.conversationId,
+                NotificationData.isSafeIdentifier(id)
+            {
                 ChatDetailView(conversationID: id)
             } else {
                 NotificationContentView(notification: notification)
@@ -162,7 +165,15 @@ private struct NotificationListingDestination: View {
                     }
                 } else if let error = model.error {
                     Text(error).foregroundStyle(Color.errorC)
-                    Button("common.retry") { Task { await model.load(slug: slug, locale: locale.language.languageCode?.identifier ?? "az") } }
+                    Button("common.retry") {
+                        Task {
+                            await model.load(
+                                slug: slug,
+                                locale: locale.language.languageCode?.identifier
+                                    ?? "az"
+                            )
+                        }
+                    }
                 } else {
                     ProgressView()
                 }
@@ -170,7 +181,12 @@ private struct NotificationListingDestination: View {
         }
         .background(Color.appBg)
         .navigationTitle("listing.title")
-        .task { await model.load(slug: slug, locale: locale.language.languageCode?.identifier ?? "az") }
+        .task {
+            await model.load(
+                slug: slug,
+                locale: locale.language.languageCode?.identifier ?? "az"
+            )
+        }
     }
 
 }

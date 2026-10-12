@@ -8,7 +8,6 @@
 import Foundation
 import Observation
 
-
 @Observable
 @MainActor
 final class HomeViewModel {
@@ -99,7 +98,10 @@ final class HomeViewModel {
             state = .loaded(content)
         } catch {
             guard generation == request else { return }
-            if error is CancellationError { state = .idle; return }
+            if error is CancellationError {
+                state = .idle
+                return
+            }
             if !keepCurrentContentOnError {
                 state = .error(error.localizedDescription)
             }

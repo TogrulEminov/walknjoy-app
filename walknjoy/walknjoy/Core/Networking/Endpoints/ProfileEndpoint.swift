@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ProfileEndpoint {
+nonisolated enum ProfileEndpoint {
     case getProfile
     case updateProfile(UpdateProfileInput)
     case updateAvatar(UpdateAvatarInput)
@@ -15,7 +15,7 @@ enum ProfileEndpoint {
     case notificationPreferences
     case updateNotificationPreferences(Notification)
 }
-extension ProfileEndpoint: Endpoint {
+nonisolated extension ProfileEndpoint: Endpoint {
     var baseURL: String {
         APIConfig.baseURL
     }

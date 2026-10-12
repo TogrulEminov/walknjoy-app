@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum ListingEndpoint {
+nonisolated enum ListingEndpoint {
     case getListingByID(id: String, locale: String)
     case getListings(ListingQuery)
     case getListing(
@@ -17,7 +17,7 @@ enum ListingEndpoint {
     )
 }
 
-extension ListingEndpoint: Endpoint {
+nonisolated extension ListingEndpoint: Endpoint {
     var baseURL: String {
         APIConfig.baseURL
     }

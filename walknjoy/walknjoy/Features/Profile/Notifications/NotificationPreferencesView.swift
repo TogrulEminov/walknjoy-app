@@ -29,12 +29,16 @@ struct NotificationPreferencesView: View {
         Form {
             Section {
                 preference(
-                    "notifications.bookings", description: "notifications.bookings.description",
-                    symbol: "calendar.badge.clock", isOn: $model.bookingUpdates
+                    "notifications.bookings",
+                    description: "notifications.bookings.description",
+                    symbol: "calendar.badge.clock",
+                    isOn: $model.bookingUpdates
                 )
                 preference(
-                    "notifications.messages", description: "notifications.messages.description",
-                    symbol: "bubble.left.and.bubble.right", isOn: $model.messages
+                    "notifications.messages",
+                    description: "notifications.messages.description",
+                    symbol: "bubble.left.and.bubble.right",
+                    isOn: $model.messages
                 )
             } header: {
                 Text("notifications.activity")
@@ -45,8 +49,10 @@ struct NotificationPreferencesView: View {
 
             Section {
                 preference(
-                    "notifications.marketing", description: "notifications.marketing.description",
-                    symbol: "megaphone", isOn: $model.marketing
+                    "notifications.marketing",
+                    description: "notifications.marketing.description",
+                    symbol: "megaphone",
+                    isOn: $model.marketing
                 )
             } header: {
                 Text("notifications.discover")
@@ -60,16 +66,25 @@ struct NotificationPreferencesView: View {
                         .foregroundStyle(Color.errorColor)
                 }
                 if model.saveState == .success && !model.form.hasChanges {
-                    Label("notifications.saved", systemImage: "checkmark.circle")
-                        .font(.footnote)
-                        .foregroundStyle(Color.titleText)
+                    Label(
+                        "notifications.saved",
+                        systemImage: "checkmark.circle"
+                    )
+                    .font(.footnote)
+                    .foregroundStyle(Color.titleText)
                 }
-                SubmitButton(title: "profile.saveChanges", icon: "checkmark", form: model.form) {
+                SubmitButton(
+                    title: "profile.saveChanges",
+                    icon: "checkmark",
+                    form: model.form
+                ) {
                     Task { await model.save() }
                 }
             }
             .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0))
+            .listRowInsets(
+                EdgeInsets(top: 8, leading: 0, bottom: 8, trailing: 0)
+            )
         }
         .scrollContentBackground(.hidden)
         .disabled(model.saveState == .loading)
@@ -86,11 +101,18 @@ struct NotificationPreferencesView: View {
                 Image(systemName: symbol)
                     .foregroundStyle(Color.iconColor)
                     .frame(width: 32, height: 32)
-                    .background(Color.appBackground, in: RoundedRectangle(cornerRadius: 8))
+                    .background(
+                        Color.appBackground,
+                        in: RoundedRectangle(cornerRadius: 8)
+                    )
                     .accessibilityHidden(true)
                 VStack(alignment: .leading, spacing: 5) {
-                    Text(title).font(.body.weight(.medium)).foregroundStyle(Color.titleText)
-                    Text(description).font(.caption).foregroundStyle(Color.descriptionText)
+                    Text(title).font(.body.weight(.medium)).foregroundStyle(
+                        Color.titleText
+                    )
+                    Text(description).font(.caption).foregroundStyle(
+                        Color.descriptionText
+                    )
                 }
             }
             .padding(.vertical, 6)

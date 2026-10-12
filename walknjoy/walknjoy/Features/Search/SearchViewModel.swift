@@ -4,7 +4,9 @@ import Observation
 @MainActor
 @Observable
 final class SearchViewModel {
-    static var makeDefault: (ListingSearchCriteria) -> SearchViewModel = { SearchViewModel(criteria: $0) }
+    static var makeDefault: (ListingSearchCriteria) -> SearchViewModel = {
+        SearchViewModel(criteria: $0)
+    }
     private let listingService: ListingServicesProtocol
     private let discoveryService: DiscoveryServicesProtocol
     private let favoritesService: FavoritesServicesProtocol
@@ -37,7 +39,11 @@ final class SearchViewModel {
     }
 
     private var loadedPageCount: Int {
-        max(1, (listings.count + max(1, criteria.limit) - 1) / max(1, criteria.limit))
+        max(
+            1,
+            (listings.count + max(1, criteria.limit) - 1)
+                / max(1, criteria.limit)
+        )
     }
 
     var hasMorePages: Bool {
@@ -77,12 +83,15 @@ final class SearchViewModel {
 
     func loadNextPageIfNeeded(currentItem: PublicListing) async {
         guard currentItem.id == listings.last?.id,
-              hasMorePages, !isLoadingNextPage, !isInitialLoading else { return }
+            hasMorePages, !isLoadingNextPage, !isInitialLoading
+        else { return }
         await loadNextPage()
     }
 
     func loadNextPage() async {
-        guard hasMorePages, !isLoadingNextPage, !isInitialLoading else { return }
+        guard hasMorePages, !isLoadingNextPage, !isInitialLoading else {
+            return
+        }
         error = nil
         let criteria = criteria
         let service = listingService
@@ -129,9 +138,16 @@ final class SearchViewModel {
     }
 
     func loadDiscovery() async {
-        async let destinationsRequest = discoveryService.getPopularDestinations()
-        async let categoriesRequest = discoveryService.getCategories(type: criteria.type, locale: criteria.locale)
-        async let amenitiesRequest = discoveryService.getAmenities(type: criteria.type, locale: criteria.locale)
+        async let destinationsRequest =
+            discoveryService.getPopularDestinations()
+        async let categoriesRequest = discoveryService.getCategories(
+            type: criteria.type,
+            locale: criteria.locale
+        )
+        async let amenitiesRequest = discoveryService.getAmenities(
+            type: criteria.type,
+            locale: criteria.locale
+        )
         do {
             (destinations, categories, amenities) = try await (
                 destinationsRequest, categoriesRequest, amenitiesRequest
@@ -145,9 +161,17 @@ final class SearchViewModel {
 
     func loadAmenities() async {
         do {
-            async let categoriesRequest = discoveryService.getCategories(type: criteria.type, locale: criteria.locale)
-            async let amenitiesRequest = discoveryService.getAmenities(type: criteria.type, locale: criteria.locale)
-            (categories, amenities) = try await (categoriesRequest, amenitiesRequest)
+            async let categoriesRequest = discoveryService.getCategories(
+                type: criteria.type,
+                locale: criteria.locale
+            )
+            async let amenitiesRequest = discoveryService.getAmenities(
+                type: criteria.type,
+                locale: criteria.locale
+            )
+            (categories, amenities) = try await (
+                categoriesRequest, amenitiesRequest
+            )
         } catch is CancellationError {
             return
         } catch {
@@ -163,9 +187,14 @@ final class SearchViewModel {
         guard updatingFavoriteIDs.insert(listing.id).inserted else { return }
         defer { updatingFavoriteIDs.remove(listing.id) }
         do {
-            let response = isFavorite(listing)
-                ? try await favoritesService.deleteFavorites(FavoriteRequest(listingId: listing.id))
-                : try await favoritesService.addFavorites(FavoriteRequest(listingId: listing.id))
+            let response =
+                isFavorite(listing)
+                ? try await favoritesService.deleteFavorites(
+                    FavoriteRequest(listingId: listing.id)
+                )
+                : try await favoritesService.addFavorites(
+                    FavoriteRequest(listingId: listing.id)
+                )
             favoriteOverrides[listing.id] = response.isFavorite
         } catch {
             self.error = error.localizedDescription

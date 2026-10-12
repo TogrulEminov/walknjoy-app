@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct ProfileStats: Decodable, Equatable {
+nonisolated struct ProfileStats: Decodable, Equatable {
     let bookings: Int
     let favorites: Int
     let reviews: Int

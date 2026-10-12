@@ -1,7 +1,6 @@
 import Foundation
 
-@MainActor
-protocol DiscoveryServicesProtocol {
+nonisolated protocol DiscoveryServicesProtocol {
     func getPopularDestinations() async throws -> [PopularDestination]
     func getCities() async throws -> [ListingCity]
     func getCategories(type: ListingType?, locale: String) async throws
@@ -10,8 +9,7 @@ protocol DiscoveryServicesProtocol {
         -> [AmenityModel]
 }
 
-@MainActor
-final class DiscoveryServices: DiscoveryServicesProtocol {
+nonisolated final class DiscoveryServices: DiscoveryServicesProtocol {
     private let networkService: NetworkingService
 
     init(networkService: NetworkingService? = nil) {

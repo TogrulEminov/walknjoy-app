@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RequestBody {
+nonisolated enum RequestBody {
     case none
     case json(Encodable)
     case data(Data, contentType: String)

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UploadFileInput {
+nonisolated struct UploadFileInput {
     let data: Data
     let fileName: String
     let mimeType: String

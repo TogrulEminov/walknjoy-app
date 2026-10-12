@@ -1,6 +1,5 @@
 import Foundation
 
-@MainActor
 protocol ProviderServiceProtocol {
     func getProfile() async throws -> ProviderProfile
     func apply(_ input: ProviderApplicationInput) async throws
@@ -9,7 +8,6 @@ protocol ProviderServiceProtocol {
         -> ProviderProfile
 }
 
-@MainActor
 final class ProviderService: ProviderServiceProtocol {
     private let networkService: NetworkingService
     private let tokenStorage: TokenStorageProtocol

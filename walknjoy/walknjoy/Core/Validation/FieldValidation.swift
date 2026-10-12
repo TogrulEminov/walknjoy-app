@@ -10,7 +10,7 @@ extension EnvironmentValues {
         set { self[FieldValidationErrorKey.self] = newValue }
     }
 }
- 
+
 private struct FieldValidationModifier: ViewModifier {
     let value: String
     let isValid: Bool
@@ -22,10 +22,13 @@ private struct FieldValidationModifier: ViewModifier {
             content
                 .environment(\.fieldHasValidationError, hasEdited && !isValid)
             if hasEdited && !isValid, let message {
-                Label(LocalizedStringKey(message), systemImage: "exclamationmark.circle")
-                    .font(.caption)
-                    .foregroundStyle(Color.errorColor)
-                    .fixedSize(horizontal: false, vertical: true)
+                Label(
+                    LocalizedStringKey(message),
+                    systemImage: "exclamationmark.circle"
+                )
+                .font(.caption)
+                .foregroundStyle(Color.errorColor)
+                .fixedSize(horizontal: false, vertical: true)
             }
         }
         .onChange(of: value) { _, _ in hasEdited = true }
@@ -34,10 +37,12 @@ private struct FieldValidationModifier: ViewModifier {
 
 extension View {
     func fieldValidation(_ field: ValidatedField) -> some View {
-        modifier(FieldValidationModifier(
-            value: field.value,
-            isValid: field.isValid,
-            message: field.errorMessage
-        ))
+        modifier(
+            FieldValidationModifier(
+                value: field.value,
+                isValid: field.isValid,
+                message: field.errorMessage
+            )
+        )
     }
 }

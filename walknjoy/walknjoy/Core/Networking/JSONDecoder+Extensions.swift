@@ -7,22 +7,26 @@
 
 import Foundation
 
-extension JSONDecoder {
+nonisolated extension JSONDecoder {
 
     static var apiDecoder: JSONDecoder {
         let decoder = JSONDecoder()
 
         decoder.dateDecodingStrategy = .custom { decoder in
+            let fractional = ISO8601DateFormatter()
+            fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+            let standard = ISO8601DateFormatter()
+            standard.formatOptions = [.withInternetDateTime]
             let container = try decoder.singleValueContainer()
             let dateString = try container.decode(String.self)
 
-            if let date = APIDateFormatter.withFractionalSeconds.date(
+            if let date = fractional.date(
                 from: dateString
             ) {
                 return date
             }
 
-            if let date = APIDateFormatter.standard.date(
+            if let date = standard.date(
                 from: dateString
             ) {
                 return date
@@ -36,28 +40,4 @@ extension JSONDecoder {
 
         return decoder
     }
-}
-
-private enum APIDateFormatter {
-
-    static let withFractionalSeconds: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-
-        formatter.formatOptions = [
-            .withInternetDateTime,
-            .withFractionalSeconds,
-        ]
-
-        return formatter
-    }()
-
-    static let standard: ISO8601DateFormatter = {
-        let formatter = ISO8601DateFormatter()
-
-        formatter.formatOptions = [
-            .withInternetDateTime
-        ]
-
-        return formatter
-    }()
 }

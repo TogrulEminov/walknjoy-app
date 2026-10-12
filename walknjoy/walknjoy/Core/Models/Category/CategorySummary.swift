@@ -1,6 +1,6 @@
 import Foundation
 
-struct CategoryModel: Decodable, Identifiable, Equatable {
+nonisolated struct CategoryModel: Decodable, Identifiable, Equatable {
     let id: String
     let name: String
     let slug: String

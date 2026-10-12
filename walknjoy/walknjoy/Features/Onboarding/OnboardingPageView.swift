@@ -177,9 +177,8 @@ extension OnboardingPageView {
                 .frame(height: 52)
                 .background(Color.buttonBackground)
                 .clipShape(Capsule())
-               
+
             }
         }
     }
 }
-

@@ -4,7 +4,10 @@ struct StayDetailsForm: View {
     @Binding var details: StayDetails
     var body: some View {
         Section("listing.stay.section") {
-            Picker("listing.stay.propertyType", selection: $details.propertyType) {
+            Picker(
+                "listing.stay.propertyType",
+                selection: $details.propertyType
+            ) {
                 ForEach(PropertyType.allCases, id: \.rawValue) { type in
                     Text(type.title).tag(type.rawValue)
                 }
@@ -14,7 +17,10 @@ struct StayDetailsForm: View {
             }
             .pickerStyle(.menu)
             Stepper(
-                String(format: String(localized: "listing.guests.countFormat"), details.maxGuests),
+                String(
+                    format: String(localized: "listing.guests.countFormat"),
+                    details.maxGuests
+                ),
                 value: $details.maxGuests,
                 in: 1...999
             )
@@ -158,13 +164,18 @@ struct ExperienceDetailsForm: View {
 }
 
 private struct OptionalNumberField: View {
-    let title:LocalizedStringResource
+    let title: LocalizedStringResource
     @Binding var value: Int?
     var body: some View {
-        BusinessInputField(title, text: Binding(
-            get: { value.map(String.init) ?? "" },
-            set: { value = Int($0) }
-        ), icon: "number", keyboard: .numberPad)
+        BusinessInputField(
+            title,
+            text: Binding(
+                get: { value.map(String.init) ?? "" },
+                set: { value = Int($0) }
+            ),
+            icon: "number",
+            keyboard: .numberPad
+        )
     }
 }
 private struct OptionalBoolPicker: View {
@@ -245,8 +256,18 @@ struct LocationPickerView: View {
                     }
                 }
             }
-            BusinessInputField("listing.location.latitude", text: $latitude, icon: "location", keyboard: .numbersAndPunctuation)
-            BusinessInputField("listing.location.longitude", text: $longitude, icon: "location", keyboard: .numbersAndPunctuation)
+            BusinessInputField(
+                "listing.location.latitude",
+                text: $latitude,
+                icon: "location",
+                keyboard: .numbersAndPunctuation
+            )
+            BusinessInputField(
+                "listing.location.longitude",
+                text: $longitude,
+                icon: "location",
+                keyboard: .numbersAndPunctuation
+            )
             BusinessInputField("listing.location.district", text: $district)
             BusinessInputField("listing.location.address", text: $addressLine)
         }

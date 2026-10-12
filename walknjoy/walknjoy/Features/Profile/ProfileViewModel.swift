@@ -33,7 +33,9 @@ final class ProfileViewModel {
             let profile = try await profileService.getProfile()
             try MobileAccountAccess.validate(role: profile.roleRawValue)
             if profile.role == .provider {
-                isApprovedProvider = (try? await providerService.getProfile().status) == .approved
+                isApprovedProvider =
+                    (try? await providerService.getProfile().status)
+                    == .approved
             } else {
                 isApprovedProvider = false
             }
@@ -171,7 +173,7 @@ extension ProfileViewModel {
                     title: "profile.businessDashboard",
                     icon: "briefcase",
                     destination: .businessDashboard
-                )
+                ),
             ]
         }
 

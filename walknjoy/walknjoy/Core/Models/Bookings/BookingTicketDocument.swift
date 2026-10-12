@@ -2,7 +2,7 @@ import CoreTransferable
 import Foundation
 import UniformTypeIdentifiers
  
-struct BookingTicketDocument: Transferable {
+nonisolated struct BookingTicketDocument: Transferable {
     let data: Data
     static var transferRepresentation: some TransferRepresentation {
         DataRepresentation(exportedContentType: .pdf) { document in

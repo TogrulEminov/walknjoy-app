@@ -1,6 +1,6 @@
 import Foundation
 
-struct PublicReview: Decodable, Identifiable {
+nonisolated struct PublicReview: Decodable, Identifiable {
     struct Author: Decodable {
         let id: String
         let firstName: String
@@ -16,7 +16,7 @@ struct PublicReview: Decodable, Identifiable {
     var verified: Bool? = nil
 }
 
-struct MyReview: Decodable, Identifiable {
+nonisolated struct MyReview: Decodable, Identifiable {
     struct ListingSummary: Decodable {
         let id: String
         let title: String?
@@ -40,7 +40,7 @@ struct MyReview: Decodable, Identifiable {
 
 typealias CreatedReview = MyReview
 
-enum ReviewSort: String, CaseIterable, Identifiable {
+nonisolated enum ReviewSort: String, CaseIterable, Identifiable {
     case newest, oldest
     case ratingHigh = "rating_high"
     case ratingLow = "rating_low"
@@ -55,7 +55,7 @@ enum ReviewSort: String, CaseIterable, Identifiable {
     }
 }
 
-enum ReviewValidation {
+nonisolated enum ReviewValidation {
     static func text(_ value: String?) -> String? {
         guard
             let value = value?.trimmingCharacters(in: .whitespacesAndNewlines),
@@ -73,7 +73,7 @@ enum ReviewValidation {
     }
 }
 
-enum ReviewInputError: LocalizedError {
+nonisolated enum ReviewInputError: LocalizedError {
     case invalid, unchanged, creationUnavailable
     var errorDescription: String? {
         switch self {
@@ -85,7 +85,7 @@ enum ReviewInputError: LocalizedError {
     }
 }
 
-struct CreateReviewRequest: Encodable {
+nonisolated struct CreateReviewRequest: Encodable {
     let rating: Int
     let title: String?
     let comment: String?
@@ -101,7 +101,7 @@ struct CreateReviewRequest: Encodable {
     }
 }
 
-enum ReviewTextChange: Equatable {
+nonisolated enum ReviewTextChange: Equatable {
     case unchanged, clear
     case value(String)
     static func comparing(_ value: String, to original: String?) -> Self {
@@ -113,7 +113,7 @@ enum ReviewTextChange: Equatable {
     }
 }
 
-struct UpdateReviewRequest: Encodable {
+nonisolated struct UpdateReviewRequest: Encodable {
     let rating: Int?
     let title: ReviewTextChange
     let comment: ReviewTextChange
@@ -149,7 +149,7 @@ struct UpdateReviewRequest: Encodable {
     }
 }
 
-struct ReviewEditorContext: Identifiable {
+nonisolated struct ReviewEditorContext: Identifiable {
     let listingID: String
     let slug: String?
     var bookingID: String? = nil

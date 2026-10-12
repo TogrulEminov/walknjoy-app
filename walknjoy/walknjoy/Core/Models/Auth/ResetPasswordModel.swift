@@ -5,7 +5,7 @@
 //  Created by Eminov Togrul Punhan on 21.09.26.
 //
 
-struct ResetPasswordRequest: Encodable {
+nonisolated struct ResetPasswordRequest: Encodable {
     let resetToken: String
     let newPassword: String
 }

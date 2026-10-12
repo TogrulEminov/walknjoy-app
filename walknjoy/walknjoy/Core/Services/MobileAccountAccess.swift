@@ -1,6 +1,6 @@
 import Foundation
 
-enum MobileAccountAccess {
+nonisolated enum MobileAccountAccess {
     static func validate(role: String) throws {
         switch role.uppercased() {
         case "CUSTOMER", "PROVIDER": return

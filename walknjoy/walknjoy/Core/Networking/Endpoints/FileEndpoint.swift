@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum FileEndpoint {
+nonisolated enum FileEndpoint {
     case upload(UploadFileInput)
     case delete(id: String)
 
 }
-extension FileEndpoint: Endpoint {
+nonisolated extension FileEndpoint: Endpoint {
     var path: String {
         switch self {
         case .upload:

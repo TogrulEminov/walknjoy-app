@@ -15,7 +15,8 @@ final class BookingListViewModel {
 
     init(role: RoleEnum, service: BookingServiceProtocol? = nil) {
         self.role = role
-        self.service = service ?? BookingService()
+        self.service =
+            service ?? BookingService(network: DefaultNetworkService())
     }
 
     func loadMore() async {
@@ -31,9 +32,14 @@ final class BookingListViewModel {
         do {
             switch role {
             case .customer:
-                let service = service, filter = status
+                let service = service
+                let filter = status
                 await pagination.refresh { page, limit in
-                    try await service.customerPage(page: page, limit: limit, status: filter)
+                    try await service.customerPage(
+                        page: page,
+                        limit: limit,
+                        status: filter
+                    )
                 }
                 bookings = pagination.items
                 state = pagination.state

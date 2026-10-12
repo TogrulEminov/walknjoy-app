@@ -24,7 +24,9 @@ struct SearchResultsView: View {
     }
 
     init(criteria: ListingSearchCriteria, viewModel: SearchViewModel? = nil) {
-        _viewModel = State(initialValue: viewModel ?? SearchViewModel.makeDefault(criteria))
+        _viewModel = State(
+            initialValue: viewModel ?? SearchViewModel.makeDefault(criteria)
+        )
     }
 
     // MARK: - Body
@@ -81,7 +83,9 @@ struct SearchResultsView: View {
             .alert(
                 "error.title",
                 isPresented: Binding(
-                    get: { viewModel.error != nil && !viewModel.listings.isEmpty },
+                    get: {
+                        viewModel.error != nil && !viewModel.listings.isEmpty
+                    },
                     set: { if !$0 { viewModel.error = nil } }
                 )
             ) {
@@ -92,7 +96,9 @@ struct SearchResultsView: View {
 
             if showMap,
                 let selectedID = selectedListingID,
-                let listing = viewModel.visibleListings.first(where: { $0.id == selectedID })
+                let listing = viewModel.visibleListings.first(where: {
+                    $0.id == selectedID
+                })
             {
                 mapSelectionCard(listing)
                     .transition(.move(edge: .bottom))
@@ -117,9 +123,12 @@ struct SearchResultsView: View {
                     .padding(.bottom, 12)
 
                 Group {
-                    if viewModel.isInitialLoading && viewModel.listings.isEmpty {
+                    if viewModel.isInitialLoading && viewModel.listings.isEmpty
+                    {
                         LoadingStateView()
-                    } else if let error = viewModel.error, viewModel.listings.isEmpty {
+                    } else if let error = viewModel.error,
+                        viewModel.listings.isEmpty
+                    {
                         ErrorStateView(title: "error.title", message: error) {
                             Task { await viewModel.search() }
                         }
@@ -155,7 +164,9 @@ struct SearchResultsView: View {
                         image.resizable().scaledToFill()
                     } placeholder: {
                         Color.border.overlay {
-                            Image(systemName: "photo").foregroundStyle(Color.description)
+                            Image(systemName: "photo").foregroundStyle(
+                                Color.description
+                            )
                         }
                     }
                     .frame(width: 60, height: 60)
@@ -180,7 +191,12 @@ struct SearchResultsView: View {
             }
             .padding()
             .background(Color.surfaceBg, in: RoundedRectangle(cornerRadius: 20))
-            .overlay(RoundedRectangle(cornerRadius: 20).stroke(Color.border, lineWidth: 1))
+            .overlay(
+                RoundedRectangle(cornerRadius: 20).stroke(
+                    Color.border,
+                    lineWidth: 1
+                )
+            )
             .padding(.horizontal, 20)
             .padding(.bottom, 80)
         }
@@ -213,7 +229,9 @@ struct SearchResultsView: View {
                 SearchListingRow(
                     listing: listing,
                     isFavorite: appState.isFavorite(listing),
-                    isUpdatingFavorite: appState.updatingFavoriteIDs.contains(listing.id),
+                    isUpdatingFavorite: appState.updatingFavoriteIDs.contains(
+                        listing.id
+                    ),
                     canFavorite: appState.canUseFavorites,
                     onFavorite: {
                         Task {
@@ -250,16 +268,28 @@ struct SearchResultsView: View {
                 Label("search.pagination.previous", systemImage: "chevron.left")
                     .frame(maxWidth: .infinity)
                     .frame(height: 46)
-                    .background(Color.surfaceBg, in: RoundedRectangle(cornerRadius: 12))
-                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.border))
+                    .background(
+                        Color.surfaceBg,
+                        in: RoundedRectangle(cornerRadius: 12)
+                    )
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 12).stroke(Color.border)
+                    )
             }
-            .disabled(!viewModel.canGoToPreviousPage || viewModel.isLoadingNextPage)
+            .disabled(
+                !viewModel.canGoToPreviousPage || viewModel.isLoadingNextPage
+            )
             .opacity(viewModel.canGoToPreviousPage ? 1 : 0.45)
 
-            Text(String(format: String(localized: "search.pagination.page"), viewModel.currentPage))
-                .font(.subheadline.weight(.medium))
-                .foregroundStyle(Color.description)
-                .fixedSize()
+            Text(
+                String(
+                    format: String(localized: "search.pagination.page"),
+                    viewModel.currentPage
+                )
+            )
+            .font(.subheadline.weight(.medium))
+            .foregroundStyle(Color.description)
+            .fixedSize()
 
             Button {
                 Task { await viewModel.goToNextPage() }
@@ -268,13 +298,21 @@ struct SearchResultsView: View {
                     if viewModel.isLoadingNextPage {
                         ProgressView()
                     } else {
-                        Label("search.pagination.next", systemImage: "chevron.right")
+                        Label(
+                            "search.pagination.next",
+                            systemImage: "chevron.right"
+                        )
                     }
                 }
                 .frame(maxWidth: .infinity)
                 .frame(height: 46)
-                .background(Color.surfaceBg, in: RoundedRectangle(cornerRadius: 12))
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(Color.border))
+                .background(
+                    Color.surfaceBg,
+                    in: RoundedRectangle(cornerRadius: 12)
+                )
+                .overlay(
+                    RoundedRectangle(cornerRadius: 12).stroke(Color.border)
+                )
             }
             .disabled(!viewModel.canGoToNextPage || viewModel.isLoadingNextPage)
             .opacity(viewModel.canGoToNextPage ? 1 : 0.45)
@@ -301,7 +339,9 @@ struct SearchResultsView: View {
 
                     Text(
                         String(
-                            format: String(localized: "search.resultCountFormat"),
+                            format: String(
+                                localized: "search.resultCountFormat"
+                            ),
                             viewModel.paginationMeta?.total ?? 0
                         )
                     )
@@ -312,12 +352,15 @@ struct SearchResultsView: View {
                 Button {
                     showFilters = true
                 } label: {
-                    Label("search.filter.title", systemImage: "slider.horizontal.3")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Color.buttonTxt)
-                        .padding(.horizontal, 14)
-                        .frame(height: 42)
-                        .background(Color.button, in: Capsule())
+                    Label(
+                        "search.filter.title",
+                        systemImage: "slider.horizontal.3"
+                    )
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color.buttonTxt)
+                    .padding(.horizontal, 14)
+                    .frame(height: 42)
+                    .background(Color.button, in: Capsule())
                 }
                 .buttonStyle(.plain)
                 .fixedSize()
@@ -325,7 +368,9 @@ struct SearchResultsView: View {
             }
 
             HStack(spacing: 8) {
-                Button { quickFilter = .destination } label: {
+                Button {
+                    quickFilter = .destination
+                } label: {
                     filterChip(
                         title: viewModel.criteria.destinationName
                             ?? String(localized: "search.allDestinations"),
@@ -336,7 +381,9 @@ struct SearchResultsView: View {
                 .accessibilityLabel("search.destination")
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                Button { quickFilter = .type } label: {
+                Button {
+                    quickFilter = .type
+                } label: {
                     filterChip(
                         title: viewModel.criteria.type.map(localizedTypeTitle)
                             ?? String(localized: "search.type.all"),
@@ -410,7 +457,7 @@ struct SearchResultsView: View {
     @ViewBuilder
     private func quickFilterSheet(_ filter: QuickFilter) -> some View {
         NavigationStack {
-            VStack(spacing: 0) { 
+            VStack(spacing: 0) {
                 HStack {
                     Text(filter.title)
                         .font(.title3.bold())
@@ -436,8 +483,11 @@ struct SearchResultsView: View {
                                 quickFilter = nil
                             } label: {
                                 selectionRow(
-                                    title: String(localized: "search.allDestinations"),
-                                    selected: viewModel.criteria.destinationId == nil
+                                    title: String(
+                                        localized: "search.allDestinations"
+                                    ),
+                                    selected: viewModel.criteria.destinationId
+                                        == nil
                                 )
                             }
                             .buttonStyle(.plain)
@@ -449,7 +499,8 @@ struct SearchResultsView: View {
                                 } label: {
                                     selectionRow(
                                         title: destination.city,
-                                        selected: viewModel.criteria.destinationId == destination.id
+                                        selected: viewModel.criteria
+                                            .destinationId == destination.id
                                     )
                                 }
                                 .buttonStyle(.plain)
@@ -474,7 +525,8 @@ struct SearchResultsView: View {
                                 } label: {
                                     selectionRow(
                                         title: localizedTypeTitle(type),
-                                        selected: viewModel.criteria.type == type
+                                        selected: viewModel.criteria.type
+                                            == type
                                     )
                                 }
                                 .buttonStyle(.plain)
@@ -544,7 +596,9 @@ struct SearchListingRow: View {
         HStack(spacing: 13) {
             Group {
                 if usesProfileRoute {
-                    NavigationLink(value: ProfileDestination.listingDetails(listing)) {
+                    NavigationLink(
+                        value: ProfileDestination.listingDetails(listing)
+                    ) {
                         listingSummary
                     }
                 } else {
@@ -561,10 +615,14 @@ struct SearchListingRow: View {
                         if isUpdatingFavorite {
                             ProgressView()
                         } else {
-                            Image(systemName: isFavorite ? "heart.fill" : "heart")
+                            Image(
+                                systemName: isFavorite ? "heart.fill" : "heart"
+                            )
                         }
                     }
-                    .foregroundStyle(isFavorite ? Color.errorC : Color.description)
+                    .foregroundStyle(
+                        isFavorite ? Color.errorC : Color.description
+                    )
                     .frame(width: 42, height: 42)
                     .contentShape(Rectangle())
                 }
@@ -589,7 +647,10 @@ struct SearchListingRow: View {
 
                 if let location = listing.location {
                     Label {
-                        Text(verbatim: "\(location.city ?? ""), \(location.countryCode)")
+                        Text(
+                            verbatim:
+                                "\(location.city ?? ""), \(location.countryCode)"
+                        )
                     } icon: {
                         Image(systemName: "mappin.and.ellipse")
                     }
@@ -604,7 +665,9 @@ struct SearchListingRow: View {
                     }
                     Spacer(minLength: 0)
                     Text(
-                        listing.basePrice.formatted(.number.precision(.fractionLength(0...2)))
+                        listing.basePrice.formatted(
+                            .number.precision(.fractionLength(0...2))
+                        )
                             + " " + listing.currency
                     )
                     .font(.subheadline.weight(.semibold))

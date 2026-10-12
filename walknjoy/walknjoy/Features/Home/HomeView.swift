@@ -26,7 +26,9 @@ struct HomeView: View {
     ) {
         _selectedTab = selectedTab
         _searchCriteria = searchCriteria
-        _viewModel = State(initialValue: viewModel ?? HomeViewModel.makeDefault())
+        _viewModel = State(
+            initialValue: viewModel ?? HomeViewModel.makeDefault()
+        )
     }
 
     var body: some View {
@@ -102,7 +104,8 @@ extension HomeView {
                     .background(.ultraThinMaterial, in: Circle())
                     .overlay(
                         Circle().stroke(
-                            isScrolled ? Color.borderColor : Color.white.opacity(0.25),
+                            isScrolled
+                                ? Color.borderColor : Color.white.opacity(0.25),
                             lineWidth: 1
                         )
                     )
@@ -142,7 +145,8 @@ extension HomeView {
             ScrollView {
                 LazyVStack(spacing: 28) {
                     HomeHeroView(
-                        topInset: geometry.safeAreaInsets.top + Self.topBarHeight
+                        topInset: geometry.safeAreaInsets.top
+                            + Self.topBarHeight
                     ) {
                         HomeSearchView(
                             criteria: $searchCriteria,

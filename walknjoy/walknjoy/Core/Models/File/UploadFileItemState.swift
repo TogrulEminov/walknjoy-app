@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum UploadFileItemState: Equatable {
+nonisolated enum UploadFileItemState: Equatable {
     case idle
     case uploading
     case uploaded

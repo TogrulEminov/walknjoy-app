@@ -1,6 +1,6 @@
 import Foundation
 
-struct ListingSearchCriteria: Hashable {
+nonisolated struct ListingSearchCriteria: Hashable {
     var locale = "az"
     var query = ""
     var type: ListingType?
@@ -99,7 +99,7 @@ struct ListingSearchCriteria: Hashable {
 
 typealias ListingQuery = ListingSearchCriteria
 
-private extension String {
+private nonisolated extension String {
     var nilIfBlank: String? {
         let value = trimmingCharacters(in: .whitespacesAndNewlines)
         return value.isEmpty ? nil : value

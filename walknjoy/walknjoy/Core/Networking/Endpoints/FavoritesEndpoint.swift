@@ -7,12 +7,12 @@
 
 import Foundation
 
-enum FavoritesEndpoint {
+nonisolated enum FavoritesEndpoint {
     case addFavorites(String)
     case deleteFavorites(String)
     case getFavorites(limit: Int, page: Int, locale: String)
 }
-extension FavoritesEndpoint: Endpoint {
+nonisolated extension FavoritesEndpoint: Endpoint {
     var baseURL: String {
         APIConfig.baseURL
     }

@@ -7,11 +7,11 @@
 
 import Foundation
 
-struct LoginRequest:Encodable {
+nonisolated struct LoginRequest:Encodable {
     let email:String
     let password:String
 }
-struct LoginResponse: Decodable {
+nonisolated struct LoginResponse: Decodable {
     let user: AuthUser
     let accessToken: String
     let refreshToken: String

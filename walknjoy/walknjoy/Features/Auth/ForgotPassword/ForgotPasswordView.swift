@@ -21,8 +21,6 @@ struct ForgotPasswordView: View {
 
     @State private var email = ""
 
-    // MARK: - Validation State
-
     // MARK: - Navigation State
 
     @State private var navigateToOtp = false

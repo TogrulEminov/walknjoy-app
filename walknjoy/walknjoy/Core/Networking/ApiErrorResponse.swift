@@ -7,18 +7,18 @@
 
 import Foundation
 
-struct ApiErrorResponse: Decodable {
+nonisolated struct ApiErrorResponse: Decodable {
     let success: Bool
     let error: ApiError
 }
 
-struct ApiError: Decodable {
+nonisolated struct ApiError: Decodable {
     let code: String
     let message: String
     let details: JSONValue?
 }
 
-enum JSONValue: Decodable {
+nonisolated enum JSONValue: Decodable {
     case string(String)
     case number(Double)
     case boolean(Bool)
@@ -49,7 +49,7 @@ enum JSONValue: Decodable {
     }
 }
 
-struct APIRequestFailure: LocalizedError {
+nonisolated struct APIRequestFailure: LocalizedError {
     let error: ApiError
     var fieldErrors: [String: String] {
         guard case .array(let entries) = error.details else { return [:] }

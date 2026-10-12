@@ -1,6 +1,6 @@
 import Foundation
 
-enum DiscoveryEndpoint: Endpoint {
+nonisolated enum DiscoveryEndpoint: Endpoint {
     case popularDestinations
     case amenities(type: ListingType?, locale: String)
 

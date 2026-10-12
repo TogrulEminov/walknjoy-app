@@ -1,6 +1,6 @@
 import Foundation
 
-protocol BookingServiceProtocol {
+nonisolated protocol BookingServiceProtocol {
     func getListingAvailability(slug: String, locale: String) async throws
         -> ListingAvailabilityResponse
     func customerPage(page: Int, limit: Int, status: String?) async throws
@@ -28,12 +28,11 @@ protocol BookingServiceProtocol {
     func getAdminBooking(id: String) async throws -> BookingsModel
 }
 
-@MainActor
-final class BookingService: BookingServiceProtocol {
+nonisolated final class BookingService: BookingServiceProtocol {
     private let network: NetworkingService
 
-    init(network: NetworkingService? = nil) {
-        self.network = network ?? DefaultNetworkService()
+    init(network: NetworkingService) {
+        self.network = network
     }
 
     private func value<T: Decodable>(_ endpoint: any Endpoint, as type: T.Type)
@@ -70,25 +69,10 @@ final class BookingService: BookingServiceProtocol {
     func createBooking(request: BookingRequest, idempotencyKey: String)
         async throws -> BookingsModel
     {
-        struct IdempotentBookingEndpoint: Endpoint {
-            let request: BookingRequest
-            let key: String
-            var baseURL: String { APIConfig.baseURL }
-            var path: String { "/bookings" }
-            var method: HttpMethod { .post }
-            var headers: [String: String]? {
-                ["Idempotency-Key": key]
-            }
-            var queryItems: [URLQueryItem]? { nil }
-            var httpBody: RequestBody { .json(request) }
-            var requiresAuth: Bool { true }
-            var usesOptionalAuth: Bool { false }
-        }
-
         return try await value(
-            IdempotentBookingEndpoint(
-                request: request,
-                key: idempotencyKey
+            BookingEndpoint.createBooking(
+                request,
+                idempotencyKey: idempotencyKey
             ),
             as: BookingsModel.self
         )

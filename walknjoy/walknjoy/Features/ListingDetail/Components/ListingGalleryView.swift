@@ -4,7 +4,10 @@ struct GlassButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .scaleEffect(configuration.isPressed ? 0.92 : 1.0)
-            .animation(.spring(response: 0.3, dampingFraction: 0.6), value: configuration.isPressed)
+            .animation(
+                .spring(response: 0.3, dampingFraction: 0.6),
+                value: configuration.isPressed
+            )
     }
 }
 
@@ -20,10 +23,15 @@ struct ListingGalleryView: View {
                 placeholder
             } else {
                 TabView(selection: $selection) {
-                    ForEach(Array(imagePaths.enumerated()), id: \.offset) { index, path in
+                    ForEach(Array(imagePaths.enumerated()), id: \.offset) {
+                        index,
+                        path in
                         GeometryReader { geometry in
                             RemoteImageView(path: path) { placeholder }
-                                .frame(width: geometry.size.width, height: geometry.size.height)
+                                .frame(
+                                    width: geometry.size.width,
+                                    height: geometry.size.height
+                                )
                                 .clipped()
                         }
                         .tag(index)
@@ -42,14 +50,26 @@ struct ListingGalleryView: View {
                 if !imagePaths.isEmpty {
                     HStack {
                         Spacer()
-                        Text(verbatim: "\(min(selection + 1, imagePaths.count)) / \(imagePaths.count)")
-                            .font(.caption.weight(.semibold)).monospacedDigit()
-                            .padding(.horizontal, 12).padding(.vertical, 8)
-                            .foregroundStyle(.white)
-                            .background(.black.opacity(0.45), in: Capsule())
-                            .accessibilityLabel(
-                                Text(String(format: String(localized: "listing.detail.imageCounterFormat"), min(selection + 1, imagePaths.count), imagePaths.count))
+                        Text(
+                            verbatim:
+                                "\(min(selection + 1, imagePaths.count)) / \(imagePaths.count)"
+                        )
+                        .font(.caption.weight(.semibold)).monospacedDigit()
+                        .padding(.horizontal, 12).padding(.vertical, 8)
+                        .foregroundStyle(.white)
+                        .background(.black.opacity(0.45), in: Capsule())
+                        .accessibilityLabel(
+                            Text(
+                                String(
+                                    format: String(
+                                        localized:
+                                            "listing.detail.imageCounterFormat"
+                                    ),
+                                    min(selection + 1, imagePaths.count),
+                                    imagePaths.count
+                                )
                             )
+                        )
                     }
                 }
             }

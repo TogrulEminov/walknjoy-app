@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol TokenStorageProtocol {
+nonisolated protocol TokenStorageProtocol {
     var accessToken: String? { get }
     var refreshToken: String? { get }
 
@@ -16,7 +16,9 @@ protocol TokenStorageProtocol {
     func clear() throws
 }
 
-final class TokenStorage: TokenStorageProtocol {
+nonisolated final class TokenStorage: TokenStorageProtocol {
+    private static let lock = NSRecursiveLock()
+
     private enum Keys {
         static let accessToken = "auth.accessToken"
         static let refreshToken = "auth.refreshToken"
@@ -36,6 +38,8 @@ final class TokenStorage: TokenStorageProtocol {
 
     }
     func save(accessToken: String, refreshToken: String) throws {
+        Self.lock.lock()
+        defer { Self.lock.unlock() }
         guard
             let accessData = accessToken.data(using: .utf8),
             let refreshData = refreshToken.data(using: .utf8)
@@ -47,16 +51,22 @@ final class TokenStorage: TokenStorageProtocol {
     }
 
     func updateAccessToken(_ accessToken: String) throws {
+        Self.lock.lock()
+        defer { Self.lock.unlock() }
         guard let data = accessToken.data(using: .utf8) else {
             throw KeychainServiceError.invalidData
         }
         try keychain.save(data, for: Keys.accessToken)
     }
     func clear() throws {
+        Self.lock.lock()
+        defer { Self.lock.unlock() }
         try keychain.delete(for: Keys.accessToken)
         try keychain.delete(for: Keys.refreshToken)
     }
     private func readToken(for key: String) -> String? {
+        Self.lock.lock()
+        defer { Self.lock.unlock() }
         guard let data = try? keychain.read(for: key) else {
             return nil
         }

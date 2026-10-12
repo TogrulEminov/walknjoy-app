@@ -17,7 +17,9 @@ struct ListingBookingBar: View {
             }
             VStack(alignment: .leading, spacing: 12) {
                 priceLabel
-                if showsBookingButton { bookingButton.frame(maxWidth: .infinity) }
+                if showsBookingButton {
+                    bookingButton.frame(maxWidth: .infinity)
+                }
             }
         }
         .padding(.horizontal, 20).padding(.vertical, 14)
@@ -43,7 +45,7 @@ struct ListingBookingBar: View {
             )
             .font(.title3.bold()).foregroundStyle(Color.titleText)
             Text("booking.basePrice")
-            .font(.caption).foregroundStyle(Color.descriptionText)
+                .font(.caption).foregroundStyle(Color.descriptionText)
         }.fixedSize(horizontal: true, vertical: false)
     }
 

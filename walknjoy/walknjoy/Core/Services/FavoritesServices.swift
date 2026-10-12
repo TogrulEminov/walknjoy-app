@@ -1,7 +1,6 @@
 import Foundation
 
-@MainActor
-protocol FavoritesServicesProtocol {
+nonisolated protocol FavoritesServicesProtocol {
     func addFavorites(_ input: FavoriteRequest) async throws -> FavoriteResponse
     func deleteFavorites(_ input: FavoriteRequest) async throws
         -> FavoriteResponse
@@ -9,8 +8,7 @@ protocol FavoritesServicesProtocol {
         -> FavoritesPage
 }
 
-@MainActor
-final class FavoritesServices: FavoritesServicesProtocol {
+nonisolated final class FavoritesServices: FavoritesServicesProtocol {
     private let networkService: NetworkingService
 
     init(networkService: NetworkingService? = nil) {

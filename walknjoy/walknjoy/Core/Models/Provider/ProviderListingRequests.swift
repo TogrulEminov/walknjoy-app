@@ -1,11 +1,11 @@
 import Foundation
 
-enum ProviderPatchValue<Value: Encodable> {
+nonisolated enum ProviderPatchValue<Value: Encodable> {
     case omitted, null
     case value(Value)
     var isOmitted: Bool { if case .omitted = self { true } else { false } }
 }
-extension KeyedEncodingContainer {
+nonisolated extension KeyedEncodingContainer {
     fileprivate mutating func encodePatch<T>(
         _ value: ProviderPatchValue<T>,
         forKey key: Key
@@ -18,7 +18,7 @@ extension KeyedEncodingContainer {
     }
 }
 
-struct ProviderLocationRequest: Encodable {
+nonisolated struct ProviderLocationRequest: Encodable {
     var locale: ListingLocale
     var cityId: String?
     var latitude: Double?
@@ -50,7 +50,7 @@ struct ProviderLocationRequest: Encodable {
     }
 }
 
-struct CreateListingRequest: Encodable {
+nonisolated struct CreateListingRequest: Encodable {
     var type: ListingType
     var categoryId: String?
     var basePrice: Decimal
@@ -88,7 +88,7 @@ struct CreateListingRequest: Encodable {
     }
 }
 
-struct UpdateListingRequest: Encodable {
+nonisolated struct UpdateListingRequest: Encodable {
     var locale: ListingLocale?
     var title: String?
     var description: String?
@@ -138,12 +138,12 @@ struct UpdateListingRequest: Encodable {
     }
 }
 
-struct ProviderMediaRequest: Encodable {
+nonisolated struct ProviderMediaRequest: Encodable {
     let fileId: String
     let altText: String?
 }
 
-enum ProviderListingValidation {
+nonisolated enum ProviderListingValidation {
     static func price(_ text: String) -> Decimal? {
         let normalized = text.trimmingCharacters(in: .whitespacesAndNewlines)
             .replacingOccurrences(of: ",", with: ".")
@@ -176,7 +176,7 @@ enum ProviderListingValidation {
     }
 }
 
-struct ProviderPriceUpdateRequest: Encodable {
+nonisolated struct ProviderPriceUpdateRequest: Encodable {
     let basePrice: Decimal
     let currency: ProviderCurrency
     private enum CodingKeys: String, CodingKey { case basePrice, currency }

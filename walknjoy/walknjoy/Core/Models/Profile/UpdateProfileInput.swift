@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct UpdateProfileInput: Encodable {
+nonisolated struct UpdateProfileInput: Encodable {
     let firstName: String?
     let lastName: String?
     let phone: String?

@@ -1,6 +1,5 @@
 import SwiftUI
 
-/// A single surface for actions above the listing gallery.
 struct ListingHeaderActionLabel: View {
     let symbol: String
     var tint: Color = .titleText
@@ -19,7 +18,12 @@ struct ListingHeaderActionLabel: View {
         .foregroundStyle(tint)
         .frame(width: 44, height: 44)
         .background(Color.surfaceBackground, in: Circle())
-        .overlay { Circle().strokeBorder(Color.borderColor.opacity(0.5), lineWidth: 0.5) }
+        .overlay {
+            Circle().strokeBorder(
+                Color.borderColor.opacity(0.5),
+                lineWidth: 0.5
+            )
+        }
         .shadow(color: .black.opacity(0.08), radius: 6, x: 0, y: 2)
         .contentShape(Circle())
     }

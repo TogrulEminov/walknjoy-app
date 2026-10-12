@@ -9,8 +9,12 @@ struct ListingReviewsView: View {
                     Image(systemName: "star.fill").foregroundStyle(
                         Color.brandYellow
                     )
-                    Text(rating.average.map { $0.formatted(.number.precision(.fractionLength(1))) } ?? "—")
-                        .font(.headline)
+                    Text(
+                        rating.average.map {
+                            $0.formatted(.number.precision(.fractionLength(1)))
+                        } ?? "—"
+                    )
+                    .font(.headline)
                     Text(
                         String(
                             format: String(

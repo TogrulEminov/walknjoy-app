@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DeleteFileResponse: Decodable {
+nonisolated struct DeleteFileResponse: Decodable {
     let id: String
     let deleted: Bool
 }

@@ -5,7 +5,7 @@ enum NotificationSocketState: Equatable {
     case disconnected, connecting, connected, reconnecting, failed
 }
 
-@MainActor protocol NotificationSocketProtocol: AnyObject {
+protocol NotificationSocketProtocol: AnyObject {
     var onStateChange: ((NotificationSocketState) -> Void)? { get set }
     var onNotification: ((AppNotification) -> Void)? { get set }
     var onConnected: (() -> Void)? { get set }
@@ -13,8 +13,7 @@ enum NotificationSocketState: Equatable {
     func start()
     func stop()
 }
-
-@MainActor final class RealtimeClient: NotificationSocketProtocol {
+final class RealtimeClient: NotificationSocketProtocol {
     var onStateChange: ((NotificationSocketState) -> Void)?
     var onNotification: ((AppNotification) -> Void)?
     var onConnected: (() -> Void)?
@@ -88,6 +87,9 @@ enum NotificationSocketState: Equatable {
     }
 
     func start() {
+        #if DEBUG
+        if DemoBackend.shared.isActive { return }
+        #endif
         guard !running else { return }
         running = true
         attempt = 0

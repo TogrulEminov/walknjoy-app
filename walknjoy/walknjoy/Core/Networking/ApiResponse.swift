@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ApiResponse<T: Decodable>: Decodable {
+nonisolated struct ApiResponse<T: Decodable>: Decodable {
     let success: Bool
     let data: T?
     let meta: PaginationMeta?
@@ -15,13 +15,13 @@ struct ApiResponse<T: Decodable>: Decodable {
 
 typealias APIResponse<T: Decodable> = ApiResponse<T>
 
-struct PaginatedResponse<T: Decodable>: Decodable {
+nonisolated struct PaginatedResponse<T: Decodable>: Decodable {
     let success: Bool
     let data: [T]
     let meta: PaginationMeta
 }
 
-struct PaginationMeta: Decodable {
+nonisolated struct PaginationMeta: Decodable {
     let page: Int
     let limit: Int
     let total: Int

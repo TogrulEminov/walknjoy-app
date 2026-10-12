@@ -7,6 +7,7 @@
 
 import Foundation
 
+@MainActor
 protocol AuthServiceProtocol {
     func register(request: RegisterRequest) async throws -> RegisterResponse
     func login(request: LoginRequest) async throws -> LoginResponse
@@ -27,6 +28,7 @@ protocol AuthServiceProtocol {
     func restoreSession() async throws
 }
 
+@MainActor
 final class AuthService: AuthServiceProtocol {
     private let tokenStorage: TokenStorageProtocol
     private let networkService: NetworkingService
@@ -53,6 +55,9 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func logout() async throws {
+        #if DEBUG
+        if DemoBackend.shared.isActive { DemoBackend.shared.end(); return }
+        #endif
         guard let refreshToken = tokenStorage.refreshToken else {
             throw NetworkError.unauthorized
         }
@@ -121,6 +126,9 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func refresh() async throws {
+        #if DEBUG
+        if DemoBackend.shared.isActive { return }
+        #endif
         guard let refreshToken = tokenStorage.refreshToken else {
             throw NetworkError.unauthorized
         }
@@ -135,7 +143,6 @@ final class AuthService: AuthServiceProtocol {
         guard let data = response.data else {
             throw NetworkError.invalidResponse
         }
-        // A refresh begun by a previous session must not overwrite a newer login/logout.
         guard tokenStorage.refreshToken == refreshToken else {
             throw NetworkError.unauthorized
         }
@@ -158,6 +165,9 @@ final class AuthService: AuthServiceProtocol {
     }
 
     func restoreSession() async throws {
+        #if DEBUG
+        if DemoBackend.shared.isActive { _ = try await me(); return }
+        #endif
         guard tokenStorage.refreshToken != nil else {
             throw NetworkError.unauthorized
         }
@@ -165,7 +175,6 @@ final class AuthService: AuthServiceProtocol {
             try await refresh()
             _ = try await me()
         } catch {
-            // A refreshed token alone is not proof of an allowed mobile account.
             try? tokenStorage.clear()
             throw error
         }

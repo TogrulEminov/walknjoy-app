@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct RefreshTokenRequest: Encodable {
+nonisolated struct RefreshTokenRequest: Encodable {
     let refreshToken: String
 }
-struct RefreshTokenResponse:Decodable {
+nonisolated struct RefreshTokenResponse:Decodable {
     let refreshToken: String
     let accessToken: String
 }

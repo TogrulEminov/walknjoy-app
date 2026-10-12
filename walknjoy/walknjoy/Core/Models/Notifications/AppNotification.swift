@@ -1,6 +1,6 @@
 import Foundation
 
-struct AppNotification: Codable, Identifiable, Hashable {
+nonisolated struct AppNotification: Codable, Identifiable, Hashable {
     let id: String
     let type: String
     let title: String
@@ -10,7 +10,7 @@ struct AppNotification: Codable, Identifiable, Hashable {
     let createdAt: String
 }
 
-struct NotificationData: Codable, Hashable {
+nonisolated struct NotificationData: Codable, Hashable {
     var conversationId: String?
     var route: String?
     var bookingId: String?
@@ -38,12 +38,12 @@ struct NotificationData: Codable, Hashable {
     }
 }
 
-struct WebSocketEvent<T: Codable>: Codable {
+nonisolated struct WebSocketEvent<T: Codable>: Codable {
     let event: String
     let data: T
 }
 
-enum NotificationEventDecoder {
+nonisolated enum NotificationEventDecoder {
     private struct Header: Decodable { let event: String }
     static func notification(from data: Data) throws -> AppNotification? {
         let decoder = JSONDecoder()

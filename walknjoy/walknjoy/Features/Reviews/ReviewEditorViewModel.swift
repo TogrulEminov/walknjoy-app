@@ -35,7 +35,9 @@ final class ReviewEditorViewModel {
     var canSubmit: Bool {
         !isSubmitting && (1...5).contains(rating) && title.count <= 120
             && comment.count <= 2000
-            && (context.reviewID != nil ? patch.hasChanges : ReviewValidation.text(context.bookingID) != nil)
+            && (context.reviewID != nil
+                ? patch.hasChanges
+                : ReviewValidation.text(context.bookingID) != nil)
     }
 
     func submit(store: ReviewStore, locale: String) async -> Bool {
@@ -54,7 +56,11 @@ final class ReviewEditorViewModel {
             } else if let bookingID = ReviewValidation.text(context.bookingID) {
                 let result = try await service.create(
                     bookingID: bookingID,
-                    request: CreateReviewRequest(rating: rating, title: title, comment: comment)
+                    request: CreateReviewRequest(
+                        rating: rating,
+                        title: title,
+                        comment: comment
+                    )
                 )
                 guard session == store.sessionID else { return false }
                 // POST has no author: invalidate and fetch public/profile lists separately.
@@ -63,7 +69,12 @@ final class ReviewEditorViewModel {
                 throw ReviewInputError.creationUnavailable
             }
             if let slug = ReviewValidation.text(context.slug) {
-                await store.refreshRating(listingID: context.listingID, slug: slug, locale: locale, service: service)
+                await store.refreshRating(
+                    listingID: context.listingID,
+                    slug: slug,
+                    locale: locale,
+                    service: service
+                )
             }
             return true
         } catch is CancellationError { return false } catch {

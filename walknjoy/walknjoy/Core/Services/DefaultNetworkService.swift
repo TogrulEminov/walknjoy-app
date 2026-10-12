@@ -1,9 +1,9 @@
 import Foundation
 
-@MainActor
-final class DefaultNetworkService: NetworkingService {
+nonisolated final class DefaultNetworkService: NetworkingService {
 
     private let session: URLSession
+    private let decoderLock = NSLock()
     private let decoder: JSONDecoder
     private let tokenStorage: TokenStorageProtocol
 
@@ -23,10 +23,9 @@ final class DefaultNetworkService: NetworkingService {
     ) async throws -> T {
         let data = try await performRequest(enpoint: enpoint)
         do {
-            return try decoder.decode(
-                responseType,
-                from: data
-            )
+            return try decoderLock.withLock {
+                try decoder.decode(responseType, from: data)
+            }
         } catch {
             #if DEBUG
                 print(
@@ -44,6 +43,11 @@ final class DefaultNetworkService: NetworkingService {
     }
 
     private func performRequest(enpoint: any Endpoint) async throws -> Data {
+        #if DEBUG
+        if DemoBackend.shared.isActive {
+            return try DemoBackend.shared.response(for: enpoint)
+        }
+        #endif
         var request = try enpoint.makeRequest()
 
         #if DEBUG
@@ -128,10 +132,9 @@ final class DefaultNetworkService: NetworkingService {
             if enpoint is ConversationEndpoint, httpResponse.statusCode == 401 {
                 throw NetworkError.unauthorized
             }
-            if let apiError = try? decoder.decode(
-                ApiErrorResponse.self,
-                from: data
-            ) {
+            if let apiError = try? decoderLock.withLock({
+                try decoder.decode(ApiErrorResponse.self, from: data)
+            }) {
                 if enpoint.path.hasPrefix("/provider/listings")
                     || enpoint is ConversationEndpoint
                     || enpoint is ReviewEndpoint

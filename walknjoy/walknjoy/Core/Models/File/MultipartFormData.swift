@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct MultipartFormData {
+nonisolated struct MultipartFormData {
     let boundary: String
     init(boundary: String = UUID().uuidString) {
         self.boundary = boundary
@@ -44,7 +44,7 @@ struct MultipartFormData {
         return body
     }
 }
-extension Data {
+nonisolated extension Data {
 
     mutating func appendString(_ string: String) {
         guard let data = string.data(using: .utf8) else {

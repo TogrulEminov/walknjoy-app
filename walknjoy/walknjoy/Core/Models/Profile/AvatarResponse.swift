@@ -1,6 +1,6 @@
 import Foundation
 
-struct AvatarResponse: Decodable {
+nonisolated struct AvatarResponse: Decodable {
     let avatarFile: UploadedFile?
     let altText: String?
 

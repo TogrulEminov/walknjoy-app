@@ -31,8 +31,13 @@ import Observation
         let locale = query.locale
         catalogError = nil
         do {
-            let values = try await service.categories(type: type, locale: locale)
-            guard !Task.isCancelled, catalogGeneration == token, type == query.type, locale == query.locale else { return }
+            let values = try await service.categories(
+                type: type,
+                locale: locale
+            )
+            guard !Task.isCancelled, catalogGeneration == token,
+                type == query.type, locale == query.locale
+            else { return }
             categories = values
         } catch {
             guard !Task.isCancelled, catalogGeneration == token else { return }
@@ -53,7 +58,10 @@ import Observation
             request.page = page
             request.limit = limit
             let response = try await service.list(query: request)
-            return PaginationPage(items: response.data ?? [], meta: response.meta)
+            return PaginationPage(
+                items: response.data ?? [],
+                meta: response.meta
+            )
         }
         if case .error(let message) = pagination.state {
             error = message
@@ -69,7 +77,10 @@ import Observation
             request.page = page
             request.limit = limit
             let response = try await service.list(query: request)
-            return PaginationPage(items: response.data ?? [], meta: response.meta)
+            return PaginationPage(
+                items: response.data ?? [],
+                meta: response.meta
+            )
         })
         if case .error(let message) = pagination.state {
             nextPageError = message

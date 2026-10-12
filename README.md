@@ -78,6 +78,30 @@ open walknjoy/walknjoy.xcodeproj
 
 Yuxarıdakı əmrlər mövcud lokal konfiqurasiyanı əvəz etmir. `APIConfig.swift` Git-də izlənmir; nümunə faylı isə repoda saxlanılır. Konfiqurasiyaya server parolu, private key və ya digər server sirləri yerləşdirməyin. Yeni public konfiqurasiya sahəsi əlavə ediləndə nümunəni də yeniləyin.
 
+## API mühiti və giriş hesabları
+
+Layihə sahibinin təqdim etdiyi hazırkı backend və media ünvanları:
+
+```swift
+static let baseURL = "https://nqkydcwhxlbbxxgi9qexnsce.5.189.155.133.sslip.io/api/v1"
+static let imageUrl = "https://pub-80a4d4523087412c8b769e1c4a3ae64c.r2.dev"
+```
+
+Bu mühitə qoşulmaq üçün həmin dəyərləri `walknjoy/walknjoy/Core/Config/APIConfig.swift` daxilində yazın. Repodakı `config/APIConfig.swift.example` lokal backend üçün nümunə olaraq qalır.
+
+Əl ilə giriş və funksionallığın yoxlanması üçün təqdim olunmuş hesablar:
+
+- **Customer (CUSTOMER)** — e-poçt: `cbgservices313@gmail.com`; şifrə: `Togrul12`.
+- **Provider (PROVIDER)** — e-poçt: `togrul40@mail.ru`; şifrə: `Togrul12`.
+
+Hesab məlumatlarını tətbiqin giriş ekranına daxil edin. Konfiqurasiyadakı hesab qeydləri avtomatik giriş etmir və backend-də istifadəçi yaratmır. Rol və provider təsdiq statusu backend tərəfindən müəyyən edilir; bu hesabların girişinin və təsdiq statusunun canlı yoxlanması aparılmayıb.
+
+### Əl ilə yoxlama
+
+1. Customer hesabı ilə daxil olun; axtarış, listing detalları, sevimlilər və rezervasiya axınını yoxlayın.
+2. Hesabdan çıxın və Provider hesabı ilə daxil olun; provider profili və listing idarəetməsini yoxlayın. Müvafiq funksiyalar üçün backend-də provider təsdiqi tələb oluna bilər.
+3. Mesajlaşmanı yoxlamaq üçün iki ayrı simulator və ya cihazda Customer və Provider hesablarını açın. Customer hesabından listing və ya booking detalındakı mesajlaşma keçidi ilə söhbət başladın; mesajın qarşı tərəfə çatmasını, typing və read vəziyyətlərini yoxlayın.
+
 ## Build və GitHub Actions
 
 ```bash

@@ -1,21 +1,21 @@
-struct ChangePasswordRequest: Encodable {
+nonisolated struct ChangePasswordRequest: Encodable {
     let currentPassword: String
 }
 
-struct ChangePasswordChallenge: Decodable {
+nonisolated struct ChangePasswordChallenge: Decodable {
     let expiresInSeconds: Int
     let resendAvailableInSeconds: Int
 }
 
-struct ChangePasswordVerification: Encodable {
+nonisolated struct ChangePasswordVerification: Encodable {
     let code: String
 }
 
-struct ChangePasswordAuthorization: Decodable {
+nonisolated struct ChangePasswordAuthorization: Decodable {
     let changePasswordToken: String
 }
 
-struct ChangePasswordInput: Encodable {
+nonisolated struct ChangePasswordInput: Encodable {
     let changePasswordToken: String
     let newPassword: String
 }

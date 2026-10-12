@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Notification:Codable {
+nonisolated struct Notification:Codable {
     let bookingUpdates: Bool
     let messages: Bool
     let marketing: Bool

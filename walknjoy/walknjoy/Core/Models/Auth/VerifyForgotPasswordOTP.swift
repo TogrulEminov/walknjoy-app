@@ -5,10 +5,10 @@
 //  Created by Eminov Togrul Punhan on 21.09.26.
 //
 
-struct VerifyForgotPasswordOTPRequest: Encodable {
+nonisolated struct VerifyForgotPasswordOTPRequest: Encodable {
     let email: String
     let code: String
 }
-struct VerifyForgotPasswordOTPResponse: Decodable {
+nonisolated struct VerifyForgotPasswordOTPResponse: Decodable {
     let resetToken: String
 }

@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-enum AppLanguage: String, CaseIterable, Identifiable {
+nonisolated enum AppLanguage: String, CaseIterable, Identifiable {
     case az
 
     var id: String {

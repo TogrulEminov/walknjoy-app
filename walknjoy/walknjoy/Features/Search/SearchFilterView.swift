@@ -29,7 +29,9 @@ struct SearchFilterView: View {
                     TextField("search.filter.maxPrice", text: $model.maxPrice)
                         .keyboardType(.decimalPad)
                     if let key = model.validationErrorKey {
-                        Text(LocalizedStringKey(key)).foregroundStyle(Color.errorC)
+                        Text(LocalizedStringKey(key)).foregroundStyle(
+                            Color.errorC
+                        )
                     }
                 }
                 .listRowBackground(Color.surfaceBackground)
@@ -132,8 +134,11 @@ struct SearchFilterView: View {
                     Button("common.cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("common.apply") { onApply(model.criteriaForSubmission()); dismiss() }
-                        .disabled(model.validationErrorKey != nil)
+                    Button("common.apply") {
+                        onApply(model.criteriaForSubmission())
+                        dismiss()
+                    }
+                    .disabled(model.validationErrorKey != nil)
                 }
             }
             .safeAreaInset(edge: .bottom) {
@@ -288,6 +293,5 @@ extension ListingSort {
         }
     }
 }
-
-// Public listing filters share the existing search filter implementation.
+ 
 typealias ListingFilterView = SearchFilterView

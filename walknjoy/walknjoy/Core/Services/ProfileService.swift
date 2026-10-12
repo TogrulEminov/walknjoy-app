@@ -7,7 +7,7 @@
 
 import Foundation
 
-protocol ProfileServiceProtocol {
+nonisolated protocol ProfileServiceProtocol {
     func getProfile() async throws -> ProfileModel
     func getNotificationPreferences() async throws -> Notification
     func updateProfile(_ input: UpdateProfileInput) async throws -> ProfileModel
@@ -17,7 +17,7 @@ protocol ProfileServiceProtocol {
         -> Notification
     func deleteAvatar() async throws -> AvatarResponse
 }
-final class ProfileService: ProfileServiceProtocol {
+nonisolated final class ProfileService: ProfileServiceProtocol {
     private let networkService: NetworkingService
 
     init(
