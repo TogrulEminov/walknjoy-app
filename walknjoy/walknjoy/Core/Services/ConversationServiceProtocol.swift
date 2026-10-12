@@ -1,6 +1,7 @@
 import Foundation
 
-@MainActor protocol ConversationServiceProtocol {
+@MainActor
+protocol ConversationServiceProtocol {
     func list(page: Int, locale: String) async throws -> ConversationPage
     func detail(id: String, locale: String) async throws -> ConversationDetail
     func start(_ context: ConversationStart, locale: String) async throws
