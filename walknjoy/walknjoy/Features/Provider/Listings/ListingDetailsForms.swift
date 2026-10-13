@@ -40,21 +40,21 @@ struct StayDetailsForm: View {
                 title: "listing.stay.minimumNights",
                 value: $details.minimumNights
             )
-            BusinessInputField(
-                "listing.stay.checkInFrom",
-                text: text($details.checkInFrom)
+            OptionalTimePicker(
+                title: "listing.stay.checkInFrom",
+                value: $details.checkInFrom
             )
-            BusinessInputField(
-                "listing.stay.checkInUntil",
-                text: text($details.checkInUntil)
+            OptionalTimePicker(
+                title: "listing.stay.checkInUntil",
+                value: $details.checkInUntil
             )
-            BusinessInputField(
-                "listing.stay.checkOutFrom",
-                text: text($details.checkOutFrom)
+            OptionalTimePicker(
+                title: "listing.stay.checkOutFrom",
+                value: $details.checkOutFrom
             )
-            BusinessInputField(
-                "listing.stay.checkOutUntil",
-                text: text($details.checkOutUntil)
+            OptionalTimePicker(
+                title: "listing.stay.checkOutUntil",
+                value: $details.checkOutUntil
             )
             OptionalBoolPicker(
                 title: "listing.stay.instantBooking",
@@ -159,6 +159,82 @@ struct ExperienceDetailsForm: View {
                 title: "listing.experience.private",
                 value: $details.isPrivate
             )
+        }
+    }
+}
+
+private struct OptionalTimePicker: View {
+    let title: LocalizedStringKey
+    @Binding var value: String?
+    @State private var showingPicker = false
+    @State private var selectedTime = Date()
+
+    private var formatter: DateFormatter {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "HH:mm"
+        return formatter
+    }
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Button {
+                selectedTime = value.flatMap { formatter.date(from: $0) }
+                    ?? Calendar.current.date(bySettingHour: 12, minute: 0, second: 0, of: Date())
+                    ?? Date()
+                showingPicker = true
+            } label: {
+                HStack {
+                    Text(title).foregroundStyle(Color.titleText)
+                    Spacer(minLength: 8)
+                    if let value {
+                        Text(verbatim: value).monospacedDigit()
+                            .foregroundStyle(Color.titleText)
+                    } else {
+                        Text("common.select").foregroundStyle(Color.descriptionText)
+                    }
+                    Image(systemName: "clock").foregroundStyle(Color.iconColor)
+                }
+                .frame(minHeight: 44)
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            if value != nil {
+                Button {
+                    value = nil
+                } label: {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundStyle(Color.descriptionText)
+                        .frame(width: 44, height: 44)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text("common.reset"))
+            }
+        }
+        .sheet(isPresented: $showingPicker) {
+            NavigationStack {
+                DatePicker(title, selection: $selectedTime, displayedComponents: .hourAndMinute)
+                    .datePickerStyle(.wheel)
+                    .labelsHidden()
+                    .environment(\.locale, Locale(identifier: "az_AZ"))
+                    .padding()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color.appBackground)
+                    .navigationTitle(title)
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .cancellationAction) {
+                            Button("common.cancel") { showingPicker = false }
+                        }
+                        ToolbarItem(placement: .confirmationAction) {
+                            Button("common.apply") {
+                                value = formatter.string(from: selectedTime)
+                                showingPicker = false
+                            }
+                        }
+                    }
+            }
+            .presentationDetents([.height(320)])
         }
     }
 }

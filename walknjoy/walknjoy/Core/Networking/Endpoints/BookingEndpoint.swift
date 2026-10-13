@@ -11,6 +11,7 @@ nonisolated enum BookingEndpoint {
     case customerCancel(id: String)
 
     // Provider Endpoints
+    case providerPage(page: Int, limit: Int, status: String?)
     case providerListBookings
     case providerGetBooking(id: String)
     case providerConfirmBooking(id: String)
@@ -43,7 +44,7 @@ nonisolated extension BookingEndpoint: Endpoint {
             "/bookings/"
         case .customerCancel(let id):
             "/bookings/\(id)/cancel"
-        case .providerListBookings:
+        case .providerListBookings, .providerPage:
             "/provider/bookings/"
         case .providerGetBooking(let id):
             "/provider/bookings/\(id)"
@@ -64,7 +65,7 @@ nonisolated extension BookingEndpoint: Endpoint {
         switch self {
         case .listingAvailability, .checkAvailability, .getBooking,
             .getBookingTicket,
-            .customerListBookings, .customerPage, .providerListBookings,
+            .customerListBookings, .customerPage, .providerListBookings, .providerPage,
             .providerGetBooking,
             .adminListBookings, .adminGetBooking:
             .get
@@ -99,7 +100,7 @@ nonisolated extension BookingEndpoint: Endpoint {
                     value: request.participants.map(String.init)
                 ),
             ].filter { $0.value != nil }
-        case .customerPage(let page, let limit, let status):
+        case .customerPage(let page, let limit, let status), .providerPage(let page, let limit, let status):
             return [
                 URLQueryItem(name: "page", value: String(page)),
                 URLQueryItem(

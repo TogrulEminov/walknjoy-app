@@ -343,6 +343,9 @@ struct ListingEditorView: View {
         } message: {
             Text("listing.unsaved.message")
         }
+        .onReceive(NotificationCenter.default.publisher(for: .listingsChanged)) { event in
+            if let id = event.object as? String, id == model.id { dismiss() }
+        }
         .task { await model.load() }
     }
 }

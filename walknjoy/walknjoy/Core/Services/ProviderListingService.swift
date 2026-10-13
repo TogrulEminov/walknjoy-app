@@ -6,7 +6,7 @@ nonisolated protocol ProviderListingsManaging {
     func list(query: ProviderListingsQuery) async throws -> ApiResponse<
         [ProviderListingCardDTO]
     >
-    func archive(id: String) async throws -> ProviderListingEditorDTO
+    func delete(id: String) async throws -> ProviderListingEditorDTO
     func submit(id: String) async throws -> ProviderListingEditorDTO
 }
 
@@ -62,8 +62,10 @@ nonisolated final class ProviderListingService: ProviderListingsManaging {
         try await listing(.submit(id: id))
     }
 
-    func archive(id: String) async throws -> ProviderListingEditorDTO {
-        try await listing(.archive(id: id))
+    func delete(id: String) async throws -> ProviderListingEditorDTO {
+        let deleted = try await listing(.delete(id: id))
+        guard deleted.id == id, deleted.isDeleted else { throw NetworkError.invalidResponse }
+        return deleted
     }
 
     func getDetails(id: String) async throws -> ProviderListingDetailsDTO {

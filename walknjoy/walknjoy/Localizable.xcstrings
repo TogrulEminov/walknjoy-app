@@ -1,6 +1,215 @@
 {
   "sourceLanguage" : "az",
   "strings" : {
+    "listing.detail.included" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daxildir"
+          }
+        }
+      }
+    },
+    "listing.detail.notIncluded" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Daxil deyil"
+          }
+        }
+      }
+    },
+    "listing.detail.private" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fərdi"
+          }
+        }
+      }
+    },
+    "listing.detail.groupExperience" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qrup təcrübəsi"
+          }
+        }
+      }
+    },
+    "provider.bookings.title" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezervasiyalar"
+          }
+        }
+      }
+    },
+    "provider.booking.confirm" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qəbul et"
+          }
+        }
+      }
+    },
+    "provider.booking.decline" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "İmtina et"
+          }
+        }
+      }
+    },
+    "provider.booking.cancel" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ləğv et"
+          }
+        }
+      }
+    },
+    "provider.booking.complete" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tamamla"
+          }
+        }
+      }
+    },
+    "provider.booking.confirmPrompt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezervasiyanı qəbul etmək istəyirsiniz?"
+          }
+        }
+      }
+    },
+    "provider.booking.cancelPrompt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezervasiyanı ləğv etmək istəyirsiniz?"
+          }
+        }
+      }
+    },
+    "provider.booking.completePrompt" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Xidmətin tamamlandığını təsdiqləyirsiniz?"
+          }
+        }
+      }
+    },
+    "provider.booking.forbidden" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bu rezervasiyanı idarə etmək üçün icazəniz yoxdur."
+          }
+        }
+      }
+    },
+    "provider.booking.notFound" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezervasiya artıq əlçatan deyil."
+          }
+        }
+      }
+    },
+    "provider.booking.conflict" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rezervasiyanın vəziyyəti dəyişib və ya xidmət vaxtı hələ bitməyib. Məlumatlar yeniləndi."
+          }
+        }
+      }
+    },
+    "provider.booking.customer" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Qonaq məlumatları"
+          }
+        }
+      }
+    },
+    "provider.booking.customerName" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ad və soyad"
+          }
+        }
+      }
+    },
+    "provider.booking.email" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "E-poçt"
+          }
+        }
+      }
+    },
+    "provider.booking.phone" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Telefon"
+          }
+        }
+      }
+    },
     "" : {
 
     },
@@ -1967,7 +2176,7 @@
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elan tapılmadı"
+            "value" : "Elan artıq əlçatan deyil"
           }
         }
       }
@@ -2332,7 +2541,7 @@
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Fərdi təcrübə"
+            "value" : "Fərdi"
           }
         }
       }
@@ -4282,32 +4491,32 @@
         }
       }
     },
-    "provider.archive.action" : {
+    "provider.delete.action" : {
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Arxivlə"
+            "value" : "Sil"
           }
         }
       }
     },
-    "provider.archive.message" : {
+    "provider.delete.message" : {
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Bu elanı arxivləşdirmək istəyirsiniz?"
+            "value" : "Bu elanı silmək istəyirsiniz? Mövcud rezervasiya tarixçəsi saxlanılacaq."
           }
         }
       }
     },
-    "provider.archive.title" : {
+    "provider.delete.title" : {
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Elanı arxivlə"
+            "value" : "Elanı sil"
           }
         }
       }

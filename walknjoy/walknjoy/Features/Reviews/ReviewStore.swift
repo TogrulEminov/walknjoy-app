@@ -19,10 +19,11 @@ final class ReviewStore {
         ratingStates[listingID] ?? .idle
     }
     func remember(_ reviews: [MyReview]) {
-        for review in reviews { ownReviews[review.listingId] = review }
+        for review in reviews { ownReviews[review.id] = review }
     }
-    func changed(listingID: String, review: MyReview?) {
-        ownReviews[listingID] = review
+    func changed(listingID: String, review: MyReview?, reviewID: String? = nil) {
+        if let review { ownReviews[review.id] = review }
+        else if let reviewID { ownReviews[reviewID] = nil }
         ratings[listingID] = nil
         ratingStates[listingID] = .idle
         invalidatedRatings.insert(listingID)

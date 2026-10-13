@@ -24,10 +24,17 @@ struct ConversationListView: View {
                 if model.isLoading && model.rows.isEmpty { ProgressView() }
                 if !model.isLoading && model.rows.isEmpty && model.error == nil
                 {
-                    ContentUnavailableView(
-                        "messages.empty",
-                        systemImage: "bubble.left.and.bubble.right"
-                    )
+                    ContentUnavailableView {
+                        Label {
+                            Text("messages.empty")
+                                .foregroundStyle(Color.titleText)
+                        } icon: {
+                            Image(systemName: "bubble.left.and.bubble.right")
+                                .foregroundStyle(Color.brandYellow)
+                        }
+                    }
+                    .listRowBackground(Color.surfaceBackground)
+                    .listRowSeparator(.hidden)
                 }
                 ForEach(model.rows) { row in
                     NavigationLink {
@@ -67,12 +74,13 @@ struct ConversationListView: View {
                             }
                             Spacer(minLength: 0)
                             if row.unreadCount > 0 {
-                                Text(row.unreadCount.formatted()).font(
-                                    .caption.bold()
-                                ).padding(7)
+                                Text(row.unreadCount > 99 ? "99+" : row.unreadCount.formatted())
+                                    .font(.system(size: 11, weight: .bold))
+                                    .monospacedDigit()
+                                    .frame(width: 28, height: 28)
                                     .background(
                                         Color.brandYellow,
-                                        in: Capsule()
+                                        in: Circle()
                                     ).foregroundStyle(Color.brandInk)
                                     .accessibilityLabel(
                                         Text("messages.unread")

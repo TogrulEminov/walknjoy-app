@@ -129,7 +129,24 @@ nonisolated final class DefaultNetworkService: NetworkingService {
                 throw NetworkError.listingNotFound
             }
 
-            if enpoint is ConversationEndpoint, httpResponse.statusCode == 401 {
+            if httpResponse.statusCode == 404 {
+                if let endpoint = enpoint as? ProviderListingEndpoint {
+                    switch endpoint {
+                    case .get, .getDetails: throw NetworkError.listingNotFound
+                    default: break
+                    }
+                }
+                if let endpoint = enpoint as? BookingEndpoint {
+                    switch endpoint {
+                    case .listingAvailability, .checkAvailability, .createBooking:
+                        throw NetworkError.listingNotFound
+                    default: break
+                    }
+                }
+            }
+
+            if (enpoint is ConversationEndpoint || enpoint is ReviewEndpoint || enpoint.path.hasPrefix("/provider/bookings")),
+                httpResponse.statusCode == 401 {
                 throw NetworkError.unauthorized
             }
             if let apiError = try? decoderLock.withLock({
@@ -138,8 +155,9 @@ nonisolated final class DefaultNetworkService: NetworkingService {
                 if enpoint.path.hasPrefix("/provider/listings")
                     || enpoint is ConversationEndpoint
                     || enpoint is ReviewEndpoint
+                    || enpoint.path.hasPrefix("/provider/bookings")
                 {
-                    throw APIRequestFailure(error: apiError.error)
+                    throw APIRequestFailure(error: apiError.error, statusCode: httpResponse.statusCode)
                 }
                 throw NetworkError.from(
                     code: apiError.error.code,

@@ -39,19 +39,7 @@ final class ListingReviewsViewModel {
         defer { checkingBookings = false }
         let session = store.sessionID
         let bookings = try await bookingService.getCustomerBookings()
-        var reviews: [MyReview] = []
-        var page = 1
-        while true {
-            try Task.checkCancellation()
-            let result = try await service.mine(page: page, limit: 20)
-            reviews.append(contentsOf: result.items)
-            if !result.hasNextPage(currentPage: page, limit: 20)
-                || result.items.isEmpty
-            {
-                break
-            }
-            page += 1
-        }
+        let reviews = try await service.allMine()
         guard session == store.sessionID else { throw CancellationError() }
         relatedBookings = bookings.filter { $0.listing.id == listingID }
         store.remember(reviews)

@@ -9,7 +9,7 @@ nonisolated enum ReviewEndpoint: Endpoint {
         locale: String
     )
     case create(bookingID: String, request: CreateReviewRequest)
-    case mine(page: Int, limit: Int)
+    case mine(page: Int, limit: Int, sort: ReviewSort)
     case update(id: String, request: UpdateReviewRequest)
     case delete(id: String)
 
@@ -40,11 +40,11 @@ nonisolated enum ReviewEndpoint: Endpoint {
                 URLQueryItem(name: "sort", value: sort.rawValue),
                 URLQueryItem(name: "locale", value: locale),
             ]
-        case .mine(let page, let limit):
+        case .mine(let page, let limit, let sort):
             [
                 URLQueryItem(name: "page", value: String(page)),
                 URLQueryItem(name: "limit", value: String(limit)),
-                URLQueryItem(name: "sort", value: "newest"),
+                URLQueryItem(name: "sort", value: sort.rawValue),
                 URLQueryItem(name: "locale", value: UserDefaultsService().selectedLanguage.rawValue),
             ]
         default: nil

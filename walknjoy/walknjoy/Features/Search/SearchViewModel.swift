@@ -12,7 +12,7 @@ final class SearchViewModel {
     private let favoritesService: FavoritesServicesProtocol
     private let pagination: PaginationController<PublicListing>
 
-    var listings: [PublicListing] { pagination.items }
+    var listings: [PublicListing] { pagination.items.filter { !ListingLifecycle.shared.deletedIDs.contains($0.id) } }
     var criteria: ListingSearchCriteria
     var paginationMeta: PaginationMeta? { pagination.meta }
     var destinations: [PopularDestination] = []
@@ -80,6 +80,11 @@ final class SearchViewModel {
     }
 
     func refresh() async { await search() }
+    func invalidateDeletedListing(_ id: String) {
+        pagination.remove(id: id)
+        favoriteOverrides[id] = nil
+        currentPage = min(currentPage, loadedPageCount)
+    }
 
     func loadNextPageIfNeeded(currentItem: PublicListing) async {
         guard currentItem.id == listings.last?.id,

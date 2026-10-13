@@ -63,6 +63,10 @@ struct FavoritesView: View {
         .background(Color.appBackground)
         .navigationTitle("profile.favorites")
         .navigationBarTitleDisplayMode(.inline)
+        .onReceive(NotificationCenter.default.publisher(for: .listingsChanged)) { event in
+            if let id = event.object as? String { viewModel.invalidateDeletedListing(id) }
+            Task { await viewModel.refresh(locale: appState.language.rawValue) }
+        }
         .task(id: appState.language) {
             await viewModel.refresh(locale: appState.language.rawValue)
         }

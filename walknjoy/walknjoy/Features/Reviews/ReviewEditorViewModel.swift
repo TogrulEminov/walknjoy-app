@@ -33,7 +33,7 @@ final class ReviewEditorViewModel {
     }
 
     var canSubmit: Bool {
-        !isSubmitting && (1...5).contains(rating) && title.count <= 120
+        !isSubmitting && !duplicate && (1...5).contains(rating) && title.count <= 120
             && comment.count <= 2000
             && (context.reviewID != nil
                 ? patch.hasChanges
@@ -81,6 +81,14 @@ final class ReviewEditorViewModel {
             duplicate = ReviewErrorMessage.isDuplicate(error)
             fieldErrors = (error as? APIRequestFailure)?.fieldErrors ?? [:]
             self.error = ReviewErrorMessage.text(error)
+            if duplicate, session == store.sessionID {
+                // Reconcile a review created elsewhere without assuming a missing first-page match.
+                if let history = try? await service.allMine(), session == store.sessionID {
+                    store.remember(history)
+                    store.changed(listingID: context.listingID,
+                        review: history.first(where: { $0.bookingId == context.bookingID }))
+                }
+            }
             return false
         }
     }

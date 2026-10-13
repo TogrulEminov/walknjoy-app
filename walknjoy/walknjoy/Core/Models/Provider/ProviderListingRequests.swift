@@ -106,9 +106,14 @@ nonisolated struct UpdateListingRequest: Encodable {
         if locale != nil || title != nil || description != nil
             || !slug.isOmitted || !shortDescription.isOmitted
         {
-            guard locale != nil, title?.listingNonBlank != nil,
-                description?.listingNonBlank != nil
+            guard locale != nil
             else { throw ListingInputError.invalidRequiredFields }
+        }
+        if let title, title.listingNonBlank == nil || title.count > 200 {
+            throw ListingInputError.invalidRequiredFields
+        }
+        if let description, description.listingNonBlank == nil || description.count > 5000 {
+            throw ListingInputError.invalidRequiredFields
         }
         guard
             locale != nil || !categoryId.isOmitted || basePrice != nil

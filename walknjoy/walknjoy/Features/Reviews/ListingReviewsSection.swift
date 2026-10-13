@@ -138,7 +138,7 @@ struct ListingReviewsContent: View {
     )
 
     private var ownContext: ReviewEditorContext? {
-        if let own = appState.reviews.ownReviews[listingID] {
+        if let own = appState.reviews.ownReviews.values.first(where: { $0.listingId == listingID }) {
             return ReviewEditorContext(own)
         }
         if let own = model.pagination.items.first(where: {
@@ -387,7 +387,7 @@ struct ListingReviewsContent: View {
         do {
             try await model.service.delete(id: review.id)
             guard session == appState.reviews.sessionID else { return }
-            appState.reviews.changed(listingID: listingID, review: nil)
+            appState.reviews.changed(listingID: listingID, review: nil, reviewID: review.id)
             await appState.reviews.refreshRating(
                 listingID: listingID,
                 slug: model.slug,

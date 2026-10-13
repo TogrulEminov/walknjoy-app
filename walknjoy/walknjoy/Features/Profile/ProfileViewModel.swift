@@ -27,8 +27,11 @@ final class ProfileViewModel {
         self.providerService = providerService ?? ProviderService()
     }
 
-    func loadProfile() async {
-        state = .loading
+    func loadProfile(isRefreshing: Bool = false) async {
+        let preserveContent: Bool
+        if case .loaded = state { preserveContent = isRefreshing }
+        else { preserveContent = false }
+        if !preserveContent { state = .loading }
         do {
             let profile = try await profileService.getProfile()
             try MobileAccountAccess.validate(role: profile.roleRawValue)
@@ -41,7 +44,7 @@ final class ProfileViewModel {
             }
             state = .loaded(profile)
         } catch {
-            state = .error(error.localizedDescription)
+            if !preserveContent { state = .error(error.localizedDescription) }
         }
     }
 

@@ -5,6 +5,7 @@ import Observation
 final class MyReviewsViewModel {
     let pagination = PaginationController<MyReview>()
     let service: any ReviewServiceProtocol
+    var sort: ReviewSort = .newest
     var deletingID: String?
     var openingID: String?
     var error: String?
@@ -18,8 +19,9 @@ final class MyReviewsViewModel {
         let service = service
         let session = store.sessionID
         let revision = store.revision
+        let sort = sort
         await pagination.refresh { page, limit in
-            try await service.mine(page: page, limit: limit)
+            try await service.mine(page: page, limit: limit, sort: sort)
         }
         guard session == store.sessionID, revision == store.revision else {
             return
@@ -46,7 +48,7 @@ final class MyReviewsViewModel {
         do {
             try await service.delete(id: review.id)
             guard session == store.sessionID else { return }
-            store.changed(listingID: review.listingId, review: nil)
+            store.changed(listingID: review.listingId, review: nil, reviewID: review.id)
             if let slug = ReviewValidation.text(review.listing.slug) {
                 await store.refreshRating(
                     listingID: review.listingId,

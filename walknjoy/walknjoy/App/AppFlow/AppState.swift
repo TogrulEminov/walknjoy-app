@@ -97,6 +97,7 @@ final class AppState {
         self.mode = preferences.selectedMode
         self.language = preferences.selectedLanguage
         self.conversations.onSessionExpired = { [weak self] in self?.finishLogout() }
+        SessionAuthentication.onSessionExpired = { [weak self] in self?.finishLogout() }
         self.notifications.onSessionExpired = { [weak self] in
             self?.finishLogout()
         }

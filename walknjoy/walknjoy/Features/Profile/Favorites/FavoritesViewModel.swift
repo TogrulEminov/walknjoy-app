@@ -10,7 +10,7 @@ final class FavoritesViewModel {
     private(set) var removalState: LoadState<Void> = .idle
     private(set) var removingIDs: Set<String> = []
 
-    var listings: [ListingResponse] { pagination.items }
+    var listings: [ListingResponse] { pagination.items.filter { !ListingLifecycle.shared.deletedIDs.contains($0.id) } }
     var nextPage: Int { pagination.nextPage }
     var hasMore: Bool { pagination.hasMore }
     var state: LoadState<Void> { pagination.state }
@@ -46,6 +46,9 @@ final class FavoritesViewModel {
 
     func loadNextPage() async {
         await pagination.loadNextPage()
+    }
+    func invalidateDeletedListing(_ id: String) {
+        pagination.remove(id: id)
     }
 
     func remove(_ listing: ListingResponse) async {
