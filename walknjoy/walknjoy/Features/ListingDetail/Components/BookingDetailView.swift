@@ -7,6 +7,7 @@ struct BookingDetailView: View {
     @State private var model: BookingDetailViewModel
     @State private var showTicket = false
     @State private var showConversation = false
+    @State private var pendingProviderAction: ProviderBookingAction?
     @State private var confirmCancel = false
     @State private var confirmDelete = false
     @State private var editor: ReviewEditorContext?
@@ -154,6 +155,25 @@ struct BookingDetailView: View {
                                 Text(note)
                             }.padding(.horizontal)
                         }
+                        if role == .provider, let customer = booking.customer {
+                            BookingDetailSection(title: "provider.booking.customer") {
+                                BookingDetailRow(title: "provider.booking.customerName", value: customer.displayName)
+                                if booking.canShowCustomerContact {
+                                    if let email = ReviewValidation.text(customer.email) {
+                                        BookingDetailRow(title: "provider.booking.email", value: email)
+                                    }
+                                    if let phone = ReviewValidation.text(customer.phone) {
+                                        BookingDetailRow(title: "provider.booking.phone", value: phone)
+                                    }
+                                }
+                            }.padding(.horizontal)
+                        }
+                        if role == .provider {
+                            ProviderBookingActionButtons(
+                                booking: booking, busy: model.providerActions.busyID != nil
+                            ) { pendingProviderAction = $0 }
+                            .padding(.horizontal)
+                        }
                         bookingDateRows(booking)
                         if role == .customer || role == .provider {
                             Button {
@@ -254,7 +274,7 @@ struct BookingDetailView: View {
             await model.loadReview(store: appState.reviews)
         }
         .refreshable {
-            await model.load()
+            await model.load(isRefreshing: true)
             await model.loadReview(store: appState.reviews)
         }
         .sheet(item: $editor) {
@@ -275,6 +295,28 @@ struct BookingDetailView: View {
                 ListingDetailView(listing: listing)
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .bookingsChanged)) { event in
+            guard role == .provider else { return }
+            if let updated = event.object as? BookingsModel, updated.id == bookingID {
+                model.booking = updated
+            } else if model.providerActions.busyID == nil {
+                Task { await model.load(isRefreshing: true) }
+            }
+        }
+        .confirmationDialog(
+            pendingProviderAction?.confirmation ?? "provider.booking.confirmPrompt",
+            isPresented: Binding(
+                get: { pendingProviderAction != nil },
+                set: { if !$0 { pendingProviderAction = nil } }
+            ), titleVisibility: .visible
+        ) {
+            if let action = pendingProviderAction, let booking = model.booking {
+                Button(action.title(for: booking), role: action == .cancel ? .destructive : nil) {
+                    Task { await model.performProviderAction(action) }
+                }
+            }
+            Button("common.cancel", role: .cancel) { pendingProviderAction = nil }
+        }
         .confirmationDialog(
             "booking.cancelConfirm",
             isPresented: $confirmCancel,
@@ -291,7 +333,7 @@ struct BookingDetailView: View {
             titleVisibility: .visible
         ) {
             Button("reviews.delete", role: .destructive) {
-                Task { await model.deleteReview(store: appState.reviews) }
+                Task { await model.deleteReview(store: appState.reviews, locale: appState.language.rawValue) }
             }
         }
         .alert(
@@ -338,6 +380,11 @@ struct BookingDetailView: View {
                 }
             case .loaded:
                 if let review = model.ownReview {
+                    Button("reviews.editOwn") {
+                        editor = ReviewEditorContext(review)
+                    }
+                    .frame(minHeight: 44)
+                    .disabled(model.isDeletingReview)
                     ReviewCardView(
                         name: booking.listing.title,
                         rating: review.rating,

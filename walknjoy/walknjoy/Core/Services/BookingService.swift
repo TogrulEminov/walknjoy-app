@@ -17,11 +17,12 @@ nonisolated protocol BookingServiceProtocol {
     func getBookingTicket(id: String) async throws -> Data
 
     // Provider methods
+    func providerPage(page: Int, limit: Int, status: String?) async throws -> PaginationPage<BookingsModel>
     func getProviderBookings() async throws -> [BookingsModel]
     func getProviderBooking(id: String) async throws -> BookingsModel
-    func confirmBooking(id: String) async throws -> BookingResponse
-    func cancelBooking(id: String) async throws -> BookingResponse
-    func completeBooking(id: String) async throws -> BookingResponse
+    func confirmBooking(id: String) async throws -> BookingsModel
+    func cancelBooking(id: String) async throws -> BookingsModel
+    func completeBooking(id: String) async throws -> BookingsModel
 
     // Admin methods
     func getAdminBookings() async throws -> [BookingsModel]
@@ -35,10 +36,29 @@ nonisolated final class BookingService: BookingServiceProtocol {
         self.network = network
     }
 
+    private func request<T: Decodable>(enpoint: any Endpoint, responseType: T.Type) async throws -> T {
+        guard enpoint.path.hasPrefix("/provider/bookings") else {
+            return try await network.request(enpoint: enpoint, responseType: responseType)
+        }
+        let tokens = TokenStorage()
+        let token = tokens.accessToken
+        do {
+            return try await network.request(enpoint: enpoint, responseType: responseType)
+        } catch NetworkError.unauthorized {
+            if tokens.accessToken == token { try await SessionAuthentication.refresh() }
+            do {
+                return try await network.request(enpoint: enpoint, responseType: responseType)
+            } catch NetworkError.unauthorized {
+                await SessionAuthentication.expire()
+                throw NetworkError.unauthorized
+            }
+        }
+    }
+
     private func value<T: Decodable>(_ endpoint: any Endpoint, as type: T.Type)
         async throws -> T
     {
-        let response = try await network.request(
+        let response = try await request(
             enpoint: endpoint,
             responseType: ApiResponse<T>.self
         )
@@ -97,7 +117,7 @@ nonisolated final class BookingService: BookingServiceProtocol {
     func customerPage(page: Int, limit: Int, status: String?) async throws
         -> PaginationPage<BookingsModel>
     {
-        let response = try await network.request(
+        let response = try await request(
             enpoint: BookingEndpoint.customerPage(
                 page: page,
                 limit: limit,
@@ -146,11 +166,26 @@ nonisolated final class BookingService: BookingServiceProtocol {
 
     // MARK: - Provider Methods
 
-    func getProviderBookings() async throws -> [BookingsModel] {
-        try await value(
-            BookingEndpoint.providerListBookings,
-            as: [BookingsModel].self
+    func providerPage(page: Int, limit: Int, status: String?) async throws -> PaginationPage<BookingsModel> {
+        let response = try await request(
+            enpoint: BookingEndpoint.providerPage(page: page, limit: limit, status: status),
+            responseType: ApiResponse<[BookingsModel]>.self
         )
+        guard response.success, let items = response.data, let meta = response.meta else {
+            throw NetworkError.invalidResponse
+        }
+        return PaginationPage(items: items, meta: meta)
+    }
+
+    func getProviderBookings() async throws -> [BookingsModel] {
+        var bookings: [BookingsModel] = []
+        var page = 1
+        while true {
+            let result = try await providerPage(page: page, limit: 100, status: nil)
+            bookings.append(contentsOf: result.items)
+            if !result.hasNextPage(currentPage: page, limit: 100) || result.items.isEmpty { return bookings }
+            page += 1
+        }
     }
 
     func getProviderBooking(id: String) async throws -> BookingsModel {
@@ -160,24 +195,24 @@ nonisolated final class BookingService: BookingServiceProtocol {
         )
     }
 
-    func confirmBooking(id: String) async throws -> BookingResponse {
+    func confirmBooking(id: String) async throws -> BookingsModel {
         try await value(
             BookingEndpoint.providerConfirmBooking(id: id),
-            as: BookingResponse.self
+            as: BookingsModel.self
         )
     }
 
-    func cancelBooking(id: String) async throws -> BookingResponse {
+    func cancelBooking(id: String) async throws -> BookingsModel {
         try await value(
             BookingEndpoint.providerCancelBooking(id: id),
-            as: BookingResponse.self
+            as: BookingsModel.self
         )
     }
 
-    func completeBooking(id: String) async throws -> BookingResponse {
+    func completeBooking(id: String) async throws -> BookingsModel {
         try await value(
             BookingEndpoint.providerCompleteBooking(id: id),
-            as: BookingResponse.self
+            as: BookingsModel.self
         )
     }
 

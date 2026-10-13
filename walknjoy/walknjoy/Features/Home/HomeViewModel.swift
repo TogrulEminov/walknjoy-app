@@ -17,7 +17,21 @@ final class HomeViewModel {
 
     static var makeDefault: () -> HomeViewModel = { HomeViewModel() }
 
-    var state: LoadState<HomeContent> = .idle
+    private var storedState: LoadState<HomeContent> = .idle
+    var state: LoadState<HomeContent> {
+        get {
+            guard case .loaded(let content) = storedState else { return storedState }
+            let deleted = ListingLifecycle.shared.deletedIDs
+            return .loaded(HomeContent(
+                cities: content.cities, categories: content.categories,
+                stays: content.stays.filter { !deleted.contains($0.id) },
+                tours: content.tours.filter { !deleted.contains($0.id) },
+                activities: content.activities.filter { !deleted.contains($0.id) },
+                experiences: content.experiences.filter { !deleted.contains($0.id) }
+            ))
+        }
+        set { storedState = newValue }
+    }
     private var locale = "az"
     private var generation = UUID()
 
@@ -98,8 +112,8 @@ final class HomeViewModel {
             state = .loaded(content)
         } catch {
             guard generation == request else { return }
-            if error is CancellationError {
-                state = .idle
+            if error is CancellationError || (error as? URLError)?.code == .cancelled {
+                if !keepCurrentContentOnError { state = .idle }
                 return
             }
             if !keepCurrentContentOnError {

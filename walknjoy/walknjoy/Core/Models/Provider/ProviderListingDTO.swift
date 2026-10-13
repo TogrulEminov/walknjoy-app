@@ -3,7 +3,7 @@ import Foundation
 nonisolated struct ProviderListingActions: Codable, Equatable {
     let canEdit: Bool
     let canSubmit: Bool
-    let canArchive: Bool
+    let canDelete: Bool
 }
 
 nonisolated struct ProviderListingCardDTO: Codable, Identifiable, Equatable {
@@ -29,6 +29,7 @@ nonisolated struct ProviderListingCardDTO: Codable, Identifiable, Equatable {
     let id: String
     let type: ListingType
     let status: ListingStatus
+    let isDeleted: Bool
     let title: String?
     let slug: String?
     let coverMedia: Cover?
@@ -42,6 +43,28 @@ nonisolated struct ProviderListingCardDTO: Codable, Identifiable, Equatable {
     var price: Decimal? {
         Decimal(string: basePrice, locale: Locale(identifier: "en_US_POSIX"))
     }
+    private enum CodingKeys: String, CodingKey {
+        case id, type, status, isDeleted, title, slug, coverMedia, category, location, basePrice, currency, rating, actions, updatedAt
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        type = try container.decode(ListingType.self, forKey: .type)
+        status = try container.decode(ListingStatus.self, forKey: .status)
+        isDeleted = try container.decodeIfPresent(Bool.self, forKey: .isDeleted) ?? false
+        title = try container.decodeIfPresent(String.self, forKey: .title)
+        slug = try container.decodeIfPresent(String.self, forKey: .slug)
+        coverMedia = try container.decodeIfPresent(Cover.self, forKey: .coverMedia)
+        category = try container.decodeIfPresent(Category.self, forKey: .category)
+        location = try container.decodeIfPresent(Location.self, forKey: .location)
+        basePrice = try container.decode(String.self, forKey: .basePrice)
+        currency = try container.decode(String.self, forKey: .currency)
+        rating = try container.decode(Rating.self, forKey: .rating)
+        actions = try container.decode(ProviderListingActions.self, forKey: .actions)
+        updatedAt = try container.decode(String.self, forKey: .updatedAt)
+    }
+
 }
 
 nonisolated struct ProviderListingEditorDTO: Codable, Identifiable {
@@ -83,6 +106,7 @@ nonisolated struct ProviderListingEditorDTO: Codable, Identifiable {
     let categoryId: String?
     let type: ListingType
     let status: ListingStatus
+    let isDeleted: Bool
     let basePrice: String
     let currency: String
     let isFeatured: Bool
@@ -93,6 +117,29 @@ nonisolated struct ProviderListingEditorDTO: Codable, Identifiable {
     let createdAt: String
     let updatedAt: String
     var price: Decimal? { Decimal(string: basePrice, locale: Locale(identifier: "en_US_POSIX")) }
+    private enum CodingKeys: String, CodingKey {
+        case id, providerId, categoryId, type, status, isDeleted, basePrice, currency, isFeatured, rejectionReason, translations, location, media, createdAt, updatedAt
+    }
+
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.decode(String.self, forKey: .id)
+        providerId = try container.decode(String.self, forKey: .providerId)
+        categoryId = try container.decodeIfPresent(String.self, forKey: .categoryId)
+        type = try container.decode(ListingType.self, forKey: .type)
+        status = try container.decode(ListingStatus.self, forKey: .status)
+        isDeleted = try container.decodeIfPresent(Bool.self, forKey: .isDeleted) ?? false
+        basePrice = try container.decode(String.self, forKey: .basePrice)
+        currency = try container.decode(String.self, forKey: .currency)
+        isFeatured = try container.decode(Bool.self, forKey: .isFeatured)
+        rejectionReason = try container.decodeIfPresent(String.self, forKey: .rejectionReason)
+        translations = try container.decode([Translation].self, forKey: .translations)
+        location = try container.decodeIfPresent(Location.self, forKey: .location)
+        media = try container.decode([Media].self, forKey: .media)
+        createdAt = try container.decode(String.self, forKey: .createdAt)
+        updatedAt = try container.decode(String.self, forKey: .updatedAt)
+    }
+
 }
 
 nonisolated enum ProviderCurrency: String, Codable { case AZN, USD, EUR }

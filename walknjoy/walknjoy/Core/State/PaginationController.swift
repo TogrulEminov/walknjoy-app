@@ -50,6 +50,12 @@ final class PaginationController<Item: Identifiable> {
     init(limit: Int = 20) {
         self.limit = max(1, limit)
     }
+    func replace(_ item: Item) {
+        if let index = items.firstIndex(where: { $0.id == item.id }) { items[index] = item }
+    }
+    func remove(id: Item.ID) {
+        items.removeAll { $0.id == id }
+    }
     func refresh(using fetchPage: @escaping FetchPage) async {
         self.fetchPage = fetchPage
         await refresh()

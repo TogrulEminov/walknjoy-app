@@ -8,7 +8,7 @@ nonisolated protocol ReviewServiceProtocol {
         sort: ReviewSort,
         locale: String
     ) async throws -> PaginationPage<PublicReview>
-    func mine(page: Int, limit: Int) async throws -> PaginationPage<MyReview>
+    func mine(page: Int, limit: Int, sort: ReviewSort) async throws -> PaginationPage<MyReview>
     func create(bookingID: String, request: CreateReviewRequest) async throws
         -> CreatedReview
     func update(id: String, request: UpdateReviewRequest) async throws
@@ -31,7 +31,7 @@ nonisolated final class ReviewService: ReviewServiceProtocol {
         sort: ReviewSort,
         locale: String
     ) async throws -> PaginationPage<PublicReview> {
-        let response: ApiResponse<[PublicReview]> = try await network.request(
+        let response: ApiResponse<[PublicReview]> = try await request(
             enpoint: ReviewEndpoint.listing(
                 slug: slug,
                 page: page,
@@ -46,9 +46,9 @@ nonisolated final class ReviewService: ReviewServiceProtocol {
         else { throw NetworkError.invalidResponse }
         return PaginationPage(items: data, meta: meta)
     }
-    func mine(page: Int, limit: Int) async throws -> PaginationPage<MyReview> {
-        let response: ApiResponse<[MyReview]> = try await network.request(
-            enpoint: ReviewEndpoint.mine(page: page, limit: limit),
+    func mine(page: Int, limit: Int, sort: ReviewSort = .newest) async throws -> PaginationPage<MyReview> {
+        let response: ApiResponse<[MyReview]> = try await request(
+            enpoint: ReviewEndpoint.mine(page: page, limit: limit, sort: sort),
             responseType: ApiResponse<[MyReview]>.self
         )
         guard response.success, let data = response.data,
@@ -95,10 +95,28 @@ nonisolated final class ReviewService: ReviewServiceProtocol {
             as: PublicListing.self
         )
     }
+    private func request<T: Decodable>(enpoint: any Endpoint, responseType: T.Type) async throws -> T {
+        let tokens = TokenStorage()
+        let originalToken = tokens.accessToken
+        do {
+            return try await network.request(enpoint: enpoint, responseType: responseType)
+        } catch NetworkError.unauthorized where enpoint.requiresAuth {
+            if tokens.accessToken == originalToken {
+                try await SessionAuthentication.refresh()
+            }
+            do {
+                return try await network.request(enpoint: enpoint, responseType: responseType)
+            } catch NetworkError.unauthorized {
+                await SessionAuthentication.expire()
+                throw NetworkError.unauthorized
+            }
+        }
+    }
+
     private func value<T: Decodable>(_ endpoint: any Endpoint, as type: T.Type)
         async throws -> T
     {
-        let response = try await network.request(
+        let response = try await request(
             enpoint: endpoint,
             responseType: ApiResponse<T>.self
         )
@@ -127,5 +145,32 @@ nonisolated enum ReviewErrorMessage {
             return String(localized: "reviews.bookingNotCompleted")
         }
         return error.localizedDescription
+    }
+}
+
+nonisolated extension ReviewServiceProtocol {
+    // Absence is authoritative only after every history page has been fetched.
+    func allMine() async throws -> [MyReview] {
+        var items: [MyReview] = []
+        var page = 1
+        while true {
+            try Task.checkCancellation()
+            let result = try await mine(page: page, limit: 20)
+            guard let meta = result.meta, meta.page == page,
+                meta.totalPages >= 0, meta.total >= 0,
+                !result.items.isEmpty || !meta.hasNextPage
+            else { throw NetworkError.invalidResponse }
+            items.append(contentsOf: result.items)
+            if !meta.hasNextPage {
+                guard Set(items.map(\.id)).count == meta.total else {
+                    throw NetworkError.invalidResponse
+                }
+                return items
+            }
+            page += 1
+        }
+    }
+    func mine(page: Int, limit: Int) async throws -> PaginationPage<MyReview> {
+        try await mine(page: page, limit: limit, sort: .newest)
     }
 }

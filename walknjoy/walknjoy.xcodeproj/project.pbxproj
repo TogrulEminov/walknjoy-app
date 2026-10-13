@@ -13,11 +13,27 @@
 		ACA5FBA83063BBE7007E3433 /* InfomaniakRichHTMLEditor in Frameworks */ = {isa = PBXBuildFile; productRef = ACA5FBA73063BBE7007E3433 /* InfomaniakRichHTMLEditor */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		AC35BE45307E02EA005EA335 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = AC903D72305B017200EDE816 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = AC903D79305B017200EDE816;
+			remoteInfo = walknjoy;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		AC35BE41307E02EA005EA335 /* walknjoyTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = walknjoyTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC903D7A305B017200EDE816 /* walknjoy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = walknjoy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		AC35BE42307E02EA005EA335 /* walknjoyTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = walknjoyTests;
+			sourceTree = "<group>";
+		};
 		AC903D7C305B017200EDE816 /* walknjoy */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			explicitFileTypes = {
@@ -29,6 +45,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		AC35BE3E307E02EA005EA335 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AC903D77305B017200EDE816 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -47,6 +70,7 @@
 			isa = PBXGroup;
 			children = (
 				AC903D7C305B017200EDE816 /* walknjoy */,
+				AC35BE42307E02EA005EA335 /* walknjoyTests */,
 				AC903D7B305B017200EDE816 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -55,6 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				AC903D7A305B017200EDE816 /* walknjoy.app */,
+				AC35BE41307E02EA005EA335 /* walknjoyTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -62,6 +87,29 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		AC35BE40307E02EA005EA335 /* walknjoyTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = AC35BE47307E02EA005EA335 /* Build configuration list for PBXNativeTarget "walknjoyTests" */;
+			buildPhases = (
+				AC35BE3D307E02EA005EA335 /* Sources */,
+				AC35BE3E307E02EA005EA335 /* Frameworks */,
+				AC35BE3F307E02EA005EA335 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				AC35BE46307E02EA005EA335 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				AC35BE42307E02EA005EA335 /* walknjoyTests */,
+			);
+			name = walknjoyTests;
+			packageProductDependencies = (
+			);
+			productName = walknjoyTests;
+			productReference = AC35BE41307E02EA005EA335 /* walknjoyTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		AC903D79305B017200EDE816 /* walknjoy */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = AC903D85305B017300EDE816 /* Build configuration list for PBXNativeTarget "walknjoy" */;
@@ -98,6 +146,10 @@
 				LastSwiftUpdateCheck = 2640;
 				LastUpgradeCheck = 2640;
 				TargetAttributes = {
+					AC35BE40307E02EA005EA335 = {
+						CreatedOnToolsVersion = 26.4;
+						TestTargetID = AC903D79305B017200EDE816;
+					};
 					AC903D79305B017200EDE816 = {
 						CreatedOnToolsVersion = 26.4;
 					};
@@ -124,11 +176,19 @@
 			projectRoot = "";
 			targets = (
 				AC903D79305B017200EDE816 /* walknjoy */,
+				AC35BE40307E02EA005EA335 /* walknjoyTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		AC35BE3F307E02EA005EA335 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AC903D78305B017200EDE816 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -139,6 +199,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		AC35BE3D307E02EA005EA335 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		AC903D76305B017200EDE816 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -148,7 +215,59 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		AC35BE46307E02EA005EA335 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = AC903D79305B017200EDE816 /* walknjoy */;
+			targetProxy = AC35BE45307E02EA005EA335 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
+		AC35BE48307E02EA005EA335 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D9WYP3DGP5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.TogrulEminov.walknjoyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/walknjoy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/walknjoy";
+			};
+			name = Debug;
+		};
+		AC35BE49307E02EA005EA335 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = D9WYP3DGP5;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.TogrulEminov.walknjoyTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/walknjoy.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/walknjoy";
+			};
+			name = Release;
+		};
 		AC903D83305B017300EDE816 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -287,6 +406,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -319,6 +439,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -339,6 +460,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		AC35BE47307E02EA005EA335 /* Build configuration list for PBXNativeTarget "walknjoyTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AC35BE48307E02EA005EA335 /* Debug */,
+				AC35BE49307E02EA005EA335 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		AC903D75305B017200EDE816 /* Build configuration list for PBXProject "walknjoy" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

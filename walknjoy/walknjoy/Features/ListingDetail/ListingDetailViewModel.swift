@@ -60,6 +60,7 @@ final class ListingDetailViewModel {
                 default: break
                 }
             }
+            if notFound { listing = nil }
             state = .error(
                 notFound
                     ? String(localized: "listing.detail.notFound")

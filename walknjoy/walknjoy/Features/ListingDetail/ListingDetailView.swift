@@ -95,19 +95,19 @@ struct ListingDetailView: View {
 
     var body: some View {
         Group {
-            if listing != nil {
+            if model.notFound || ListingLifecycle.shared.deletedIDs.contains(listingID) {
+                ContentUnavailableView("listing.detail.notFound", systemImage: "magnifyingglass")
+            } else if listing != nil {
                 detailContent
-            } else if model.notFound {
-                ContentUnavailableView(
-                    "listing.detail.notFound",
-                    systemImage: "magnifyingglass"
-                )
             } else if case .error(let message) = model.state {
                 ErrorStateView(title: "error.title", message: message) {
                     Task { await load() }
                 }
             } else {
-                LoadingStateView()
+                ProgressView()
+                    .controlSize(.large)
+                    .tint(Color.iconColor)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .background(Color.appBackground)
@@ -134,7 +134,13 @@ struct ListingDetailView: View {
             }
         }
         .toolbarBackground(.hidden, for: .navigationBar)
+        .onReceive(NotificationCenter.default.publisher(for: .listingsChanged)) { _ in
+            Task { await load() }
+        }
         .task(id: appState.reviews.revision) { await load() }
+        .onChange(of: model.notFound) { _, notFound in
+            if notFound { ListingLifecycle.shared.didDelete(listingID) }
+        }
         .onChange(of: appState.language) { _, _ in dismiss() }
         .navigationDestination(isPresented: $showConversation) {
             ConversationStartView(context: .listing(listingID))

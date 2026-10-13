@@ -48,6 +48,9 @@ struct ProfileView: View {
                     }
                 }
         }
+        .onReceive(NotificationCenter.default.publisher(for: .bookingsChanged)) { _ in
+            Task { await viewModel.loadProfile(isRefreshing: true) }
+        }
         .alert(
             "profile.logoutConfirmTitle",
             isPresented: $showLogoutConfirmation

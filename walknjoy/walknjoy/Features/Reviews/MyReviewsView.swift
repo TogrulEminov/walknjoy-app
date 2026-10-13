@@ -10,6 +10,13 @@ struct MyReviewsView: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 16) {
                 if appState.currentUserRole == .customer {
+                    Picker("reviews.sort", selection: $model.sort) {
+                        ForEach(ReviewSort.allCases) { Text($0.title).tag($0) }
+                    }
+                    .pickerStyle(.menu)
+                    .onChange(of: model.sort) { _, _ in
+                        Task { await model.refresh(store: appState.reviews) }
+                    }
                     ForEach(model.pagination.items) { review in
                         VStack(alignment: .leading, spacing: 8) {
                             ReviewCardView(

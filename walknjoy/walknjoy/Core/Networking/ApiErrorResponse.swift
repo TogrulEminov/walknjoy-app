@@ -51,6 +51,7 @@ nonisolated enum JSONValue: Decodable {
 
 nonisolated struct APIRequestFailure: LocalizedError {
     let error: ApiError
+    var statusCode: Int? = nil
     var fieldErrors: [String: String] {
         guard case .array(let entries) = error.details else { return [:] }
         var fields: [String: String] = [:]

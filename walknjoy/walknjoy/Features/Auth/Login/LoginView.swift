@@ -64,9 +64,16 @@ extension LoginView {
                     appState.enterDemo()
                 } label: {
                     Label("Demo ilə daxil ol", systemImage: "play.circle")
-                        .frame(maxWidth: .infinity)
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Color.titleText)
+                        .frame(maxWidth: .infinity, minHeight: 56)
+                        .background(Color.surfaceBackground, in: RoundedRectangle(cornerRadius: 16))
+                        .overlay {
+                            RoundedRectangle(cornerRadius: 16)
+                                .stroke(Color.borderColor, lineWidth: 1)
+                        }
                 }
-                .buttonStyle(.bordered)
+                .buttonStyle(.plain)
                 .disabled(isLoading)
                 .padding(.top, 12)
                 Text("İnternet tələb etmir. Nümunə məlumatlarla sınaq rejimi.")

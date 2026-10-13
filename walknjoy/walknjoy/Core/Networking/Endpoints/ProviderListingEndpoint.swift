@@ -9,7 +9,7 @@ nonisolated enum ProviderListingEndpoint: Endpoint {
     case getDetails(id: String)
     case details(id: String, input: ListingDetailsInput)
     case submit(id: String)
-    case archive(id: String)
+    case delete(id: String)
     case addMedia(id: String, input: ProviderMediaRequest)
     case deleteMedia(id: String, mediaId: String)
 
@@ -17,7 +17,7 @@ nonisolated enum ProviderListingEndpoint: Endpoint {
         switch self {
         case .list, .create: "/provider/listings"
         case .get(let id), .update(let id, _), .updatePrice(let id, _),
-            .archive(let id):
+            .delete(let id):
             "/provider/listings/\(id)"
         case .getDetails(let id), .details(let id, _):
             "/provider/listings/\(id)/details"
@@ -31,7 +31,7 @@ nonisolated enum ProviderListingEndpoint: Endpoint {
         switch self {
         case .list, .get, .getDetails: .get
         case .create, .submit, .addMedia: .post
-        case .archive, .deleteMedia: .delete
+        case .delete, .deleteMedia: .delete
         case .update, .updatePrice: .patch
         case .details: .put
         }

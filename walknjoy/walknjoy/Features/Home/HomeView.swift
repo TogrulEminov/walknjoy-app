@@ -17,6 +17,7 @@ struct HomeView: View {
     @State private var viewModel: HomeViewModel
     @State private var showNotifications = false
     @State private var isScrolled = false
+    @State private var isRefreshing = false
 
     @MainActor
     init(
@@ -39,7 +40,10 @@ struct HomeView: View {
                     Color.appBg
 
                 case .loading:
-                    LoadingStateView()
+                    ProgressView()
+                        .controlSize(.large)
+                        .tint(Color.iconColor)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
 
                 case .loaded(let content):
                     contentView(content)
@@ -52,6 +56,14 @@ struct HomeView: View {
             }
             .background(Color.appBg)
             .overlay(alignment: .top) { topBar }
+            .overlay(alignment: .top) {
+                if isRefreshing {
+                    ProgressView()
+                        .tint(Color.brandYellow)
+                        .padding(.top, Self.topBarHeight + 12)
+                        .allowsHitTesting(false)
+                }
+            }
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: AppRoute.self) { route in
                 destination(for: route)
@@ -74,6 +86,9 @@ struct HomeView: View {
             Button("common.ok", role: .cancel) { favoriteError = nil }
         } message: {
             Text(favoriteError ?? "")
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .listingsChanged)) { _ in
+            Task { await viewModel.refresh() }
         }
         .task(id: appState.language) {
             await viewModel.load(locale: appState.language.rawValue)
@@ -212,7 +227,10 @@ extension HomeView {
             }
             .background(Color.appBg)
             .refreshable {
-                await Task { await viewModel.refresh() }.value
+                guard !isRefreshing else { return }
+                isRefreshing = true
+                defer { isRefreshing = false }
+                await viewModel.refresh()
             }
         }
     }

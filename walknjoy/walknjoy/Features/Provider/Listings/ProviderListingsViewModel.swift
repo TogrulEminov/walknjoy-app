@@ -7,7 +7,7 @@ import Observation
     private(set) var catalogError: String?
     private var catalogGeneration = UUID()
     private let pagination: PaginationController<ProviderListingCardDTO>
-    var listings: [ProviderListingCardDTO] { pagination.items }
+    var listings: [ProviderListingCardDTO] { pagination.items.filter { !$0.isDeleted && !ListingLifecycle.shared.deletedIDs.contains($0.id) } }
     var loading: Bool { pagination.isLoading && listings.isEmpty }
     var loadingNext: Bool { pagination.isLoading && !listings.isEmpty }
     private(set) var mutatingID: String?
@@ -86,13 +86,16 @@ import Observation
             nextPageError = message
         }
     }
-    func archive(_ listing: ProviderListingCardDTO) async {
-        guard listing.actions.canArchive, mutatingID == nil else { return }
+    func delete(_ listing: ProviderListingCardDTO) async {
+        guard listing.actions.canDelete, mutatingID == nil else { return }
         mutatingID = listing.id
         mutationError = nil
         defer { mutatingID = nil }
         do {
-            _ = try await service.archive(id: listing.id)
+            let deleted = try await service.delete(id: listing.id)
+            guard deleted.id == listing.id, deleted.isDeleted else { throw NetworkError.invalidResponse }
+            ListingLifecycle.shared.didDelete(listing.id)
+            pagination.remove(id: listing.id)
             await reload()
         } catch { mutationError = error.localizedDescription }
     }

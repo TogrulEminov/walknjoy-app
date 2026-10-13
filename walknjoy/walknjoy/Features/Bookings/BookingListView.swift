@@ -2,6 +2,8 @@ import SwiftUI
 
 struct BookingListView: View {
     @State private var viewModel: BookingListViewModel
+    @State private var actionBooking: BookingsModel?
+    @State private var pendingAction: ProviderBookingAction?
 
     init(role: RoleEnum, service: BookingServiceProtocol? = nil) {
         _viewModel = State(
@@ -11,7 +13,7 @@ struct BookingListView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            if viewModel.role == .customer {
+            if viewModel.role == .customer || viewModel.role == .provider {
                 Picker("listing.detail.status", selection: $viewModel.status) {
                     Text("booking.allStatuses").tag(nil as String?)
                     ForEach(BookingStatus.allCases) {
@@ -37,7 +39,12 @@ struct BookingListView: View {
                                 "bookings.emptyTitle",
                                 systemImage: "calendar.badge.exclamationmark"
                             )
-                        }.refreshable { await viewModel.loadBookings() }
+                            if let error = viewModel.error {
+                                Text(error).foregroundStyle(Color.errorColor)
+                            }
+                        }.refreshable {
+                            await viewModel.loadBookings(isRefreshing: true)
+                        }
                     } else {
                         bookingsList
                     }
@@ -49,9 +56,32 @@ struct BookingListView: View {
         .toolbarBackground(Color.appBackground, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .onReceive(NotificationCenter.default.publisher(for: .bookingsChanged))
-        { _ in
-            Task { await viewModel.loadBookings() }
+        { event in
+            if viewModel.role == .provider {
+                viewModel.applyProviderChange(event.object as? BookingsModel)
+            }
+            Task { await viewModel.loadBookings(isRefreshing: true) }
         }
+        .confirmationDialog(
+            pendingAction?.confirmation ?? "provider.booking.confirmPrompt",
+            isPresented: Binding(
+                get: { pendingAction != nil },
+                set: { if !$0 { pendingAction = nil; actionBooking = nil } }
+            ), titleVisibility: .visible
+        ) {
+            if let action = pendingAction, let booking = actionBooking {
+                Button(action.title(for: booking), role: action == .cancel ? .destructive : nil) {
+                    Task { await viewModel.performProviderAction(action, booking: booking) }
+                }
+            }
+            Button("common.cancel", role: .cancel) { pendingAction = nil; actionBooking = nil }
+        }
+        .alert("error.title", isPresented: Binding(
+            get: { viewModel.providerActions.error != nil },
+            set: { if !$0 { viewModel.providerActions.error = nil } }
+        )) {
+            Button("common.ok", role: .cancel) { viewModel.providerActions.error = nil }
+        } message: { Text(viewModel.providerActions.error ?? "") }
         .navigationTitle("bookings.title")
         .navigationBarTitleDisplayMode(.inline)
         .task {
@@ -60,108 +90,139 @@ struct BookingListView: View {
     }
 
     private var bookingsList: some View {
-        ScrollView {
-            LazyVStack(spacing: 16) {
+        TimelineView(.periodic(from: .now, by: 30)) { timeline in
+            List {
                 ForEach(viewModel.bookings) { booking in
-                    NavigationLink(
-                        value: ProfileDestination.bookingDetail(
-                            id: booking.id,
-                            role: viewModel.role
+                    NavigationLink {
+                        BookingDetailView(bookingID: booking.id, role: viewModel.role)
+                    } label: {
+                        BookingListItemView(
+                            booking: booking,
+                            isBusy: viewModel.providerActions.busyID == booking.id
                         )
-                    ) {
-                        BookingListItemView(booking: booking)
                     }
-                    .buttonStyle(.plain)
+                    .listRowBackground(Color.appBackground)
+                    .listRowInsets(EdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 16))
+                    .listRowSeparatorTint(Color.borderColor)
+                    .swipeActions(edge: .leading, allowsFullSwipe: false) {
+                        if viewModel.role == .provider {
+                            ForEach(booking.providerActions(now: timeline.date).filter { $0 != .cancel }) { action in
+                                swipeButton(action, booking: booking)
+                            }
+                        }
+                    }
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        if viewModel.role == .provider,
+                            booking.providerActions(now: timeline.date).contains(.cancel) {
+                            swipeButton(.cancel, booking: booking)
+                        }
+                    }
+                    .contextMenu {
+                        if viewModel.role == .provider {
+                            ForEach(booking.providerActions(now: timeline.date)) { action in
+                                swipeButton(action, booking: booking)
+                            }
+                        }
+                    }
                 }
-                if viewModel.role == .customer, viewModel.pagination.hasMore {
-                    Button("reviews.loadMore") {
-                        Task { await viewModel.loadMore() }
+                if viewModel.role != .admin, viewModel.pagination.hasMore {
+                    HStack {
+                        Spacer()
+                        Button("reviews.loadMore") {
+                            Task { await viewModel.loadMore() }
+                        }
+                        if viewModel.pagination.isLoading { ProgressView() }
+                        Spacer()
                     }
-                    .frame(minHeight: 44).disabled(
-                        viewModel.pagination.isLoading
-                    )
+                    .frame(minHeight: 44)
+                    .disabled(viewModel.pagination.isLoading)
+                    .listRowBackground(Color.appBackground)
+                    .listRowSeparator(.hidden)
                 }
                 if let error = viewModel.error {
                     Text(error).foregroundStyle(Color.errorColor)
+                        .listRowBackground(Color.appBackground)
                 }
             }
-            .padding()
+            .listStyle(.plain)
+            .scrollContentBackground(.hidden)
+            .background(Color.appBackground)
+            .refreshable { await viewModel.loadBookings(isRefreshing: true) }
         }
-        .background(Color.appBackground)
-        .refreshable { await viewModel.loadBookings() }
+    }
+
+    private func swipeButton(_ action: ProviderBookingAction, booking: BookingsModel) -> some View {
+        // Keep cancellation non-destructive here so the row stays until confirmation succeeds.
+        Button {
+            actionBooking = booking
+            pendingAction = action
+        } label: {
+            Label(action.title(for: booking), systemImage: action == .confirm
+                ? "checkmark" : action == .complete ? "checkmark.seal" : "xmark")
+        }
+        .tint(action == .cancel ? .red : action == .confirm ? .green : .blue)
+        .disabled(viewModel.providerActions.busyID != nil)
     }
 }
 
 struct BookingListItemView: View {
     let booking: BookingsModel
+    var isBusy = false
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            if let path = booking.listing.coverImageUrl {
-                RemoteImageView(path: path) { Color.appBackground }
-                    .frame(height: 140).clipped().clipShape(
-                        RoundedRectangle(cornerRadius: 12)
-                    )
+        HStack(alignment: .top, spacing: 12) {
+            RemoteImageView(path: booking.listing.coverImageUrl) {
+                RoundedRectangle(cornerRadius: 10)
+                    .fill(Color.surfaceBackground)
+                    .overlay {
+                        Image(systemName: "calendar")
+                            .foregroundStyle(Color.descriptionText)
+                    }
             }
-            HStack {
-                Text(booking.reference)
-                    .font(.headline)
-                    .foregroundStyle(Color.titleText)
-                Spacer()
-                statusBadge(status: booking.status)
-            }
+            .frame(width: 56, height: 56)
+            .clipped()
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+            .accessibilityHidden(true)
 
-            HStack(spacing: 16) {
-                Label(booking.schedule, systemImage: "calendar")
-                Spacer()
-                Label(
-                    String(booking.participants),
-                    systemImage: "person.2"
-                )
-            }
-            .font(.caption)
-            .foregroundStyle(Color.descriptionText)
-
-            Divider().padding(.vertical, 8)
-
-            HStack {
+            VStack(alignment: .leading, spacing: 8) {
                 Text(booking.listing.title)
-                    .font(.subheadline)
+                    .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Color.titleText)
-                Spacer()
-                Text(
-                    "\(booking.totalAmount.formatted(.number.precision(.fractionLength(0...2)))) \(booking.currency)"
-                )
-                .font(.subheadline.bold())
-                .foregroundStyle(Color.brandInk)
+                    .lineLimit(2)
+                Text(booking.reference)
+                    .font(.caption.monospaced())
+                    .foregroundStyle(Color.descriptionText)
+                Label(booking.schedule, systemImage: "calendar")
+                    .font(.caption)
+                    .foregroundStyle(Color.descriptionText)
+                    .fixedSize(horizontal: false, vertical: true)
+                HStack(alignment: .firstTextBaseline, spacing: 8) {
+                    Label(String(booking.participants), systemImage: "person.2")
+                        .font(.caption)
+                        .foregroundStyle(Color.descriptionText)
+                    Spacer(minLength: 8)
+                    Text("\(booking.totalAmount.formatted(.number.precision(.fractionLength(0...2)))) \(booking.currency)")
+                        .font(.subheadline.bold())
+                        .foregroundStyle(Color.titleText)
+                        .fixedSize(horizontal: true, vertical: false)
+                }
+                HStack(spacing: 6) {
+                    Label(booking.statusTitle, systemImage: booking.statusIcon)
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(statusColor)
+                    if isBusy { ProgressView().controlSize(.mini) }
+                }
             }
         }
-        .padding()
-        .background(
-            Color.surfaceBackground,
-            in: RoundedRectangle(cornerRadius: 16)
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 16)
-                .stroke(Color.borderColor, lineWidth: 1)
-        )
+        .padding(.vertical, 2)
     }
 
-    private func statusBadge(status: String) -> some View {
-        Label(booking.statusTitle, systemImage: booking.statusIcon)
-            .font(.caption2.bold())
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(statusColor(status: status).opacity(0.2), in: Capsule())
-            .foregroundStyle(statusColor(status: status))
-    }
-
-    private func statusColor(status: String) -> Color {
-        switch status.lowercased() {
-        case "confirmed", "completed": return .green
-        case "pending": return .orange
-        case "cancelled": return .red
-        default: return .gray
+    private var statusColor: Color {
+        switch booking.status.uppercased() {
+        case "CONFIRMED", "COMPLETED": .green
+        case "PENDING": .orange
+        case "CANCELLED": .red
+        default: Color.descriptionText
         }
     }
 }

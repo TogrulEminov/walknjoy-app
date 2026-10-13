@@ -3,7 +3,7 @@ import SwiftUI
 struct ListingListView: View {
     @State private var model = ProviderListingsViewModel()
     @State private var editing: ProviderListingCardDTO?
-    @State private var archiveTarget: ProviderListingCardDTO?
+    @State private var deleteTarget: ProviderListingCardDTO?
     @State private var creating = false
 
     var body: some View {
@@ -11,6 +11,12 @@ struct ListingListView: View {
         ScrollView {
             VStack(spacing: 18) {
                 pageHeading
+                NavigationLink {
+                    BookingListView(role: .provider)
+                } label: {
+                    Label("provider.bookings.title", systemImage: "calendar")
+                        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+                }.tint(Color.titleText)
                 filters
                 if let error = model.error ?? model.catalogError {
                     Text(error).foregroundStyle(Color.errorC)
@@ -40,7 +46,7 @@ struct ListingListView: View {
                             busy: model.mutatingID != nil,
                             onOpen: { editing = listing },
                             onSubmit: { Task { await model.submit(listing) } },
-                            onArchive: { archiveTarget = listing }
+                            onDelete: { deleteTarget = listing }
                         )
                     }
                 }
@@ -67,6 +73,10 @@ struct ListingListView: View {
                 "\(model.query.locale.rawValue)-\(model.query.type?.rawValue ?? "all")"
         ) { await model.loadCategories() }
         .refreshable { await model.reload() }
+        .onReceive(NotificationCenter.default.publisher(for: .listingsChanged)) { event in
+            if let id = event.object as? String, editing?.id == id { editing = nil }
+            if event.object as? String != model.mutatingID { Task { await model.reload() } }
+        }
         .sheet(item: $editing, onDismiss: refresh) { listing in
             NavigationStack {
                 EditListingView(
@@ -80,28 +90,28 @@ struct ListingListView: View {
             NavigationStack { ListingTypeSelectionView() }
         }
         .confirmationDialog(
-            "provider.archive.title",
+            "provider.delete.title",
             isPresented: Binding(
-                get: { archiveTarget != nil },
-                set: { if $0 { archiveTarget = nil } }
+                get: { deleteTarget != nil },
+                set: { if !$0 { deleteTarget = nil } }
             ),
             titleVisibility: .visible
         ) {
-            Button("provider.archive.action", role: .destructive) {
-                if let target = archiveTarget {
-                    Task { await model.archive(target) }
+            Button("provider.delete.action", role: .destructive) {
+                if let target = deleteTarget {
+                    Task { await model.delete(target) }
                 }
-                archiveTarget = nil
+                deleteTarget = nil
             }
-            Button("common.cancel", role: .cancel) { archiveTarget = nil }
+            Button("common.cancel", role: .cancel) { deleteTarget = nil }
         } message: {
-            Text("provider.archive.message")
+            Text("provider.delete.message")
         }
         .alert(
             "error.title",
             isPresented: Binding(
                 get: { model.mutationError != nil },
-                set: { if $0 { model.mutationError = nil } }
+                set: { if !$0 { model.mutationError = nil } }
             )
         ) {
             Button("common.ok", role: .cancel) { model.mutationError = nil }
@@ -333,7 +343,7 @@ private struct ProviderListingRowView: View {
     let busy: Bool
     let onOpen: () -> Void
     let onSubmit: () -> Void
-    let onArchive: () -> Void
+    let onDelete: () -> Void
     var body: some View {
         HStack(spacing: 12) {
             Button(action: onOpen) {
@@ -396,12 +406,12 @@ private struct ProviderListingRowView: View {
                 if listing.actions.canSubmit {
                     Button("listing.action.submit", action: onSubmit)
                 }
-                if listing.actions.canArchive {
+                if listing.actions.canDelete {
                     Button(
-                        "provider.archive.action",
-                        systemImage: "archivebox",
+                        "provider.delete.action",
+                        systemImage: "trash",
                         role: .destructive,
-                        action: onArchive
+                        action: onDelete
                     )
                 }
             } label: {

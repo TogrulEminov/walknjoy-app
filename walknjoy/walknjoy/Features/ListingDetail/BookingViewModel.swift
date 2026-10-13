@@ -52,7 +52,8 @@ final class BookingViewModel: Identifiable {
     var participants: Int { adults + children }
     var isBusy: Bool { state == .checkingAvailability || state == .submitting }
     var canBook: Bool {
-        guard !isBusy, state != .success, adults >= 1, children >= 0,
+        guard !ListingLifecycle.shared.deletedIDs.contains(listingID),
+            !isBusy, state != .success, adults >= 1, children >= 0,
             participants <= guestLimit
         else { return false }
         if isStay {
@@ -137,6 +138,11 @@ final class BookingViewModel: Identifiable {
             if generation == sessionsGeneration { sessionsState = .idle }
         } catch {
             guard generation == sessionsGeneration else { return }
+            if error.isUnavailableListing {
+                availability = nil
+                sessions = []
+                ListingLifecycle.shared.didDelete(listingID)
+            }
             sessionsState = .error(error.localizedDescription)
         }
     }
@@ -192,6 +198,7 @@ final class BookingViewModel: Identifiable {
             state = .success
             return true
         } catch {
+            if error.isUnavailableListing { ListingLifecycle.shared.didDelete(listingID) }
             state = .failed
             self.error = error.localizedDescription
             fieldErrors = (error as? APIRequestFailure)?.fieldErrors ?? [:]

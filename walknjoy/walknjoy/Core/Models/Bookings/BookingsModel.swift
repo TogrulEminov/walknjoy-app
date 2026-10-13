@@ -103,6 +103,15 @@ nonisolated struct BookingResponse: Decodable {
 }
 
 nonisolated struct BookingsModel: Decodable, Identifiable {
+    struct Customer: Decodable {
+        let id: String
+        let firstName: String
+        let lastName: String
+        let email: String?
+        let phone: String?
+        var displayName: String { [firstName, lastName].joined(separator: " ") }
+    }
+
     struct SessionSummary: Decodable {
         let id: String
         let startsAt: String?
@@ -166,6 +175,7 @@ nonisolated struct BookingsModel: Decodable, Identifiable {
     let id: String
     let reference: String
     let status: String
+    let customer: Customer?
     let listing: ListingSummary
     let session: SessionSummary?
     let checkIn: String?
@@ -186,6 +196,7 @@ nonisolated struct BookingsModel: Decodable, Identifiable {
         case id
         case reference
         case status
+        case customer
         case listing
         case session
         case checkIn
@@ -207,6 +218,7 @@ nonisolated struct BookingsModel: Decodable, Identifiable {
         id = try container.decode(String.self, forKey: .id)
         reference = try container.decode(String.self, forKey: .reference)
         status = try container.decode(String.self, forKey: .status)
+        customer = try container.decodeIfPresent(Customer.self, forKey: .customer)
         listing = try container.decode(ListingSummary.self, forKey: .listing)
         session = try container.decodeIfPresent(
             SessionSummary.self,
@@ -273,9 +285,13 @@ nonisolated enum BookingStatus: String, CaseIterable, Identifiable {
     case expired = "EXPIRED"
     var id: String { rawValue }
     var title: String {
-        String(
-            localized: String.LocalizationValue("booking.status." + rawValue)
-        )
+        switch self {
+        case .pending: String(localized: "booking.status.Pending")
+        case .confirmed: String(localized: "booking.status.Confirmed")
+        case .cancelled: String(localized: "booking.status.Cancelled")
+        case .completed: String(localized: "booking.status.Completed")
+        case .expired: String(localized: "booking.status.Expired")
+        }
     }
     var icon: String {
         switch self {

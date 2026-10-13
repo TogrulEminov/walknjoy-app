@@ -16,6 +16,7 @@ final class ListingEditorViewModel {
     private(set) var id: String?
     private(set) var status: ListingStatus? = .draft
     private(set) var rejectionReason: String?
+    private(set) var isDeleted = false
     private(set) var canEdit = true
     private(set) var canSubmit = true
     private(set) var locale: ListingLocale = .az
@@ -69,7 +70,7 @@ final class ListingEditorViewModel {
 
     private let onMutation: @MainActor @Sendable () -> Void
 
-    var editable: Bool { canEdit && status != .archived }
+    var editable: Bool { canEdit && !isDeleted }
     var canSave: Bool { loaded && editable && valid && detailsValid && !busy }
     var canSubmitWithCurrentInput: Bool {
         canSubmit && loaded && valid && detailsValid && !busy
@@ -135,7 +136,7 @@ final class ListingEditorViewModel {
                 let listing = try await service.get(id: id)
                 let details = try await service.getDetails(id: id)
                 apply(listing)
-                canEdit = canEdit && listing.status != .archived
+                canEdit = canEdit && !listing.isDeleted
                 canSubmit =
                     canSubmit
                     && (listing.status == .draft || listing.status == .rejected)
@@ -143,7 +144,14 @@ final class ListingEditorViewModel {
             }
             try await loadTaxonomy(locale)
             loaded = true
-        } catch { self.error = error.localizedDescription }
+        } catch {
+            if error.isUnavailableListing {
+                isDeleted = true
+                canEdit = false
+                canSubmit = false
+            }
+            self.error = error.localizedDescription
+        }
     }
 
     func refreshFromServer() async {
@@ -154,9 +162,16 @@ final class ListingEditorViewModel {
         do {
             let listing = try await service.get(id: id)
             apply(listing)
-            canEdit = listing.status != .archived
+            canEdit = canEdit && !listing.isDeleted
             canSubmit = listing.status == .draft || listing.status == .rejected
-        } catch { refreshError = error.localizedDescription }
+        } catch {
+            if error.isUnavailableListing {
+                isDeleted = true
+                canEdit = false
+                canSubmit = false
+            }
+            refreshError = error.localizedDescription
+        }
     }
 
     func addPhoto(_ data: Data) async {
@@ -395,6 +410,7 @@ final class ListingEditorViewModel {
     }
 
     private func apply(_ listing: ProviderListingEditorDTO) {
+        isDeleted = listing.isDeleted
         status = listing.status
         rejectionReason = listing.rejectionReason
         for language in ListingLocale.allCases {

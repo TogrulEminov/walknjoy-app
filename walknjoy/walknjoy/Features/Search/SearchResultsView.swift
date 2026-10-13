@@ -74,6 +74,10 @@ struct SearchResultsView: View {
                     .presentationDragIndicator(.visible)
                     .presentationBackground(Color.appBackground)
             }
+            .onReceive(NotificationCenter.default.publisher(for: .listingsChanged)) { event in
+                if let id = event.object as? String { viewModel.invalidateDeletedListing(id) }
+                Task { await viewModel.refresh(); await viewModel.loadDiscovery() }
+            }
             .task(id: appState.language) {
                 viewModel.criteria.locale = appState.language.rawValue
                 async let discovery: Void = viewModel.loadDiscovery()
