@@ -62,6 +62,28 @@ struct HomeViewModelTests {
         #expect(updated.stays.map(\.id) == ["new-home-listing"])
     }
 
+    @Test func userRefreshFinishesEvenIfSwiftUIActionIsCancelled() async {
+        let model = makeModel(error: nil)
+        model.state = .loaded(content(id: "old-home-listing"))
+        let action = Task {
+            withUnsafeCurrentTask { $0?.cancel() }
+            await model.refreshFromUser()
+        }
+        await action.value
+        guard case .loaded(let updated) = model.state else {
+            Issue.record("User refresh must apply its response")
+            return
+        }
+        #expect(updated.stays.map(\.id) == ["new-home-listing"])
+    }
+
+    @Test func failedRefreshReportsError() async {
+        let model = makeModel(error: NetworkError.noInternet)
+        model.state = .loaded(content(id: "old-home-listing"))
+        await model.refreshFromUser()
+        #expect(model.refreshError != nil)
+    }
+
     @Test func successfulRefreshReplacesContent() async {
         let model = makeModel(error: nil)
         model.state = .loaded(content(id: "old-home-listing"))

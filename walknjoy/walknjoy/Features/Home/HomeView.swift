@@ -77,15 +77,23 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBg)
         .alert(
-            "favorites.error",
+            LocalizedStringKey(favoriteError != nil ? "favorites.error" : "error.title"),
             isPresented: Binding(
-                get: { favoriteError != nil },
-                set: { if !$0 { favoriteError = nil } }
+                get: { favoriteError != nil || viewModel.refreshError != nil },
+                set: {
+                    if !$0 {
+                        favoriteError = nil
+                        viewModel.refreshError = nil
+                    }
+                }
             )
         ) {
-            Button("common.ok", role: .cancel) { favoriteError = nil }
+            Button("common.ok", role: .cancel) {
+                favoriteError = nil
+                viewModel.refreshError = nil
+            }
         } message: {
-            Text(favoriteError ?? "")
+            Text(favoriteError ?? viewModel.refreshError ?? "")
         }
         .onReceive(NotificationCenter.default.publisher(for: .listingsChanged)) { _ in
             Task { await viewModel.refresh() }
@@ -230,7 +238,7 @@ extension HomeView {
                 guard !isRefreshing else { return }
                 isRefreshing = true
                 defer { isRefreshing = false }
-                await viewModel.refresh()
+                await viewModel.refreshFromUser()
             }
         }
     }

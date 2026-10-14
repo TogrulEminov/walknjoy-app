@@ -32,6 +32,7 @@ final class HomeViewModel {
         }
         set { storedState = newValue }
     }
+    var refreshError: String?
     private var locale = "az"
     private var generation = UUID()
 
@@ -61,7 +62,14 @@ final class HomeViewModel {
         await loadListings()
     }
 
+    // SwiftUI can cancel the refresh action when its scroll content changes.
+    // Keep the user-requested reload alive until its result is applied.
+    func refreshFromUser() async {
+        await Task { await self.refresh() }.value
+    }
+
     func refresh() async {
+        refreshError = nil
         let keepCurrentContent: Bool
         if case .loaded = state {
             keepCurrentContent = true
@@ -122,7 +130,9 @@ final class HomeViewModel {
                 if !keepCurrentContentOnError { state = .idle }
                 return
             }
-            if !keepCurrentContentOnError {
+            if keepCurrentContentOnError {
+                refreshError = error.localizedDescription
+            } else {
                 state = .error(error.localizedDescription)
             }
         }
