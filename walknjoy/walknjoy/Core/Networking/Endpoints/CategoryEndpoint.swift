@@ -4,6 +4,8 @@ nonisolated enum CategoryEndpoint: Endpoint {
     case getCategories
     case filtered(type: ListingType?, locale: String)
 
+    var cachePolicy: URLRequest.CachePolicy { .reloadIgnoringLocalCacheData }
+
     var path: String {
         "/categories"
     }

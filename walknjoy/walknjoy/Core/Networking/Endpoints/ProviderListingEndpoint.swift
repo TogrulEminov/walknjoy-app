@@ -56,6 +56,8 @@ nonisolated enum ProviderListingEndpoint: Endpoint {
 }
 
 nonisolated enum ListingTaxonomyEndpoint: Endpoint {
+    var cachePolicy: URLRequest.CachePolicy { .reloadIgnoringLocalCacheData }
+
     case cities(locale: ListingLocale, countryCode: String)
     case categories(type: ListingType, locale: ListingLocale)
     case amenities(type: ListingType, locale: ListingLocale)

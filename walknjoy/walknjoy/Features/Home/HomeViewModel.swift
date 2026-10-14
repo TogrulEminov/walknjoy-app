@@ -75,6 +75,12 @@ final class HomeViewModel {
     private func loadListings(keepCurrentContentOnError: Bool = false) async {
         generation = UUID()
         let request = generation
+        let previousContent: HomeContent?
+        if case .loaded(let content) = state, keepCurrentContentOnError {
+            previousContent = content
+        } else {
+            previousContent = nil
+        }
         do {
             async let stayRequest = listingServices.getListings(
                 query: makeQuery(for: .stay)
@@ -88,8 +94,8 @@ final class HomeViewModel {
             async let experiencesRequest = listingServices.getListings(
                 query: makeQuery(for: .experience)
             )
-            async let categoriesRequest = categoryServices.getCategories()
-            async let citiesRequest = discoveryServices.getCities()
+            async let categoriesRequest = loadCategories(fallback: previousContent?.categories)
+            async let citiesRequest = loadCities(fallback: previousContent?.cities)
 
             let (
                 staysResponse, toursResponse, activitiesResponse,
@@ -119,6 +125,27 @@ final class HomeViewModel {
             if !keepCurrentContentOnError {
                 state = .error(error.localizedDescription)
             }
+        }
+    }
+
+    // A taxonomy failure must not discard freshly fetched listings during refresh.
+    private func loadCategories(fallback: [CategoryModel]?) async throws -> [CategoryModel] {
+        do {
+            return try await categoryServices.getCategories()
+        } catch {
+            try Task.checkCancellation()
+            guard let fallback else { throw error }
+            return fallback
+        }
+    }
+
+    private func loadCities(fallback: [ListingCity]?) async throws -> [ListingCity] {
+        do {
+            return try await discoveryServices.getCities()
+        } catch {
+            try Task.checkCancellation()
+            guard let fallback else { throw error }
+            return fallback
         }
     }
 }

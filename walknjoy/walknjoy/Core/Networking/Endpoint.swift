@@ -16,9 +16,11 @@ nonisolated protocol Endpoint {
     var httpBody: RequestBody { get }
     var requiresAuth: Bool { get }
     var usesOptionalAuth: Bool { get }
+    var cachePolicy: URLRequest.CachePolicy { get }
 }
 
 nonisolated extension Endpoint {
+    var cachePolicy: URLRequest.CachePolicy { .useProtocolCachePolicy }
     var usesOptionalAuth: Bool { false }
     var baseURL: String {
         APIConfig.baseURL
@@ -57,7 +59,7 @@ nonisolated extension Endpoint {
             throw NetworkError.invalidURL
         }
 
-        var request = URLRequest(url: url)
+        var request = URLRequest(url: url, cachePolicy: cachePolicy)
 
         request.httpMethod = method.rawValue
 
