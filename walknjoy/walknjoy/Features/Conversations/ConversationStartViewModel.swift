@@ -3,9 +3,13 @@ import Observation
 
 @MainActor @Observable
 final class ConversationStartViewModel {
-    private(set) var conversationID: String?
-    private(set) var isLoading = false
-    var error: String?
+    private(set) var state: LoadState<String> = .idle
+    var conversationID: String? {
+        if case .loaded(let id) = state { return id }
+        return nil
+    }
+    var isLoading: Bool { state.isLoading }
+    var error: String? { state.errorMessage }
     private var generation = UUID()
     func load(
         context: ConversationStart,
@@ -14,20 +18,20 @@ final class ConversationStartViewModel {
     ) async {
         guard !isLoading else { return }
         let epoch = generation
-        isLoading = true
-        error = nil
+        state = .loading
         do {
             let value = try await service.start(context, locale: locale)
             guard generation == epoch else { return }
-            conversationID = value.id
+            state = .loaded(value.id)
         } catch is CancellationError {} catch {
-            if generation == epoch { self.error = error.localizedDescription }
+            if generation == epoch {
+                state = .error(error.localizedDescription)
+            }
         }
-        if generation == epoch { isLoading = false }
+        if generation == epoch, state.isLoading { state = .idle }
     }
     func invalidate() {
         generation = UUID()
-        isLoading = false
-        conversationID = nil
+        state = .idle
     }
 }
