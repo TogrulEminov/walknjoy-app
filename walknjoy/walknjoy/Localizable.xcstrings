@@ -4,9 +4,6 @@
     "" : {
 
     },
-    " %lld" : {
-
-    },
     "%@ %@" : {
       "localizations" : {
         "az" : {
@@ -59,11 +56,22 @@
       }
     },
     "booking.blockedDates" : {
+      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "Uyğun olmayan tarixlər"
+          }
+        }
+      }
+    },
+    "booking.calendar.hint" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boz tarixlər seçilə bilməz. Əvvəl giriş, sonra çıxış tarixini seçin."
           }
         }
       }
@@ -114,6 +122,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Təsdiqlənmə vaxtı"
+          }
+        }
+      }
+    },
+    "booking.dates.chooseValid" : {
+      "localizations" : {
+        "az" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Davam etmək üçün uyğun giriş və çıxış tarixlərini seçin."
           }
         }
       }
@@ -3325,6 +3343,7 @@
       }
     },
     "messages.unread" : {
+      "extractionState" : "stale",
       "localizations" : {
         "az" : {
           "stringUnit" : {
@@ -3333,6 +3352,9 @@
           }
         }
       }
+    },
+    "messages.unread %lld" : {
+
     },
     "messages.write" : {
       "localizations" : {

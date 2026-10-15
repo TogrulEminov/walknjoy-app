@@ -77,7 +77,9 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.appBg)
         .alert(
-            LocalizedStringKey(favoriteError != nil ? "favorites.error" : "error.title"),
+            LocalizedStringKey(
+                favoriteError != nil ? "favorites.error" : "error.title"
+            ),
             isPresented: Binding(
                 get: { favoriteError != nil || viewModel.refreshError != nil },
                 set: {
@@ -95,7 +97,8 @@ struct HomeView: View {
         } message: {
             Text(favoriteError ?? viewModel.refreshError ?? "")
         }
-        .onReceive(NotificationCenter.default.publisher(for: .listingsChanged)) { _ in
+        .onReceive(NotificationCenter.default.publisher(for: .listingsChanged))
+        { _ in
             Task { await viewModel.refresh() }
         }
         .task(id: appState.language) {

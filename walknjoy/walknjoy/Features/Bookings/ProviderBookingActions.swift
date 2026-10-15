@@ -15,8 +15,9 @@ nonisolated enum ProviderBookingAction: String, Identifiable {
     func title(for booking: BookingsModel) -> LocalizedStringKey {
         switch self {
         case .confirm: "provider.booking.confirm"
-        case .cancel: booking.status.uppercased() == "PENDING"
-            ? "provider.booking.decline" : "provider.booking.cancel"
+        case .cancel:
+            booking.status.uppercased() == "PENDING"
+                ? "provider.booking.decline" : "provider.booking.cancel"
         case .complete: "provider.booking.complete"
         }
     }
@@ -36,7 +37,9 @@ nonisolated extension BookingsModel {
     func providerActions(now: Date = Date()) -> [ProviderBookingAction] {
         switch status.uppercased() {
         case "PENDING": return [.confirm, .cancel]
-        case "CONFIRMED": return canProviderComplete(now: now) ? [.cancel, .complete] : [.cancel]
+        case "CONFIRMED":
+            return canProviderComplete(now: now)
+                ? [.cancel, .complete] : [.cancel]
         default: return []
         }
     }
@@ -48,13 +51,18 @@ nonisolated extension BookingsModel {
             formatter.locale = Locale(identifier: "en_US_POSIX")
             formatter.timeZone = TimeZone(secondsFromGMT: 0)
             formatter.dateFormat = "yyyy-MM-dd"
-            guard let end = formatter.date(from: String(checkOut.prefix(10))) else { return false }
+            guard let end = formatter.date(from: String(checkOut.prefix(10)))
+            else { return false }
             return end <= now
         }
         guard let endsAt = session?.endsAt else { return false }
         let fractional = ISO8601DateFormatter()
-        fractional.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
-        let date = fractional.date(from: endsAt) ?? ISO8601DateFormatter().date(from: endsAt)
+        fractional.formatOptions = [
+            .withInternetDateTime, .withFractionalSeconds,
+        ]
+        let date =
+            fractional.date(from: endsAt)
+            ?? ISO8601DateFormatter().date(from: endsAt)
         return date.map { $0 <= now } ?? false
     }
 }
@@ -65,7 +73,9 @@ nonisolated enum ProviderBookingError {
             switch failure.statusCode {
             case 403: return String(localized: "provider.booking.forbidden")
             case 404: return String(localized: "provider.booking.notFound")
-            case 409: return String(localized: "provider.booking.conflict") + "\n" + failure.error.message
+            case 409:
+                return String(localized: "provider.booking.conflict") + "\n"
+                    + failure.error.message
             default: return failure.localizedDescription
             }
         }
@@ -78,8 +88,12 @@ nonisolated enum ProviderBookingError {
         return error.localizedDescription
     }
     static func isNotFound(_ error: Error) -> Bool {
-        if let failure = error as? APIRequestFailure { return failure.statusCode == 404 }
-        if case NetworkError.serverError(statusCode: 404) = error { return true }
+        if let failure = error as? APIRequestFailure {
+            return failure.statusCode == 404
+        }
+        if case NetworkError.serverError(statusCode: 404) = error {
+            return true
+        }
         return false
     }
 }
@@ -94,8 +108,12 @@ final class ProviderBookingActionsModel {
 
     init(service: any BookingServiceProtocol) { self.service = service }
 
-    func perform(_ action: ProviderBookingAction, booking: BookingsModel) async -> BookingsModel? {
-        guard busyID == nil, booking.providerActions().contains(action) else { return nil }
+    func perform(_ action: ProviderBookingAction, booking: BookingsModel) async
+        -> BookingsModel?
+    {
+        guard busyID == nil, booking.providerActions().contains(action) else {
+            return nil
+        }
         busyID = booking.id
         error = nil
         refreshedBooking = nil
@@ -104,15 +122,23 @@ final class ProviderBookingActionsModel {
         do {
             let result: BookingsModel
             switch action {
-            case .confirm: result = try await service.confirmBooking(id: booking.id)
-            case .cancel: result = try await service.cancelBooking(id: booking.id)
-            case .complete: result = try await service.completeBooking(id: booking.id)
+            case .confirm:
+                result = try await service.confirmBooking(id: booking.id)
+            case .cancel:
+                result = try await service.cancelBooking(id: booking.id)
+            case .complete:
+                result = try await service.completeBooking(id: booking.id)
             }
-            guard result.id == booking.id, result.status.uppercased() == action.expectedStatus else {
+            guard result.id == booking.id,
+                result.status.uppercased() == action.expectedStatus
+            else {
                 throw NetworkError.invalidResponse
             }
             refreshedBooking = result
-            NotificationCenter.default.post(name: .bookingsChanged, object: result)
+            NotificationCenter.default.post(
+                name: .bookingsChanged,
+                object: result
+            )
             return result
         } catch is CancellationError {
             return nil
@@ -121,12 +147,20 @@ final class ProviderBookingActionsModel {
             if ProviderBookingError.isNotFound(error) {
                 unavailableID = booking.id
             } else {
-                do { refreshedBooking = try await service.getProviderBooking(id: booking.id) }
-                catch {
-                    if ProviderBookingError.isNotFound(error) { unavailableID = booking.id }
+                do {
+                    refreshedBooking = try await service.getProviderBooking(
+                        id: booking.id
+                    )
+                } catch {
+                    if ProviderBookingError.isNotFound(error) {
+                        unavailableID = booking.id
+                    }
                 }
             }
-            NotificationCenter.default.post(name: .bookingsChanged, object: refreshedBooking)
+            NotificationCenter.default.post(
+                name: .bookingsChanged,
+                object: refreshedBooking
+            )
             return nil
         }
     }
@@ -145,7 +179,10 @@ struct ProviderBookingActionButtons: View {
                         onAction(action)
                     } label: {
                         Text(action.title(for: booking))
-                            .font(.subheadline.bold()).frame(maxWidth: .infinity, minHeight: 44)
+                            .font(.subheadline.bold()).frame(
+                                maxWidth: .infinity,
+                                minHeight: 44
+                            )
                     }
                     .buttonStyle(.bordered)
                 }

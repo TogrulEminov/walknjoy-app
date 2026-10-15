@@ -51,7 +51,9 @@ final class PaginationController<Item: Identifiable> {
         self.limit = max(1, limit)
     }
     func replace(_ item: Item) {
-        if let index = items.firstIndex(where: { $0.id == item.id }) { items[index] = item }
+        if let index = items.firstIndex(where: { $0.id == item.id }) {
+            items[index] = item
+        }
     }
     func remove(id: Item.ID) {
         items.removeAll { $0.id == id }
@@ -95,8 +97,6 @@ final class PaginationController<Item: Identifiable> {
             if error is CancellationError
                 || (error as? URLError)?.code == .cancelled
             {
-                // An idle state is rendered as a spinner by list views. End the
-                // cancelled request explicitly and keep any previously loaded rows.
                 state =
                     items.isEmpty
                     ? .error(URLError(.cancelled).localizedDescription)

@@ -17,8 +17,13 @@ final class ResetPasswordViewModel {
         self.authService = authService ?? AuthService()
     }
 
-    func resetPassword(password: String, resetToken: String) async  {
-        guard AuthForms.resetPassword(password: password, isBlocked: resetToken.isEmpty).canSubmit else { return }
+    func resetPassword(password: String, resetToken: String) async {
+        guard
+            AuthForms.resetPassword(
+                password: password,
+                isBlocked: resetToken.isEmpty
+            ).canSubmit
+        else { return }
         if case .loading = state { return }
         state = .loading
 

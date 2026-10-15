@@ -8,7 +8,8 @@ nonisolated protocol ReviewServiceProtocol {
         sort: ReviewSort,
         locale: String
     ) async throws -> PaginationPage<PublicReview>
-    func mine(page: Int, limit: Int, sort: ReviewSort) async throws -> PaginationPage<MyReview>
+    func mine(page: Int, limit: Int, sort: ReviewSort) async throws
+        -> PaginationPage<MyReview>
     func create(bookingID: String, request: CreateReviewRequest) async throws
         -> CreatedReview
     func update(id: String, request: UpdateReviewRequest) async throws
@@ -46,7 +47,9 @@ nonisolated final class ReviewService: ReviewServiceProtocol {
         else { throw NetworkError.invalidResponse }
         return PaginationPage(items: data, meta: meta)
     }
-    func mine(page: Int, limit: Int, sort: ReviewSort = .newest) async throws -> PaginationPage<MyReview> {
+    func mine(page: Int, limit: Int, sort: ReviewSort = .newest) async throws
+        -> PaginationPage<MyReview>
+    {
         let response: ApiResponse<[MyReview]> = try await request(
             enpoint: ReviewEndpoint.mine(page: page, limit: limit, sort: sort),
             responseType: ApiResponse<[MyReview]>.self
@@ -95,17 +98,26 @@ nonisolated final class ReviewService: ReviewServiceProtocol {
             as: PublicListing.self
         )
     }
-    private func request<T: Decodable>(enpoint: any Endpoint, responseType: T.Type) async throws -> T {
+    private func request<T: Decodable>(
+        enpoint: any Endpoint,
+        responseType: T.Type
+    ) async throws -> T {
         let tokens = TokenStorage()
         let originalToken = tokens.accessToken
         do {
-            return try await network.request(enpoint: enpoint, responseType: responseType)
+            return try await network.request(
+                enpoint: enpoint,
+                responseType: responseType
+            )
         } catch NetworkError.unauthorized where enpoint.requiresAuth {
             if tokens.accessToken == originalToken {
                 try await SessionAuthentication.refresh()
             }
             do {
-                return try await network.request(enpoint: enpoint, responseType: responseType)
+                return try await network.request(
+                    enpoint: enpoint,
+                    responseType: responseType
+                )
             } catch NetworkError.unauthorized {
                 await SessionAuthentication.expire()
                 throw NetworkError.unauthorized

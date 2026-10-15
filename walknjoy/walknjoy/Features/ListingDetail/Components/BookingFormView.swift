@@ -3,6 +3,11 @@ import SwiftUI
 struct BookingFormView: View {
     @Bindable var viewModel: BookingViewModel
     var onSuccess: (BookingsModel) -> Void = { _ in }
+    @State private var dateSelection: StayDateField?
+    private enum StayDateField: String, Identifiable {
+        case checkIn, checkOut
+        var id: String { rawValue }
+    }
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -71,14 +76,12 @@ struct BookingFormView: View {
                                     VStack(spacing: 16) {
                                         dateField(
                                             label: "listing.detail.checkIn",
-                                            selection: $viewModel.checkIn,
-                                            in: Date()...
+                                            field: .checkIn
                                         )
                                         fieldError("checkIn")
                                         dateField(
                                             label: "listing.detail.checkOut",
-                                            selection: $viewModel.checkOut,
-                                            in: minimumCheckOut...
+                                            field: .checkOut
                                         )
                                         fieldError("checkOut")
                                         if case .loading = viewModel
@@ -101,27 +104,14 @@ struct BookingFormView: View {
                                         if viewModel.availability != nil,
                                             !viewModel.datesAvailable
                                         {
-                                            Text("listing.detail.unavailable")
+                                            Text("booking.dates.chooseValid")
                                                 .foregroundStyle(
                                                     Color.errorColor
                                                 )
                                         }
-                                        ForEach(
-                                            Array(
-                                                (viewModel.availability?
-                                                    .blockedPeriods ?? [])
-                                                    .enumerated()
-                                            ),
-                                            id: \.offset
-                                        ) { _, period in
-                                            Text(
-                                                String(
-                                                    localized:
-                                                        "booking.blockedDates"
-                                                ) + ": " + period.startDate
-                                                    + " – " + period.endDate
-                                            ).font(.caption)
-                                        }
+                                        Text("booking.calendar.hint")
+                                            .font(.caption)
+                                            .foregroundStyle(Color.descriptionText)
                                     }
                                 }
                             } else {
@@ -260,12 +250,35 @@ struct BookingFormView: View {
         .onChange(of: viewModel.children) { _, _ in
             viewModel.validateSelection()
         }
-        .onChange(of: viewModel.checkIn) { _, _ in
-            if Calendar.current.startOfDay(for: viewModel.checkOut)
-                <= Calendar.current.startOfDay(for: viewModel.checkIn)
-            {
-                viewModel.checkOut = minimumCheckOut
+        .sheet(item: $dateSelection) { field in
+            NavigationStack {
+                StayAvailabilityCalendar(
+                    selectedDate: field == .checkIn ? viewModel.checkIn : viewModel.checkOut,
+                    canSelect: { date in
+                        field == .checkIn
+                            ? viewModel.canSelectCheckIn(date)
+                            : viewModel.canSelectCheckOut(date)
+                    },
+                    onSelect: { date in
+                        if field == .checkIn {
+                            viewModel.selectCheckIn(date)
+                        } else {
+                            viewModel.checkOut = date
+                            viewModel.fieldErrors = [:]
+                        }
+                        dateSelection = nil
+                    }
+                )
+                .padding()
+                .navigationTitle(LocalizedStringKey(field == .checkIn ? "listing.detail.checkIn" : "listing.detail.checkOut"))
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("common.cancel") { dateSelection = nil }
+                    }
+                }
             }
+            .presentationDetents([.height(520), .large])
         }
         .interactiveDismissDisabled(viewModel.isBusy)
     }
@@ -274,14 +287,6 @@ struct BookingFormView: View {
         if let message = viewModel.fieldErrors[key] {
             Text(message).font(.caption).foregroundStyle(Color.errorColor)
         }
-    }
-
-    private var minimumCheckOut: Date {
-        Calendar.current.date(
-            byAdding: .day,
-            value: viewModel.minimumNights,
-            to: Calendar.current.startOfDay(for: viewModel.checkIn)
-        ) ?? viewModel.checkIn
     }
 
     @ViewBuilder private var sessionsSection: some View {
@@ -410,24 +415,24 @@ struct BookingFormView: View {
 
     private func dateField(
         label: LocalizedStringKey,
-        selection: Binding<Date>,
-        in range: PartialRangeFrom<Date>
+        field: StayDateField
     ) -> some View {
-        HStack {
-            Text(label).font(.subheadline).foregroundStyle(
-                Color.descriptionText
-            )
-            Spacer()
-            DatePicker(
-                "",
-                selection: selection,
-                in: range,
-                displayedComponents: .date
-            )
-            .labelsHidden()
-            .datePickerStyle(.compact)
-            .foregroundStyle(Color.titleText)
+        Button {
+            dateSelection = field
+        } label: {
+            HStack {
+                Text(label).font(.subheadline).foregroundStyle(Color.descriptionText)
+                Spacer()
+                Text(field == .checkIn ? viewModel.checkIn : viewModel.checkOut,
+                     format: .dateTime.day().month(.abbreviated).year())
+                    .foregroundStyle(Color.titleText)
+                Image(systemName: "calendar").foregroundStyle(Color.titleText)
+            }
+            .frame(minHeight: 44)
+            .contentShape(Rectangle())
         }
+        .buttonStyle(.plain)
+        .disabled(viewModel.availability == nil)
     }
 
     private func stepperField(

@@ -17,7 +17,8 @@ final class BookingListViewModel {
 
     init(role: RoleEnum, service: BookingServiceProtocol? = nil) {
         self.role = role
-        let service = service ?? BookingService(network: DefaultNetworkService())
+        let service =
+            service ?? BookingService(network: DefaultNetworkService())
         self.service = service
         self.providerActions = ProviderBookingActionsModel(service: service)
     }
@@ -50,7 +51,11 @@ final class BookingListViewModel {
                 let provider = role == .provider
                 await pagination.refresh { page, limit in
                     if provider {
-                        return try await service.providerPage(page: page, limit: limit, status: filter)
+                        return try await service.providerPage(
+                            page: page,
+                            limit: limit,
+                            status: filter
+                        )
                     }
                     return try await service.customerPage(
                         page: page,
@@ -60,7 +65,8 @@ final class BookingListViewModel {
                 }
                 guard generation == request else { return }
                 bookings = pagination.items
-                if case .error(let message) = pagination.state, preserveContent {
+                if case .error(let message) = pagination.state, preserveContent
+                {
                     error = message
                     state = .loaded(())
                 } else {
@@ -80,13 +86,22 @@ final class BookingListViewModel {
             }
         }
     }
-    func performProviderAction(_ action: ProviderBookingAction, booking: BookingsModel) async {
+    func performProviderAction(
+        _ action: ProviderBookingAction,
+        booking: BookingsModel
+    ) async {
         guard role == .provider else { return }
         _ = await providerActions.perform(action, booking: booking)
-        applyProviderChange(providerActions.refreshedBooking, unavailableID: providerActions.unavailableID)
+        applyProviderChange(
+            providerActions.refreshedBooking,
+            unavailableID: providerActions.unavailableID
+        )
     }
 
-    func applyProviderChange(_ updated: BookingsModel?, unavailableID: String? = nil) {
+    func applyProviderChange(
+        _ updated: BookingsModel?,
+        unavailableID: String? = nil
+    ) {
         if let unavailableID {
             bookings.removeAll { $0.id == unavailableID }
             pagination.remove(id: unavailableID)
@@ -95,7 +110,8 @@ final class BookingListViewModel {
         if let status, updated.status.uppercased() != status {
             bookings.removeAll { $0.id == updated.id }
             pagination.remove(id: updated.id)
-        } else if let index = bookings.firstIndex(where: { $0.id == updated.id }) {
+        } else if let index = bookings.firstIndex(where: { $0.id == updated.id }
+        ) {
             bookings[index] = updated
             pagination.replace(updated)
         }

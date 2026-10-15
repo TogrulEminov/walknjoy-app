@@ -56,7 +56,10 @@ final class AuthService: AuthServiceProtocol {
 
     func logout() async throws {
         #if DEBUG
-        if DemoBackend.shared.isActive { DemoBackend.shared.end(); return }
+            if DemoBackend.shared.isActive {
+                DemoBackend.shared.end()
+                return
+            }
         #endif
         guard let refreshToken = tokenStorage.refreshToken else {
             throw NetworkError.unauthorized
@@ -127,7 +130,7 @@ final class AuthService: AuthServiceProtocol {
 
     func refresh() async throws {
         #if DEBUG
-        if DemoBackend.shared.isActive { return }
+            if DemoBackend.shared.isActive { return }
         #endif
         guard let refreshToken = tokenStorage.refreshToken else {
             throw NetworkError.unauthorized
@@ -166,7 +169,10 @@ final class AuthService: AuthServiceProtocol {
 
     func restoreSession() async throws {
         #if DEBUG
-        if DemoBackend.shared.isActive { _ = try await me(); return }
+            if DemoBackend.shared.isActive {
+                _ = try await me()
+                return
+            }
         #endif
         guard tokenStorage.refreshToken != nil else {
             throw NetworkError.unauthorized

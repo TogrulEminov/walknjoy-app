@@ -24,14 +24,25 @@ final class RegisterViewModel {
         email: String,
         password: String
     ) async {
-        guard AuthForms.register(firstName: firstName, lastName: lastName, email: email, password: password).canSubmit else { return }
+        guard
+            AuthForms.register(
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                password: password
+            ).canSubmit
+        else { return }
         if case .loading = state { return }
         state = .loading
 
         do {
             let request = RegisterRequest(
-                firstName: firstName.trimmingCharacters(in: .whitespacesAndNewlines),
-                lastName: lastName.trimmingCharacters(in: .whitespacesAndNewlines),
+                firstName: firstName.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                ),
+                lastName: lastName.trimmingCharacters(
+                    in: .whitespacesAndNewlines
+                ),
                 email: email.trimmingCharacters(in: .whitespacesAndNewlines),
                 password: password
             )

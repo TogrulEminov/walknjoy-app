@@ -64,7 +64,9 @@ nonisolated final class ProviderListingService: ProviderListingsManaging {
 
     func delete(id: String) async throws -> ProviderListingEditorDTO {
         let deleted = try await listing(.delete(id: id))
-        guard deleted.id == id, deleted.isDeleted else { throw NetworkError.invalidResponse }
+        guard deleted.id == id, deleted.isDeleted else {
+            throw NetworkError.invalidResponse
+        }
         return deleted
     }
 

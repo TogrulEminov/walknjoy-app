@@ -20,15 +20,24 @@ final class HomeViewModel {
     private var storedState: LoadState<HomeContent> = .idle
     var state: LoadState<HomeContent> {
         get {
-            guard case .loaded(let content) = storedState else { return storedState }
+            guard case .loaded(let content) = storedState else {
+                return storedState
+            }
             let deleted = ListingLifecycle.shared.deletedIDs
-            return .loaded(HomeContent(
-                cities: content.cities, categories: content.categories,
-                stays: content.stays.filter { !deleted.contains($0.id) },
-                tours: content.tours.filter { !deleted.contains($0.id) },
-                activities: content.activities.filter { !deleted.contains($0.id) },
-                experiences: content.experiences.filter { !deleted.contains($0.id) }
-            ))
+            return .loaded(
+                HomeContent(
+                    cities: content.cities,
+                    categories: content.categories,
+                    stays: content.stays.filter { !deleted.contains($0.id) },
+                    tours: content.tours.filter { !deleted.contains($0.id) },
+                    activities: content.activities.filter {
+                        !deleted.contains($0.id)
+                    },
+                    experiences: content.experiences.filter {
+                        !deleted.contains($0.id)
+                    }
+                )
+            )
         }
         set { storedState = newValue }
     }
@@ -102,8 +111,12 @@ final class HomeViewModel {
             async let experiencesRequest = listingServices.getListings(
                 query: makeQuery(for: .experience)
             )
-            async let categoriesRequest = loadCategories(fallback: previousContent?.categories)
-            async let citiesRequest = loadCities(fallback: previousContent?.cities)
+            async let categoriesRequest = loadCategories(
+                fallback: previousContent?.categories
+            )
+            async let citiesRequest = loadCities(
+                fallback: previousContent?.cities
+            )
 
             let (
                 staysResponse, toursResponse, activitiesResponse,
@@ -126,7 +139,9 @@ final class HomeViewModel {
             state = .loaded(content)
         } catch {
             guard generation == request else { return }
-            if error is CancellationError || (error as? URLError)?.code == .cancelled {
+            if error is CancellationError
+                || (error as? URLError)?.code == .cancelled
+            {
                 if !keepCurrentContentOnError { state = .idle }
                 return
             }
@@ -139,7 +154,9 @@ final class HomeViewModel {
     }
 
     // A taxonomy failure must not discard freshly fetched listings during refresh.
-    private func loadCategories(fallback: [CategoryModel]?) async throws -> [CategoryModel] {
+    private func loadCategories(fallback: [CategoryModel]?) async throws
+        -> [CategoryModel]
+    {
         do {
             return try await categoryServices.getCategories()
         } catch {
@@ -149,7 +166,9 @@ final class HomeViewModel {
         }
     }
 
-    private func loadCities(fallback: [ListingCity]?) async throws -> [ListingCity] {
+    private func loadCities(fallback: [ListingCity]?) async throws
+        -> [ListingCity]
+    {
         do {
             return try await discoveryServices.getCities()
         } catch {

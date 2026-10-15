@@ -40,7 +40,10 @@ nonisolated extension ListingEndpoint: Endpoint {
         }
     }
     var headers: [String: String]? {
-        ["Accept": "application/json", "Cache-Control": "no-cache, no-store", "Pragma": "no-cache"]
+        [
+            "Accept": "application/json", "Cache-Control": "no-cache, no-store",
+            "Pragma": "no-cache",
+        ]
     }
     var queryItems: [URLQueryItem]? {
         switch self {

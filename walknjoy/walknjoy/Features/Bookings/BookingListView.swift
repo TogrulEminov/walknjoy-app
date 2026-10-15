@@ -66,22 +66,46 @@ struct BookingListView: View {
             pendingAction?.confirmation ?? "provider.booking.confirmPrompt",
             isPresented: Binding(
                 get: { pendingAction != nil },
-                set: { if !$0 { pendingAction = nil; actionBooking = nil } }
-            ), titleVisibility: .visible
+                set: {
+                    if !$0 {
+                        pendingAction = nil
+                        actionBooking = nil
+                    }
+                }
+            ),
+            titleVisibility: .visible
         ) {
             if let action = pendingAction, let booking = actionBooking {
-                Button(action.title(for: booking), role: action == .cancel ? .destructive : nil) {
-                    Task { await viewModel.performProviderAction(action, booking: booking) }
+                Button(
+                    action.title(for: booking),
+                    role: action == .cancel ? .destructive : nil
+                ) {
+                    Task {
+                        await viewModel.performProviderAction(
+                            action,
+                            booking: booking
+                        )
+                    }
                 }
             }
-            Button("common.cancel", role: .cancel) { pendingAction = nil; actionBooking = nil }
+            Button("common.cancel", role: .cancel) {
+                pendingAction = nil
+                actionBooking = nil
+            }
         }
-        .alert("error.title", isPresented: Binding(
-            get: { viewModel.providerActions.error != nil },
-            set: { if !$0 { viewModel.providerActions.error = nil } }
-        )) {
-            Button("common.ok", role: .cancel) { viewModel.providerActions.error = nil }
-        } message: { Text(viewModel.providerActions.error ?? "") }
+        .alert(
+            "error.title",
+            isPresented: Binding(
+                get: { viewModel.providerActions.error != nil },
+                set: { if !$0 { viewModel.providerActions.error = nil } }
+            )
+        ) {
+            Button("common.ok", role: .cancel) {
+                viewModel.providerActions.error = nil
+            }
+        } message: {
+            Text(viewModel.providerActions.error ?? "")
+        }
         .navigationTitle("bookings.title")
         .navigationBarTitleDisplayMode(.inline)
         .task {
@@ -94,32 +118,49 @@ struct BookingListView: View {
             List {
                 ForEach(viewModel.bookings) { booking in
                     NavigationLink {
-                        BookingDetailView(bookingID: booking.id, role: viewModel.role)
+                        BookingDetailView(
+                            bookingID: booking.id,
+                            role: viewModel.role
+                        )
                     } label: {
                         BookingListItemView(
                             booking: booking,
-                            isBusy: viewModel.providerActions.busyID == booking.id
+                            isBusy: viewModel.providerActions.busyID
+                                == booking.id
                         )
                     }
                     .listRowBackground(Color.appBackground)
-                    .listRowInsets(EdgeInsets(top: 16, leading: 20, bottom: 16, trailing: 16))
+                    .listRowInsets(
+                        EdgeInsets(
+                            top: 16,
+                            leading: 20,
+                            bottom: 16,
+                            trailing: 16
+                        )
+                    )
                     .listRowSeparatorTint(Color.borderColor)
                     .swipeActions(edge: .leading, allowsFullSwipe: false) {
                         if viewModel.role == .provider {
-                            ForEach(booking.providerActions(now: timeline.date).filter { $0 != .cancel }) { action in
+                            ForEach(
+                                booking.providerActions(now: timeline.date)
+                                    .filter { $0 != .cancel }
+                            ) { action in
                                 swipeButton(action, booking: booking)
                             }
                         }
                     }
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         if viewModel.role == .provider,
-                            booking.providerActions(now: timeline.date).contains(.cancel) {
+                            booking.providerActions(now: timeline.date)
+                                .contains(.cancel)
+                        {
                             swipeButton(.cancel, booking: booking)
                         }
                     }
                     .contextMenu {
                         if viewModel.role == .provider {
-                            ForEach(booking.providerActions(now: timeline.date)) { action in
+                            ForEach(booking.providerActions(now: timeline.date))
+                            { action in
                                 swipeButton(action, booking: booking)
                             }
                         }
@@ -151,14 +192,21 @@ struct BookingListView: View {
         }
     }
 
-    private func swipeButton(_ action: ProviderBookingAction, booking: BookingsModel) -> some View {
+    private func swipeButton(
+        _ action: ProviderBookingAction,
+        booking: BookingsModel
+    ) -> some View {
         // Keep cancellation non-destructive here so the row stays until confirmation succeeds.
         Button {
             actionBooking = booking
             pendingAction = action
         } label: {
-            Label(action.title(for: booking), systemImage: action == .confirm
-                ? "checkmark" : action == .complete ? "checkmark.seal" : "xmark")
+            Label(
+                action.title(for: booking),
+                systemImage: action == .confirm
+                    ? "checkmark"
+                    : action == .complete ? "checkmark.seal" : "xmark"
+            )
         }
         .tint(action == .cancel ? .red : action == .confirm ? .green : .blue)
         .disabled(viewModel.providerActions.busyID != nil)
@@ -201,10 +249,12 @@ struct BookingListItemView: View {
                         .font(.caption)
                         .foregroundStyle(Color.descriptionText)
                     Spacer(minLength: 8)
-                    Text("\(booking.totalAmount.formatted(.number.precision(.fractionLength(0...2)))) \(booking.currency)")
-                        .font(.subheadline.bold())
-                        .foregroundStyle(Color.titleText)
-                        .fixedSize(horizontal: true, vertical: false)
+                    Text(
+                        "\(booking.totalAmount.formatted(.number.precision(.fractionLength(0...2)))) \(booking.currency)"
+                    )
+                    .font(.subheadline.bold())
+                    .foregroundStyle(Color.titleText)
+                    .fixedSize(horizontal: true, vertical: false)
                 }
                 HStack(spacing: 6) {
                     Label(booking.statusTitle, systemImage: booking.statusIcon)
