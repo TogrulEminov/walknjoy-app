@@ -28,6 +28,7 @@ final class ChatDetailViewModel {
     private var sends: [String: Task<Void, Never>] = [:]
     private var typingTask: Task<Void, Never>?
     private var remoteTypingTask: Task<Void, Never>?
+    private var visibleReadTask: Task<Void, Never>?
     private var loadedHistory = false
     private var lastVisibleID: String?
     private var lastReadID: String?
@@ -38,12 +39,16 @@ final class ChatDetailViewModel {
     private(set) var messages: [ChatMessage] = []
     private(set) var outgoing: [OutgoingMessage] = []
     private(set) var nextCursor: String?
-    private(set) var isLoading = false
-    private(set) var isLoadingOlder = false
+    private(set) var state: LoadState<Void> = .idle
+    private(set) var olderState: LoadState<Void> = .idle
+    var isLoading: Bool { state.isLoading }
+    var isLoadingOlder: Bool { olderState.isLoading }
+    var hasLoadedHistory: Bool { loadedHistory }
     private(set) var otherIsTyping = false
     private(set) var receipt: ChatReadReceipt?
     private(set) var revision = 0
-    var error: String?
+    private var actionError: String?
+    var error: String? { state.errorMessage ?? olderState.errorMessage ?? actionError }
     var draft = ""
     var canSend: Bool {
         let value = draft.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -73,11 +78,14 @@ final class ChatDetailViewModel {
         subscription = socket.subscribeChat { [weak self] data in
             self?.receive(data)
         }
-        if socket.state == .connected { await join() }
+        Task { [weak self] in await self?.join() }
         await synchronize()
     }
     func stop() {
         active = false
+        if state.isLoading { state = loadedHistory ? .loaded(()) : .idle }
+        olderState = .idle
+        visibleReadTask?.cancel()
         joined = false
         generation = UUID()
         historyGeneration = UUID()
@@ -131,14 +139,19 @@ final class ChatDetailViewModel {
         )
     }
     func synchronize() async {
-        guard active else { return }
+        guard active, !state.isLoading else { return }
         if socket.state == .failed && foreground { socket.start() }
         let epoch = generation
         let history = UUID()
         historyGeneration = history
-        isLoading = messages.isEmpty
-        isLoadingOlder = false
-        error = nil
+        defer {
+            if generation == epoch, historyGeneration == history {
+                if state.isLoading { state = loadedHistory ? .loaded(()) : .idle }
+            }
+        }
+        state = .loading
+        olderState = .idle
+        actionError = nil
         do {
             let value = try await service.detail(
                 id: conversationID,
@@ -156,22 +169,22 @@ final class ChatDetailViewModel {
                 nextCursor = page.meta.nextCursor
                 loadedHistory = true
             }
+            state = .loaded(())
             revision += 1
         } catch is CancellationError {} catch {
             guard active, generation == epoch, historyGeneration == history
             else { return }
-            self.error = error.localizedDescription
+            state = .error(error.localizedDescription)
         }
         guard generation == epoch, historyGeneration == history else { return }
-        isLoading = false
         await markVisibleRead()
     }
     func loadOlder() async {
-        guard active, !isLoadingOlder, let cursor = nextCursor else { return }
+        guard active, !state.isLoading, !isLoadingOlder, let cursor = nextCursor else { return }
         let epoch = generation
         let history = historyGeneration
-        isLoadingOlder = true
-        error = nil
+        olderState = .loading
+        actionError = nil
         do {
             let page = try await service.messages(
                 id: conversationID,
@@ -181,10 +194,11 @@ final class ChatDetailViewModel {
             else { return }
             messages = ChatFormatting.merge(page.data, messages)
             nextCursor = page.meta.nextCursor
+            olderState = .loaded(())
         } catch is CancellationError {} catch {
-            if generation == epoch { self.error = error.localizedDescription }
+            if generation == epoch, historyGeneration == history { olderState = .error(error.localizedDescription) }
         }
-        if generation == epoch { isLoadingOlder = false }
+        if generation == epoch, historyGeneration == history, olderState.isLoading { olderState = .idle }
     }
     func sendDraft() {
         guard canSend else { return }
@@ -248,7 +262,7 @@ final class ChatDetailViewModel {
                     self.outgoing[index].status = .failed
                 }
                 self.sends[message.id] = nil
-                self.error = error.localizedDescription
+                self.actionError = error.localizedDescription
             }
         }
     }
@@ -260,17 +274,21 @@ final class ChatDetailViewModel {
         sends[clientID] = nil
         revision += 1
     }
-    func visible(_ message: ChatMessage) {
-        guard let index = messages.firstIndex(where: { $0.id == message.id })
+    func visibleMessages(_ ids: Set<String>) {
+        guard let message = messages.last(where: { ids.contains($0.id) }),
+            message.id != lastVisibleID
         else { return }
         if let current = lastVisibleID,
             let oldIndex = messages.firstIndex(where: { $0.id == current }),
+            let index = messages.firstIndex(where: { $0.id == message.id }),
             oldIndex > index
-        {
-            return
-        }
+        { return }
         lastVisibleID = message.id
-        Task { await markVisibleRead() }
+        visibleReadTask?.cancel()
+        visibleReadTask = Task { [weak self] in
+            do { try await Task.sleep(for: .milliseconds(200)) } catch { return }
+            await self?.markVisibleRead()
+        }
     }
     private func markVisibleRead() async {
         guard active, foreground, let id = lastVisibleID, id != lastReadID,
@@ -308,7 +326,7 @@ final class ChatDetailViewModel {
             detail = refreshed
         } catch is CancellationError {} catch {
             if generation == epoch, readGeneration == read {
-                self.error = error.localizedDescription
+                self.actionError = error.localizedDescription
             }
         }
     }
@@ -430,6 +448,7 @@ final class ChatDetailViewModel {
         }
     }
     isolated deinit {
+        visibleReadTask?.cancel()
         typingTask?.cancel()
         remoteTypingTask?.cancel()
         for task in sends.values { task.cancel() }

@@ -17,7 +17,8 @@ nonisolated protocol BookingServiceProtocol {
     func getBookingTicket(id: String) async throws -> Data
 
     // Provider methods
-    func providerPage(page: Int, limit: Int, status: String?) async throws -> PaginationPage<BookingsModel>
+    func providerPage(page: Int, limit: Int, status: String?) async throws
+        -> PaginationPage<BookingsModel>
     func getProviderBookings() async throws -> [BookingsModel]
     func getProviderBooking(id: String) async throws -> BookingsModel
     func confirmBooking(id: String) async throws -> BookingsModel
@@ -36,18 +37,32 @@ nonisolated final class BookingService: BookingServiceProtocol {
         self.network = network
     }
 
-    private func request<T: Decodable>(enpoint: any Endpoint, responseType: T.Type) async throws -> T {
+    private func request<T: Decodable>(
+        enpoint: any Endpoint,
+        responseType: T.Type
+    ) async throws -> T {
         guard enpoint.path.hasPrefix("/provider/bookings") else {
-            return try await network.request(enpoint: enpoint, responseType: responseType)
+            return try await network.request(
+                enpoint: enpoint,
+                responseType: responseType
+            )
         }
         let tokens = TokenStorage()
         let token = tokens.accessToken
         do {
-            return try await network.request(enpoint: enpoint, responseType: responseType)
+            return try await network.request(
+                enpoint: enpoint,
+                responseType: responseType
+            )
         } catch NetworkError.unauthorized {
-            if tokens.accessToken == token { try await SessionAuthentication.refresh() }
+            if tokens.accessToken == token {
+                try await SessionAuthentication.refresh()
+            }
             do {
-                return try await network.request(enpoint: enpoint, responseType: responseType)
+                return try await network.request(
+                    enpoint: enpoint,
+                    responseType: responseType
+                )
             } catch NetworkError.unauthorized {
                 await SessionAuthentication.expire()
                 throw NetworkError.unauthorized
@@ -166,12 +181,20 @@ nonisolated final class BookingService: BookingServiceProtocol {
 
     // MARK: - Provider Methods
 
-    func providerPage(page: Int, limit: Int, status: String?) async throws -> PaginationPage<BookingsModel> {
+    func providerPage(page: Int, limit: Int, status: String?) async throws
+        -> PaginationPage<BookingsModel>
+    {
         let response = try await request(
-            enpoint: BookingEndpoint.providerPage(page: page, limit: limit, status: status),
+            enpoint: BookingEndpoint.providerPage(
+                page: page,
+                limit: limit,
+                status: status
+            ),
             responseType: ApiResponse<[BookingsModel]>.self
         )
-        guard response.success, let items = response.data, let meta = response.meta else {
+        guard response.success, let items = response.data,
+            let meta = response.meta
+        else {
             throw NetworkError.invalidResponse
         }
         return PaginationPage(items: items, meta: meta)
@@ -181,9 +204,17 @@ nonisolated final class BookingService: BookingServiceProtocol {
         var bookings: [BookingsModel] = []
         var page = 1
         while true {
-            let result = try await providerPage(page: page, limit: 100, status: nil)
+            let result = try await providerPage(
+                page: page,
+                limit: 100,
+                status: nil
+            )
             bookings.append(contentsOf: result.items)
-            if !result.hasNextPage(currentPage: page, limit: 100) || result.items.isEmpty { return bookings }
+            if !result.hasNextPage(currentPage: page, limit: 100)
+                || result.items.isEmpty
+            {
+                return bookings
+            }
             page += 1
         }
     }

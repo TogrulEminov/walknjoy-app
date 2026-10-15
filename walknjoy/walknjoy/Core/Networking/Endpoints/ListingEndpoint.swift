@@ -18,6 +18,8 @@ nonisolated enum ListingEndpoint {
 }
 
 nonisolated extension ListingEndpoint: Endpoint {
+    var cachePolicy: URLRequest.CachePolicy { .reloadIgnoringLocalCacheData }
+
     var baseURL: String {
         APIConfig.baseURL
     }
@@ -38,7 +40,10 @@ nonisolated extension ListingEndpoint: Endpoint {
         }
     }
     var headers: [String: String]? {
-        nil
+        [
+            "Accept": "application/json", "Cache-Control": "no-cache, no-store",
+            "Pragma": "no-cache",
+        ]
     }
     var queryItems: [URLQueryItem]? {
         switch self {

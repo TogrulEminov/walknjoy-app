@@ -15,10 +15,12 @@ struct ListingCard: View {
         ZStack(alignment: .topTrailing) {
             NavigationLink(value: AppRoute.listingDetails(listing)) {
                 VStack(alignment: .leading, spacing: 0) {
-                    RemoteImageView(url: imageURL) { placeholder }
-                        .frame(height: 168)
-                        .frame(maxWidth: .infinity)
-                        .clipped()
+                    GeometryReader { geometry in
+                        RemoteImageView(url: imageURL) { placeholder }
+                            .frame(width: geometry.size.width, height: geometry.size.height)
+                            .clipped()
+                    }
+                    .frame(height: 168)
 
                     VStack(alignment: .leading, spacing: 7) {
                         HStack {

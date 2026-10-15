@@ -89,16 +89,46 @@ final class BookingViewModel: Identifiable {
         return 1
     }
     var datesAvailable: Bool {
+        stayDatesAvailable(from: checkIn, to: checkOut)
+    }
+
+    private func stayDatesAvailable(from checkIn: Date, to checkOut: Date) -> Bool {
         guard let availability else { return false }
         let start = formatDate(checkIn)
         let end = formatDate(checkOut)
-        if let bound = availability.availableFrom, start < bound {
-            return false
-        }
+        guard start < end else { return false }
+        if let bound = availability.availableFrom, start < bound { return false }
         if let bound = availability.availableUntil, end > bound { return false }
         return !(availability.blockedPeriods ?? []).contains {
             start < $0.endDate && end > $0.startDate
         }
+    }
+
+    func canSelectCheckIn(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let start = calendar.startOfDay(for: date)
+        guard start >= calendar.startOfDay(for: Date()),
+            let end = calendar.date(byAdding: .day, value: minimumNights, to: start)
+        else { return false }
+        return stayDatesAvailable(from: start, to: end)
+    }
+
+    func canSelectCheckOut(_ date: Date) -> Bool {
+        let calendar = Calendar.current
+        let nights = calendar.dateComponents(
+            [.day], from: calendar.startOfDay(for: checkIn),
+            to: calendar.startOfDay(for: date)
+        ).day ?? 0
+        return nights >= minimumNights && stayDatesAvailable(from: checkIn, to: date)
+    }
+
+    func selectCheckIn(_ date: Date) {
+        guard canSelectCheckIn(date) else { return }
+        checkIn = Calendar.current.startOfDay(for: date)
+        if !canSelectCheckOut(checkOut) {
+            checkOut = Calendar.current.date(byAdding: .day, value: minimumNights, to: checkIn) ?? checkIn
+        }
+        fieldErrors = [:]
     }
 
     func canSelect(_ session: BookingSession) -> Bool {

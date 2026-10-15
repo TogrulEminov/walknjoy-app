@@ -5,27 +5,23 @@ struct StayDetailsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             ListingDetailSection(title: "listing.detail.stay.about") {
-                VStack(spacing: 12) {
-                    Grid {
-                        GridRow {
-                            DetailFeatureItem(icon: "house", title: "listing.detail.propertyType", value: ListingDetailFormatting.property(details.propertyType))
-                            DetailFeatureItem(icon: "person.2", title: "listing.detail.guests", value: details.maxGuests.formatted())
-                        }
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(alignment: .top, spacing: 12) {
+                        DetailFeatureItem(icon: "house", title: "listing.detail.propertyType", value: ListingDetailFormatting.property(details.propertyType))
+                            .frame(width: 124)
+                        DetailFeatureItem(icon: "person.2", title: "listing.detail.guests", value: details.maxGuests.formatted())
+                            .frame(width: 124)
                         if let bedrooms = details.bedrooms {
-                            GridRow {
-                                DetailFeatureItem(icon: "bed.double", title: "listing.detail.bedrooms", value: bedrooms.formatted())
-                                if let beds = details.beds {
-                                    DetailFeatureItem(icon: "bed.double.fill", title: "listing.detail.beds", value: beds.formatted())
-                                } else {
-                                    EmptyView()
-                                }
-                            }
+                            DetailFeatureItem(icon: "bed.double", title: "listing.detail.bedrooms", value: bedrooms.formatted())
+                                .frame(width: 124)
+                        }
+                        if let beds = details.beds {
+                            DetailFeatureItem(icon: "bed.double.fill", title: "listing.detail.beds", value: beds.formatted())
+                                .frame(width: 124)
                         }
                         if let bathrooms = details.bathrooms {
-                            GridRow {
-                                DetailFeatureItem(icon: "shower", title: "listing.detail.bathrooms", value: bathrooms.formatted())
-                                Spacer()
-                            }
+                            DetailFeatureItem(icon: "shower", title: "listing.detail.bathrooms", value: bathrooms.formatted())
+                                .frame(width: 124)
                         }
                     }
                 }

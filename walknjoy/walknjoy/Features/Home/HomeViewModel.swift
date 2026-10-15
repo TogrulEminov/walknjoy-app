@@ -20,18 +20,28 @@ final class HomeViewModel {
     private var storedState: LoadState<HomeContent> = .idle
     var state: LoadState<HomeContent> {
         get {
-            guard case .loaded(let content) = storedState else { return storedState }
+            guard case .loaded(let content) = storedState else {
+                return storedState
+            }
             let deleted = ListingLifecycle.shared.deletedIDs
-            return .loaded(HomeContent(
-                cities: content.cities, categories: content.categories,
-                stays: content.stays.filter { !deleted.contains($0.id) },
-                tours: content.tours.filter { !deleted.contains($0.id) },
-                activities: content.activities.filter { !deleted.contains($0.id) },
-                experiences: content.experiences.filter { !deleted.contains($0.id) }
-            ))
+            return .loaded(
+                HomeContent(
+                    cities: content.cities,
+                    categories: content.categories,
+                    stays: content.stays.filter { !deleted.contains($0.id) },
+                    tours: content.tours.filter { !deleted.contains($0.id) },
+                    activities: content.activities.filter {
+                        !deleted.contains($0.id)
+                    },
+                    experiences: content.experiences.filter {
+                        !deleted.contains($0.id)
+                    }
+                )
+            )
         }
         set { storedState = newValue }
     }
+    var refreshError: String?
     private var locale = "az"
     private var generation = UUID()
 
@@ -61,7 +71,14 @@ final class HomeViewModel {
         await loadListings()
     }
 
+    // SwiftUI can cancel the refresh action when its scroll content changes.
+    // Keep the user-requested reload alive until its result is applied.
+    func refreshFromUser() async {
+        await Task { await self.refresh() }.value
+    }
+
     func refresh() async {
+        refreshError = nil
         let keepCurrentContent: Bool
         if case .loaded = state {
             keepCurrentContent = true
@@ -75,6 +92,12 @@ final class HomeViewModel {
     private func loadListings(keepCurrentContentOnError: Bool = false) async {
         generation = UUID()
         let request = generation
+        let previousContent: HomeContent?
+        if case .loaded(let content) = state, keepCurrentContentOnError {
+            previousContent = content
+        } else {
+            previousContent = nil
+        }
         do {
             async let stayRequest = listingServices.getListings(
                 query: makeQuery(for: .stay)
@@ -88,8 +111,12 @@ final class HomeViewModel {
             async let experiencesRequest = listingServices.getListings(
                 query: makeQuery(for: .experience)
             )
-            async let categoriesRequest = categoryServices.getCategories()
-            async let citiesRequest = discoveryServices.getCities()
+            async let categoriesRequest = loadCategories(
+                fallback: previousContent?.categories
+            )
+            async let citiesRequest = loadCities(
+                fallback: previousContent?.cities
+            )
 
             let (
                 staysResponse, toursResponse, activitiesResponse,
@@ -112,13 +139,42 @@ final class HomeViewModel {
             state = .loaded(content)
         } catch {
             guard generation == request else { return }
-            if error is CancellationError || (error as? URLError)?.code == .cancelled {
+            if error is CancellationError
+                || (error as? URLError)?.code == .cancelled
+            {
                 if !keepCurrentContentOnError { state = .idle }
                 return
             }
-            if !keepCurrentContentOnError {
+            if keepCurrentContentOnError {
+                refreshError = error.localizedDescription
+            } else {
                 state = .error(error.localizedDescription)
             }
+        }
+    }
+
+    // A taxonomy failure must not discard freshly fetched listings during refresh.
+    private func loadCategories(fallback: [CategoryModel]?) async throws
+        -> [CategoryModel]
+    {
+        do {
+            return try await categoryServices.getCategories()
+        } catch {
+            try Task.checkCancellation()
+            guard let fallback else { throw error }
+            return fallback
+        }
+    }
+
+    private func loadCities(fallback: [ListingCity]?) async throws
+        -> [ListingCity]
+    {
+        do {
+            return try await discoveryServices.getCities()
+        } catch {
+            try Task.checkCancellation()
+            guard let fallback else { throw error }
+            return fallback
         }
     }
 }

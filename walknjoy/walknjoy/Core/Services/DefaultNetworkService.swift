@@ -44,9 +44,9 @@ nonisolated final class DefaultNetworkService: NetworkingService {
 
     private func performRequest(enpoint: any Endpoint) async throws -> Data {
         #if DEBUG
-        if DemoBackend.shared.isActive {
-            return try DemoBackend.shared.response(for: enpoint)
-        }
+            if DemoBackend.shared.isActive {
+                return try DemoBackend.shared.response(for: enpoint)
+            }
         #endif
         var request = try enpoint.makeRequest()
 
@@ -138,15 +138,18 @@ nonisolated final class DefaultNetworkService: NetworkingService {
                 }
                 if let endpoint = enpoint as? BookingEndpoint {
                     switch endpoint {
-                    case .listingAvailability, .checkAvailability, .createBooking:
+                    case .listingAvailability, .checkAvailability,
+                        .createBooking:
                         throw NetworkError.listingNotFound
                     default: break
                     }
                 }
             }
 
-            if (enpoint is ConversationEndpoint || enpoint is ReviewEndpoint || enpoint.path.hasPrefix("/provider/bookings")),
-                httpResponse.statusCode == 401 {
+            if enpoint is ConversationEndpoint || enpoint is ReviewEndpoint
+                || enpoint.path.hasPrefix("/provider/bookings"),
+                httpResponse.statusCode == 401
+            {
                 throw NetworkError.unauthorized
             }
             if let apiError = try? decoderLock.withLock({
@@ -157,7 +160,10 @@ nonisolated final class DefaultNetworkService: NetworkingService {
                     || enpoint is ReviewEndpoint
                     || enpoint.path.hasPrefix("/provider/bookings")
                 {
-                    throw APIRequestFailure(error: apiError.error, statusCode: httpResponse.statusCode)
+                    throw APIRequestFailure(
+                        error: apiError.error,
+                        statusCode: httpResponse.statusCode
+                    )
                 }
                 throw NetworkError.from(
                     code: apiError.error.code,

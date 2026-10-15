@@ -4,6 +4,8 @@ nonisolated enum DiscoveryEndpoint: Endpoint {
     case popularDestinations
     case amenities(type: ListingType?, locale: String)
 
+    var cachePolicy: URLRequest.CachePolicy { .reloadIgnoringLocalCacheData }
+
     var path: String {
         switch self {
         case .popularDestinations: "/discovery/popular-destinations"

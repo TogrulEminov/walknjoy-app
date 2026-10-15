@@ -320,6 +320,7 @@ struct ListingDetailView: View {
                 .padding(.top, -22)
             }
         }
+        .refreshable { await load() }
         .background(Color.appBackground)
         .ignoresSafeArea(.container, edges: .top)
         .safeAreaInset(edge: .bottom, spacing: 0) {

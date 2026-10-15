@@ -88,7 +88,7 @@ final class RealtimeClient: NotificationSocketProtocol {
 
     func start() {
         #if DEBUG
-        if DemoBackend.shared.isActive { return }
+            if DemoBackend.shared.isActive { return }
         #endif
         guard !running else { return }
         running = true

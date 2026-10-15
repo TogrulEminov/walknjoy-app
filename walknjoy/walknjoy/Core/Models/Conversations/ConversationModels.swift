@@ -81,13 +81,18 @@ struct OutgoingMessage: Identifiable {
     var status: Status
 }
 enum ChatFormatting {
-    static func date(_ text: String) -> Date? {
+    private static let fractionalFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [
             .withInternetDateTime, .withFractionalSeconds,
         ]
-        return formatter.date(from: text)
-            ?? ISO8601DateFormatter().date(from: text)
+        return formatter
+    }()
+    private static let standardFormatter = ISO8601DateFormatter()
+
+    static func date(_ text: String) -> Date? {
+        fractionalFormatter.date(from: text)
+            ?? standardFormatter.date(from: text)
     }
     static func merge(_ existing: [ChatMessage], _ incoming: [ChatMessage])
         -> [ChatMessage]
@@ -97,14 +102,16 @@ enum ChatFormatting {
             uniquingKeysWith: { _, last in last }
         )
         for message in incoming { byID[message.id] = message }
-        return byID.values.sorted {
-            let left = date($0.createdAt)
-            let right = date($1.createdAt)
-            if let left, let right {
-                return left == right ? $0.id < $1.id : left < right
+        return byID.values.map { (message: $0, date: date($0.createdAt)) }
+            .sorted {
+                if let left = $0.date, let right = $1.date {
+                    return left == right
+                        ? $0.message.id < $1.message.id : left < right
+                }
+                return $0.message.createdAt == $1.message.createdAt
+                    ? $0.message.id < $1.message.id
+                    : $0.message.createdAt < $1.message.createdAt
             }
-            return $0.createdAt == $1.createdAt
-                ? $0.id < $1.id : $0.createdAt < $1.createdAt
-        }
+            .map(\.message)
     }
 }

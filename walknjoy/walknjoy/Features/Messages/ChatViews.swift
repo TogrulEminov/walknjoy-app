@@ -11,7 +11,7 @@ struct ConversationListView: View {
     var body: some View {
         List {
             if let model {
-                if let error = model.error {
+                if let error = model.error, !model.rows.isEmpty {
                     Text(error).foregroundStyle(Color.errorC)
                     Button("common.retry") {
                         Task {
@@ -21,9 +21,25 @@ struct ConversationListView: View {
                         }
                     }
                 }
-                if model.isLoading && model.rows.isEmpty { ProgressView() }
-                if !model.isLoading && model.rows.isEmpty && model.error == nil
-                {
+                if model.rows.isEmpty {
+                    switch model.state {
+                    case .idle, .loading:
+                        LoadingStateView()
+                            .listRowSeparator(.hidden)
+                    case .error(let error):
+                        ErrorStateView(title: "error.title", message: error) {
+                            Task {
+                                await model.refresh(
+                                    locale: appState.language.rawValue
+                                )
+                            }
+                        }
+                        .listRowSeparator(.hidden)
+                    case .loaded:
+                        EmptyView()
+                    }
+                }
+                if case .loaded = model.state, model.rows.isEmpty {
                     ContentUnavailableView {
                         Label {
                             Text("messages.empty")
@@ -74,18 +90,20 @@ struct ConversationListView: View {
                             }
                             Spacer(minLength: 0)
                             if row.unreadCount > 0 {
-                                Text(row.unreadCount > 99 ? "99+" : row.unreadCount.formatted())
-                                    .font(.system(size: 11, weight: .bold))
-                                    .monospacedDigit()
-                                    .frame(width: 28, height: 28)
-                                    .background(
-                                        Color.brandYellow,
-                                        in: Circle()
-                                    ).foregroundStyle(Color.brandInk)
-                                    .accessibilityLabel(
-                                        Text("messages.unread")
-                                            + Text(" \(row.unreadCount)")
-                                    )
+                                Text(
+                                    row.unreadCount > 99
+                                        ? "99+" : row.unreadCount.formatted()
+                                )
+                                .font(.system(size: 11, weight: .bold))
+                                .monospacedDigit()
+                                .frame(width: 28, height: 28)
+                                .background(
+                                    Color.brandYellow,
+                                    in: Circle()
+                                ).foregroundStyle(Color.brandInk)
+                                .accessibilityLabel(
+                                    Text("messages.unread \(row.unreadCount)")
+                                )
                             }
                         }.padding(.vertical, 5)
                     }.listRowBackground(Color.surfaceBackground)
@@ -100,7 +118,7 @@ struct ConversationListView: View {
                     }.disabled(model.isLoading)
                 }
             } else {
-                ProgressView()
+                LoadingStateView()
             }
         }
         .scrollContentBackground(.hidden).background(Color.appBackground)
@@ -157,13 +175,14 @@ struct ConversationStartView: View {
     @State private var model = ConversationStartViewModel()
     var body: some View {
         Group {
-            if let id = model.conversationID {
+            switch model.state {
+            case .loaded(let id):
                 ChatDetailView(conversationID: id)
-            } else if let error = model.error {
+            case .error(let error):
                 ErrorStateView(title: "error.title", message: error) {
                     Task { await load() }
                 }
-            } else {
+            case .idle, .loading:
                 LoadingStateView()
             }
         }
@@ -194,7 +213,20 @@ struct ChatDetailView: View {
     var body: some View {
         Group {
             if let model {
-                ChatScreen(model: model)
+                if model.hasLoadedHistory {
+                    ChatScreen(model: model)
+                } else {
+                    switch model.state {
+                    case .idle, .loading:
+                        LoadingStateView()
+                    case .error(let error):
+                        ErrorStateView(title: "error.title", message: error) {
+                            Task { await model.synchronize() }
+                        }
+                    case .loaded:
+                        ChatScreen(model: model)
+                    }
+                }
             } else {
                 LoadingStateView()
             }
@@ -230,7 +262,6 @@ private struct ChatScreen: View {
     @Bindable var model: ChatDetailViewModel
     @Environment(AppState.self) private var appState
     @State private var atBottom = true
-    @State private var didInitialScroll = false
     @State private var hasNewMessages = false
     @State private var visibleIDs: Set<String> = []
     var body: some View {
@@ -272,7 +303,9 @@ private struct ChatScreen: View {
                             }
                         }.disabled(model.isLoadingOlder).frame(minHeight: 44)
                     }
-                    if model.isLoading || model.isLoadingOlder {
+                    if model.isLoadingOlder
+                        || (model.isLoading && !model.hasLoadedHistory)
+                    {
                         ProgressView()
                     }
                     if model.messages.isEmpty && model.outgoing.isEmpty
@@ -302,14 +335,6 @@ private struct ChatScreen: View {
                             )
                         }
                         .id(message.id)
-                        .onScrollVisibilityChange(threshold: 0.6) { visible in
-                            if visible {
-                                visibleIDs.insert(message.id)
-                                model.visible(message)
-                            } else {
-                                visibleIDs.remove(message.id)
-                            }
-                        }
                     }
                     ForEach(model.outgoing) { message in
                         VStack(alignment: .trailing, spacing: 4) {
@@ -335,15 +360,19 @@ private struct ChatScreen: View {
                             if visible { hasNewMessages = false }
                         }
                 }.padding(16)
+                    .scrollTargetLayout()
+            }
+            .defaultScrollAnchor(.bottom, for: .initialOffset)
+            .defaultScrollAnchor(atBottom ? .bottom : nil, for: .sizeChanges)
+            .onScrollTargetVisibilityChange(idType: String.self, threshold: 0.6)
+            { ids in
+                let visible = Set(ids)
+                if visibleIDs != visible { visibleIDs = visible }
+                model.visibleMessages(visible)
             }
             .scrollDismissesKeyboard(.interactively)
             .onChange(of: model.revision) { _, _ in
-                if !didInitialScroll || atBottom {
-                    proxy.scrollTo("chat-bottom", anchor: .bottom)
-                    didInitialScroll = true
-                } else {
-                    hasNewMessages = true
-                }
+                if !atBottom { hasNewMessages = true }
             }
             .overlay(alignment: .bottomTrailing) {
                 if hasNewMessages {
