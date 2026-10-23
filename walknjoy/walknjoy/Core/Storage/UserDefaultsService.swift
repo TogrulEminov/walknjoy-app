@@ -22,7 +22,10 @@ nonisolated final class UserDefaultsService: UserDefaultsServiceProtocol {
     private let defaults: UserDefaults
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-
+        let dictionary = UserDefaults.standard.dictionaryRepresentation()
+        dictionary.keys.forEach { key in
+            UserDefaults.standard.removeObject(forKey: key)
+        }
     }
 
     var hasSeenOnboarding: Bool {

@@ -118,11 +118,11 @@ xcodebuild build \
   CODE_SIGNING_ALLOWED=NO
 ```
 
-`iOS CI` hər **push** və **pull request** zamanı avtomatik işləyir; `workflow_dispatch` ilə əl ilə də başladılır. `macos-26` üzərində Xcode 26.4.1 istifadə edərək Debug və Release build-lərini yoxlayır. Paketlər resolved fayldakı versiyalarla yüklənir. CI nümunədən müvəqqəti API konfiqurasiyası yaradır; backend, signing sertifikatı və GitHub Secrets tələb olunmur. Runner-dəki Xcode versiyası [rəsmi runner siyahısı](https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md) ilə yoxlanıla bilər.
+`iOS CI` hər **push** və **pull request** zamanı avtomatik işləyir; `workflow_dispatch` ilə əl ilə də başladılır. `macos-26` üzərində Xcode 26.4.1 istifadə edərək iPhone 17 Pro simulator-unda unit testləri, həmçinin Debug və Release build-lərini yoxlayır. Test nəticələri Actions artifact-i kimi 7 gün saxlanılır. Paketlər resolved fayldakı versiyalarla yüklənir. CI nümunədən müvəqqəti API konfiqurasiyası yaradır; backend, signing sertifikatı və GitHub Secrets tələb olunmur. Runner-dəki Xcode versiyası [rəsmi runner siyahısı](https://github.com/actions/runner-images/blob/main/images/macos/macos-26-Readme.md) ilə yoxlanıla bilər.
 
 REST və WebSocket eyni `APIConfig.baseURL` ünvanından istifadə edir (`http` → `ws`, `https` → `wss`). Lokal backend 3000 portunda işləyirsə config-də `http://localhost:3000/api/v1` yazın. Mesajlaşmanın canlı iki hesabla yoxlanması ayrıca CUSTOMER və approved PROVIDER hesabı tələb edir.
 
-**Test target vəziyyəti:** shared scheme-də hazırda unit/UI test target-ləri yoxdur. Workflow Debug/Release build yoxlamalarını aparır; Xcode UI test keçidi kimi təqdim edilmir. Test target-ləri əlavə olunanda `xcodebuild test` mərhələsi də əlavə edilməlidir. Hazırkı build yoxlaması qiymətləndirmənin ayrıca məcburi test şərtini ödəmir.
+**Testlər:** shared scheme-də `walknjoyTests` unit test target-i var. Testlər mock service və network istifadə etdiyi üçün backend-ə qoşulmadan işləyir. Hazırda UI test target-i yoxdur.
 
 ## İnkişaf qaydası
 
