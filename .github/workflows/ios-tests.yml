@@ -1,0 +1,71 @@
+name: iOS Tests
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/ios-tests.yml'
+      - 'walknjoy/**'
+      - 'config/**'
+  pull_request:
+    paths:
+      - '.github/workflows/ios-tests.yml'
+      - 'walknjoy/**'
+      - 'config/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Build and run unit tests
+    runs-on: macos-26
+    timeout-minutes: 45
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_26.4.1.app/Contents/Developer
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+
+      - name: Prepare non-secret test configuration
+        run: |
+          mkdir -p walknjoy/walknjoy/Core/Config
+          if [ ! -f walknjoy/walknjoy/Core/Config/APIConfig.swift ]; then
+            cp config/APIConfig.swift.example walknjoy/walknjoy/Core/Config/APIConfig.swift
+          fi
+          xcodebuild -version
+
+      - name: Resolve locked Swift packages
+        run: |
+          xcodebuild -resolvePackageDependencies \
+            -project walknjoy/walknjoy.xcodeproj \
+            -scheme walknjoy \
+            -onlyUsePackageVersionsFromResolvedFile
+
+      - name: Build and run unit tests on iPhone simulator
+        run: |
+          xcodebuild test \
+            -project walknjoy/walknjoy.xcodeproj \
+            -scheme walknjoy \
+            -configuration Debug \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro' \
+            -derivedDataPath "$RUNNER_TEMP/DerivedData" \
+            -resultBundlePath "$RUNNER_TEMP/walknjoy-tests.xcresult" \
+            -disableAutomaticPackageResolution \
+            -onlyUsePackageVersionsFromResolvedFile \
+            CODE_SIGNING_ALLOWED=NO
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: walknjoy-test-results
+          path: ${{ runner.temp }}/walknjoy-tests.xcresult
+          if-no-files-found: ignore
+          retention-days: 7
